@@ -1,6 +1,6 @@
 # FastWAM RMBench 独立训练项目
 
-本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [Hugging Face](https://huggingface.co/datasets/cenzl/fastwam-rmbench-training-assets) 下载。默认从公共 Wan + ActionDiT 预训练初始化开始，`resume=null`。
+本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [魔搭 ModelScope](https://modelscope.cn/datasets/ccenzl/fastwam-rmbench-training-assets) 下载。默认从公共 Wan + ActionDiT 预训练初始化开始，`resume=null`。
 
 ## 一行下载并恢复环境
 
@@ -10,7 +10,7 @@
 bash setup.sh
 ```
 
-命令将完整资源下载到配置要求的相对目录，并恢复 Python 环境与 CUDA 编译工具链。支持断点续传；新下载的文件检查 SHA256。资源约 257 GB，环境解包额外占用约 15 GB，训练输出另计。Hugging Face 资源仓库公开，下载无需 Token。远端存在 `ASSETS_READY.json` 才表示整套资源已上传并验证完成。
+命令将完整资源下载到配置要求的相对目录，并恢复 Python 环境与 CUDA 编译工具链。支持断点续传；新下载的文件检查 SHA256。资源约 257 GB，环境解包额外占用约 15 GB，训练输出另计。魔搭资源仓库公开，下载无需 Token，也无需安装 ModelScope SDK。远端存在 `ASSETS_READY.json` 才表示整套资源已上传并验证完成。
 
 目标服务器需要 Linux x86_64、Python 3.8 或以上、bash、tar、gzip、flock，以及可运行 CUDA/BF16 的 NVIDIA 驱动。无需预先安装 conda 或训练依赖。
 

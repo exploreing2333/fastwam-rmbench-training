@@ -11,11 +11,42 @@ import sys
 import threading
 import time
 from urllib.error import HTTPError
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urlencode, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 ROOT = Path(__file__).resolve().parents[1]
 BLOCK_SIZE = 8 * 1024 * 1024
+
+
+def resource_url(base_url, relative):
+    # ModelScope addresses repository files through a query parameter.
+    if '?' in base_url and base_url.endswith('FilePath='):
+        return base_url + quote(relative, safe='')
+    return base_url.rstrip('/') + '/' + quote(relative, safe='/')
+
+
+def hub_source(hub):
+    provider = hub.get('provider', 'huggingface')
+    revision = os.environ.get('FASTWAM_ASSET_REVISION', hub.get('revision', 'master' if provider == 'modelscope' else 'main'))
+    if provider == 'modelscope':
+        return 'https://modelscope.cn/api/v1/datasets/' + quote(hub['repo_id'], safe='/') + '/repo?' + urlencode({'Revision': revision, 'FilePath': ''})
+    if provider == 'huggingface':
+        return 'https://huggingface.co/datasets/' + hub['repo_id'] + '/resolve/' + revision
+    raise ValueError('Unsupported resource provider: ' + provider)
+
+
+def resource_token(source):
+    hostname = urlsplit(source).hostname or ''
+    if hostname in ('modelscope.cn', 'www.modelscope.cn', 'modelscope.ai', 'www.modelscope.ai'):
+        return os.environ.get('MODELSCOPE_API_TOKEN') or os.environ.get('MODELSCOPE_TOKEN')
+    if hostname not in ('huggingface.co', 'hf-mirror.com'):
+        return os.environ.get('FASTWAM_ASSET_TOKEN')
+    token = os.environ.get('HF_TOKEN')
+    if not token:
+        token_path = Path(os.environ.get('HF_TOKEN_PATH', str(Path(os.environ.get('HF_HOME', str(Path.home() / '.cache/huggingface'))) / 'token')))
+        if token_path.is_file():
+            token = token_path.read_text().strip()
+    return token
 
 
 class SafeRedirect(HTTPRedirectHandler):
@@ -105,7 +136,7 @@ def fetch_http(root, row, base_url, token):
             headers['Authorization'] = 'Bearer ' + token
         if offset:
             headers['Range'] = 'bytes=' + str(offset) + '-'
-        url = base_url.rstrip('/') + '/' + quote(row['path'], safe='/')
+        url = resource_url(base_url, row['path'])
         digest = hashlib.sha256()
         try:
             with build_opener(SafeRedirect()).open(Request(url, headers=headers), timeout=120) as incoming:
@@ -136,9 +167,9 @@ def fetch_http(root, row, base_url, token):
             return
         except HTTPError as error:
             if error.code in (401, 403):
-                raise RuntimeError('Resource access denied. Set HF_TOKEN to a read token for this Hugging Face repository.') from None
+                raise RuntimeError('Resource access denied. Configure a read token for the selected resource source.') from None
             if error.code == 404:
-                raise RuntimeError('Resource is not available yet on Hugging Face: ' + row['path']) from None
+                raise RuntimeError('Resource is not available on the selected source: ' + row['path']) from None
             if attempt == 2:
                 raise RuntimeError('HTTP download failed for ' + row['path'] + ' (status ' + str(error.code) + ')') from None
         except Exception as error:
@@ -208,32 +239,27 @@ def main():
         using_default_hub = False
         if missing and not source:
             if hub.get('repo_id'):
-                revision = os.environ.get('FASTWAM_ASSET_REVISION', hub.get('revision', 'main'))
-                source = 'https://huggingface.co/datasets/' + hub['repo_id'] + '/resolve/' + revision
+                source = hub_source(hub)
                 using_default_hub = True
             else:
                 source = manifest.get('default_local_source')
         if missing and not source:
-            parser.error('No Hugging Face resource repository or local source is configured')
+            parser.error('No resource repository or local source is configured')
         if missing:
-            token = os.environ.get('HF_TOKEN')
-            if not token:
-                token_path = Path(os.environ.get('HF_TOKEN_PATH', str(Path(os.environ.get('HF_HOME', str(Path.home() / '.cache/huggingface'))) / 'token')))
-                if token_path.is_file():
-                    token = token_path.read_text().strip()
+            token = resource_token(source)
             if using_default_hub:
                 headers = {'User-Agent': 'fastwam-rmbench-portable/1'}
                 if token:
                     headers['Authorization'] = 'Bearer ' + token
                 try:
-                    with build_opener(SafeRedirect()).open(Request(source + '/ASSETS_READY.json', headers=headers), timeout=30) as response:
+                    with build_opener(SafeRedirect()).open(Request(resource_url(source, 'ASSETS_READY.json'), headers=headers), timeout=30) as response:
                         uploaded = json.load(response)
                 except HTTPError as error:
                     if error.code == 404:
-                        raise RuntimeError('The Hugging Face resource upload has not completed yet; ASSETS_READY.json is missing.') from None
-                    raise RuntimeError('Cannot read Hugging Face resource readiness metadata (HTTP ' + str(error.code) + ')') from None
+                        raise RuntimeError('The resource upload has not completed yet; ASSETS_READY.json is missing.') from None
+                    raise RuntimeError('Cannot read resource readiness metadata (HTTP ' + str(error.code) + ')') from None
                 if uploaded.get('bundle_id') != manifest['bundle_id']:
-                    raise RuntimeError('Hugging Face resource snapshot does not match this code repository')
+                    raise RuntimeError('Resource snapshot does not match this code repository')
             remote = source.startswith(('https://', 'http://'))
             if cli.link_local and remote:
                 parser.error('--link-local requires a local shared-storage source')

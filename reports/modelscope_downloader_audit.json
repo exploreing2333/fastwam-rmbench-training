@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "modelscope_query_paths": true,
+  "special_character_paths": true,
+  "pinned_revision_url": true,
+  "http_range_resume": true,
+  "download_sha256": true,
+  "anonymous_public_download": true,
+  "provider_token_isolation": true,
+  "legacy_huggingface_url": true,
+  "default_provider_ready_gate": true,
+  "wrong_snapshot_rejected": true,
+  "gpu_jobs_started": 0
+}

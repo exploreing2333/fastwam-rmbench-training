@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "provider": "modelscope",
+  "revision": "6c0522b3785fafef84bded2ad7f321f2c2dc1542",
+  "authenticated": false,
+  "ready_marker_verified": true,
+  "exact_file_sha256": true,
+  "http_range_resume": true,
+  "project_downloader_verified": true,
+  "sample_path": "data/gt_subtask_text_embeds/0bbda32d0e85d7adbe5f1526f98e1019e8cca51b9c379d1eedfee2651b7b6e41.t5_len128.wan22ti2v5b.pt",
+  "range_path": "data/RMBench/data/data/battery_try/demo_clean/data/episode27.hdf5",
+  "gpu_jobs_started": 0
+}
