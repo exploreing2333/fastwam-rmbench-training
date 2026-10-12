@@ -1,6 +1,6 @@
 # FastWAM RMBench 独立训练项目
 
-本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [魔搭 ModelScope](https://modelscope.cn/datasets/ccenzl/fastwam-rmbench-training-assets) 下载。默认从公共 Wan + ActionDiT 预训练初始化开始，`resume=null`。
+本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [魔搭 ModelScope](https://modelscope.cn/datasets/ccenzl/fastwam-rmbench-training-assets) 下载。默认从 **Wan 2.2 预训练权重初始化**，从第 0 步训练，`resume=null`。
 
 ## 一行下载并恢复环境
 
@@ -79,13 +79,21 @@ bash train_task.sh rearrange_blocks --dry-run
 | `data/RMBench/` | 完整原始数据、GT 标注、pi05 处理数据、转换与采集代码、模拟资源 |
 | `data/lerobot/rmbench_all_12tasks_demo_clean_50/` | 原训练使用的完整 LeRobot 缓存，600 episodes、416711 frames |
 | `data/gt_subtask_text_embeds/` | 46 个 GT subtask 对应的 Wan T5 文本缓存 |
-| `models/` | 公共 Wan 2.2、VAE、T5、tokenizer 与 ActionDiT 初始化 |
+| `models/` | 公共 Wan 2.2、VAE、T5、tokenizer，以及由 Wan 权重插值生成的动作骨干初始化 |
 | `environment/` | 完整 conda-pack 环境、CUDA toolkit，以及实际依赖版本 |
 | `vendor/` | 原环境依赖的 curobo、LIBERO 源码与资源 |
 | `assets/manifest.json` | 外部资源路径、大小、SHA256；下载后保持同一目录布局 |
 | `data/task_manifest.json` | 每任务 50 条 episode 的索引、原始编号及帧数 |
 
 自训练权重与训练状态不在迁移资源中。训练依赖 GT subtask，初始化时无需加载训练过的 V72/ProgressModel。
+
+## 从 Wan 初始化
+
+默认启动所有任务时，视频 DiT 直接加载 `Wan-AI/Wan2.2-TI2V-5B` 的预训练权重。动作 DiT 的骨干通过 `scripts/preprocess_action_dit_backbone.py` 从同一 Wan 权重生成：将对应张量线性插值到动作骨干的 1024 hidden dim，并按原算法执行 alpha scaling。
+
+`models/ActionDiT_linear_interp_Wan22_alphascale_1024hdim.pt` 保存的是上述 Wan 权重转换结果，仅包含动作骨干；动作输入层 `action_encoder`、动作输出层 `head` 和 `proprio_encoder` 在训练启动时按 seed 42 新建。该文件不包含 RMBench 训练后的动作模型、动作头或 optimizer 状态。
+
+默认配置保留 `skip_dit_load_from_pretrain=false`、上述 Wan 动作骨干转换路径和 `resume=null`。`--resume` 仅在用户显式要求续训时使用。初始化来源核对结果见 `reports/wan_initialization_audit.json`。
 
 ## 保留的训练与采样逻辑
 

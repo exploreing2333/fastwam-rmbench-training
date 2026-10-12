@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "initialization": "wan_pretrained",
+  "wan_model_id": "Wan-AI/Wan2.2-TI2V-5B",
+  "action_initializer_path": "models/ActionDiT_linear_interp_Wan22_alphascale_1024hdim.pt",
+  "action_initializer_sha256": "7bd65e1986accaaf2e8dd5e59b5e98ef348d7c2f1d88ab2df010eb954a441445",
+  "action_initializer_is_wan_weight_conversion": true,
+  "backbone_tensors_checked": 820,
+  "exact_matching_tensors": 820,
+  "matching_with_float_tolerance": 0,
+  "maximum_absolute_difference": 0.0,
+  "copied_tensors": 300,
+  "interpolated_tensors": 520,
+  "policy": {
+    "skip_prefixes": [
+      "action_encoder.",
+      "head."
+    ],
+    "alpha_scaling": true,
+    "interpolation": "sequential_1d_linear_align_corners_true"
+  },
+  "fresh_random_modules": [
+    "action_encoder",
+    "action_head",
+    "proprio_encoder"
+  ],
+  "training_checkpoint_loaded": false,
+  "all_tasks_resume_null": [
+    "battery_try",
+    "blocks_ranking_try",
+    "classify_blocks",
+    "cover_blocks",
+    "observe_and_pickup",
+    "place_block_mat",
+    "press_button",
+    "put_back_block",
+    "rearrange_blocks",
+    "storage_blocks",
+    "swap_T",
+    "swap_blocks"
+  ],
+  "failures": [],
+  "gpu_jobs_started": 0
+}
