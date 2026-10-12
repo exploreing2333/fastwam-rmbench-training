@@ -20,5 +20,10 @@
   "reduced_workers_option": true,
   "actual_hydra_entrypoint_resolves": true,
   "shell_syntax": true,
+  "default_subtask_segment_mode": "v72_semantic",
+  "event_instance_tasks": [
+    "press_button"
+  ],
+  "raw_annotation_override": true,
   "gpu_jobs_started": 0
 }

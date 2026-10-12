@@ -1,7 +1,6 @@
 {
   "passed": true,
   "tasks": 12,
-  "all_training_settings_match_reference_except_documented_paths_and_task_selection": true,
   "documented_changed_fields": [
     "output_dir",
     "runtime_cache_root",
@@ -14,10 +13,24 @@
     "data.train.gt_subtask_text_embedding_cache_dir",
     "model.action_dit_pretrained_path",
     "rmbench_task",
-    "hydra"
+    "hydra",
+    "data.train.gt_subtask_segment_mode",
+    "data.train.gt_subtask_event_instance_tasks"
   ],
   "all_12_cli_dryruns_passed": true,
   "actual_hydra_training_entrypoint_resolved": true,
   "fresh_pretrained_initialization": true,
-  "default_global_batch_size": 64
+  "default_global_batch_size": 64,
+  "all_training_settings_match_reference_except_documented_paths_task_selection_and_subtask_spans": true,
+  "intentional_training_logic_change": "V72 adjacent-equal semantic GT spans, preserving press_button event instances",
+  "default_gt_subtask_segment_mode": "v72_semantic",
+  "affected_tasks": [
+    "classify_blocks",
+    "rearrange_blocks",
+    "swap_blocks",
+    "storage_blocks",
+    "put_back_block",
+    "observe_and_pickup",
+    "swap_T"
+  ]
 }

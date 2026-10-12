@@ -219,6 +219,9 @@ data:
         - 320
     subtask_source_map: ${oc.env:FASTWAM_RUNTIME_ROOT}/rmbench_source_map.json
     gt_subtask_text_embedding_cache_dir: ${oc.env:FASTWAM_BUNDLE_ROOT}/data/gt_subtask_text_embeds
+    gt_subtask_segment_mode: v72_semantic
+    gt_subtask_event_instance_tasks:
+    - press_button
     training_shuffle_unit: trajectory
     trajectory_anchor_stride: 1
   val: null

@@ -1,0 +1,16 @@
+{
+  "updated_at": "2026-10-12T11:30:23.071707+00:00",
+  "reference_training_source": "/home/cenzl/VLA/LatentWAM/FastWAM",
+  "intentional_native_source_changes": [
+    "src/fastwam/datasets/lerobot/gt_subtask_segments.py",
+    "src/fastwam/datasets/lerobot/gt_subtask_video_dataset.py"
+  ],
+  "core_model_optimizer_loss_sampler_unchanged": true,
+  "reference_episodes_normalization_and_assets_unchanged": true,
+  "default_gt_subtask_segment_mode": "v72_semantic",
+  "event_instance_tasks": [
+    "press_button"
+  ],
+  "legacy_mode": "raw_annotation",
+  "gpu_jobs_started": 0
+}

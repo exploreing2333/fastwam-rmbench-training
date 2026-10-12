@@ -1,11 +1,16 @@
 {
   "passed": true,
-  "code_files": 2335,
-  "code_bytes": 24487889,
+  "code_files": 2344,
+  "code_bytes": 24514309,
   "largest_file_bytes": 2638605,
-  "native_training_source_unchanged": true,
+  "native_training_source_unchanged": false,
   "datasets_and_weights_excluded": true,
   "credentials_excluded": true,
   "gpu_jobs_started": 0,
-  "checked_at": "2026-10-12T03:47:51.806332+00:00"
+  "checked_at": "2026-10-12T11:30:23.136563+00:00",
+  "intentional_native_training_source_changes": [
+    "src/fastwam/datasets/lerobot/gt_subtask_segments.py",
+    "src/fastwam/datasets/lerobot/gt_subtask_video_dataset.py"
+  ],
+  "core_model_optimizer_loss_sampler_unchanged": true
 }

@@ -3,6 +3,8 @@
 No ProgressModel output, history image, event anchor, or init cache is loaded.
 Only the original FastWAM camera layout and subtask terminal-hold operations
 are reused from the deployed-subtask dataset; the labels come from RMBench GT.
+Default spans follow V72: adjacent equal instructions merge, while counted
+press_button events retain their individual boundaries.
 """
 from __future__ import annotations
 
@@ -18,6 +20,7 @@ from fastwam_qwen.datasets.robot_video_dataset import (
     RobotVideoDatasetNoT5,
 )
 from .progress_subtask_video_dataset import ProgressSubtaskRobotVideoDataset
+from .gt_subtask_segments import build_gt_subtask_segments
 
 
 class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
@@ -26,6 +29,8 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         *args,
         subtask_source_map: str,
         gt_subtask_text_embedding_cache_dir: str,
+        gt_subtask_segment_mode: str = "v72_semantic",
+        gt_subtask_event_instance_tasks=("press_button",),
         **kwargs,
     ) -> None:
         for name in (
@@ -56,6 +61,12 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         self.gt_subtask_text_embedding_cache_dir = Path(
             gt_subtask_text_embedding_cache_dir
         ).expanduser().resolve()
+        if gt_subtask_segment_mode not in {"raw_annotation", "v72_semantic"}:
+            raise ValueError(f"Unknown GT subtask segment mode: {gt_subtask_segment_mode!r}")
+        if isinstance(gt_subtask_event_instance_tasks, str):
+            raise ValueError("gt_subtask_event_instance_tasks must be a sequence of task names.")
+        self.gt_subtask_segment_mode = gt_subtask_segment_mode
+        self.gt_subtask_event_instance_tasks = tuple(gt_subtask_event_instance_tasks)
         self.subtask_trajectory_mode = True
         self.subtask_terminal_hold = True
         self.subtask_segment_source = "gt_annotation"
@@ -64,6 +75,7 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         self._subtask_segment_end = {}
         self._gt_texts_by_episode = {}
         self._gt_contexts = {}
+        self._gt_raw_ranges_by_episode = {}
         super().__init__(*args, **kwargs)
         if self.current_obs_index != 0 or self.action_horizon != 32:
             raise ValueError("Expected one current condition and a 32-control action chunk.")
@@ -72,23 +84,43 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         processor = self.lerobot_dataset.processor
         if processor.action_state_transforms or processor.use_stepwise_action_norm:
             raise ValueError("Terminal hold requires absolute-qpos, non-stepwise normalization.")
+        self._load_gt_subtask_trajectories()
+        for texts in self._gt_texts_by_episode.values():
+            for text in texts:
+                if text not in self._gt_contexts:
+                    self._gt_contexts[text] = self._load_gt_context(text)
+
+    def _load_gt_subtask_trajectories(self) -> None:
+        # Preserve the native annotation/episode/frame validation, then build a
+        # semantic view without changing raw files or the population of anchors.
         ProgressSubtaskRobotVideoDataset._load_gt_subtask_trajectories(self)
         source = json.loads(self.subtask_source_map.read_text(encoding="utf-8"))
         rows = {int(row["episode_index"]): row for row in source["entries"]}
         annotations = {}
-        for episode in self._gt_stage_index:
+        for episode, raw_stage_index in self._gt_stage_index.items():
             row = rows[episode]
             task = row["source_task_name"]
             if task not in annotations:
                 path = Path(source["raw_root"]) / task / "demo_clean/language_annotation.json"
                 annotations[task] = json.loads(path.read_text(encoding="utf-8"))
-            self._gt_texts_by_episode[episode] = tuple(
-                str(segment[0]).strip()
-                for segment in annotations[task][f"episode_{row['source_episode_id']}"]
+            raw_segments = annotations[task][f"episode_{row['source_episode_id']}"]
+            segments = build_gt_subtask_segments(
+                raw_segments, task, self.gt_subtask_segment_mode,
+                self.gt_subtask_event_instance_tasks,
             )
-            for text in self._gt_texts_by_episode[episode]:
-                if text not in self._gt_contexts:
-                    self._gt_contexts[text] = self._load_gt_context(text)
+            raw_to_semantic = np.empty(len(raw_segments), dtype=np.int32)
+            semantic_ends = np.empty(len(segments), dtype=np.int32)
+            for index, segment in enumerate(segments):
+                raw_to_semantic[segment.raw_first:segment.raw_last + 1] = index
+                semantic_ends[index] = min(segment.stop, len(raw_stage_index)) - 1
+            stage_index = raw_to_semantic[raw_stage_index]
+            self._gt_stage_index[episode] = stage_index
+            self._subtask_segment_index[episode] = stage_index
+            self._subtask_segment_end[episode] = semantic_ends[stage_index]
+            self._gt_texts_by_episode[episode] = tuple(segment.text for segment in segments)
+            self._gt_raw_ranges_by_episode[episode] = tuple(
+                (segment.raw_first, segment.raw_last) for segment in segments
+            )
 
     def _load_gt_context(self, text: str) -> torch.Tensor:
         prompt = DEFAULT_PROMPT.format(task=text)

@@ -29,6 +29,8 @@ def main():
     parser.add_argument('--max-steps', type=int, default=200000)
     parser.add_argument('--gradient-checkpointing', action='store_true')
     parser.add_argument('--cached-stats', action='store_true', help='Use bundled statistics computed with the unchanged reference algorithm.')
+    parser.add_argument('--subtask-segments', choices=('v72_semantic', 'raw_annotation'),
+                        help='Override the default V72 semantic spans or reproduce the original raw GT spans.')
     parser.add_argument('--foreground', action='store_true')
     parser.add_argument('--dry-run', action='store_true')
     cli = parser.parse_args()
@@ -51,6 +53,8 @@ def main():
     cfg.num_workers = cli.num_workers
     cfg.max_steps = cli.max_steps
     cfg.output_dir = str(ROOT / 'runs' / cli.task / run_id)
+    if cli.subtask_segments:
+        cfg.data.train.gt_subtask_segment_mode = cli.subtask_segments
     if cli.resume is not None:
         if not cli.resume.exists():
             parser.error(f'resume checkpoint does not exist: {cli.resume}')
@@ -84,12 +88,15 @@ def main():
     record = dict(task=cli.task, run_id=run_id, command=command, gpus=cli.gpus,
                   microbatch=cli.microbatch, gradient_accumulation_steps=accumulation,
                   global_batch_size=64, max_steps=cli.max_steps, resume=cfg_data['resume'],
+                  gt_subtask_segment_mode=cfg_data['data']['train']['gt_subtask_segment_mode'],
                   CUDA_VISIBLE_DEVICES=os.environ.get('CUDA_VISIBLE_DEVICES', 'all'),
                   run_dir=str(run_dir), created_at=datetime.now(timezone.utc).isoformat())
     (run_dir / 'launch_command.json').write_text(json.dumps(record, indent=2) + '\n')
     print(shlex.join(command), flush=True)
     print(f'[training] task={cli.task} episodes=50 frames={info["frames"]} '
           f'global_batch=64 ({cli.gpus} GPUs x {cli.microbatch} x accumulation {accumulation})', flush=True)
+    print('[subtasks] mode=' + cfg_data['data']['train']['gt_subtask_segment_mode']
+          + ' event_instance_tasks=' + ','.join(cfg_data['data']['train']['gt_subtask_event_instance_tasks']), flush=True)
     if cli.dry_run:
         print('[dry-run] No GPU training process was launched.', flush=True)
         return 0

@@ -10,7 +10,6 @@ import pyarrow.parquet as pq
 import torch
 
 from fastwam.datasets.lerobot.gt_subtask_video_dataset import GroundTruthSubtaskRobotVideoDataset
-from fastwam.datasets.lerobot.progress_subtask_video_dataset import ProgressSubtaskRobotVideoDataset
 from fastwam.utils.samplers import ResumableEpochSampler
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +29,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--raw-root', type=Path, default=ROOT / 'data/RMBench/data/data')
     parser.add_argument('--dataset-root', type=Path, default=ROOT / 'data/lerobot/rmbench_all_12tasks_demo_clean_50')
+    parser.add_argument('--subtask-segments', choices=('v72_semantic', 'raw_annotation'), default='v72_semantic')
     args = parser.parse_args()
     torch.set_num_threads(1)
     source = json.loads((ROOT / 'data/source_map_template.json').read_text())
@@ -51,8 +51,10 @@ def main():
         dataset._subtask_segment_end = {}
         dataset._subtask_segment_index = {}
         dataset._gt_texts_by_episode = {}
-        ProgressSubtaskRobotVideoDataset._load_gt_subtask_trajectories(dataset)
-        annotations = json.loads((args.raw_root / task / 'demo_clean/language_annotation.json').read_text())
+        dataset._gt_raw_ranges_by_episode = {}
+        dataset.gt_subtask_segment_mode = args.subtask_segments
+        dataset.gt_subtask_event_instance_tasks = ('press_button',)
+        dataset._load_gt_subtask_trajectories()
         gt_segments = held = targets_count = 0
         for row in selected:
             ep, raw_id = row['episode_index'], row['source_episode_id']
@@ -67,8 +69,6 @@ def main():
             actions = np.asarray(table['action'].to_pylist(), dtype=np.float32)
             assert np.array_equal(states, qpos[:-1])
             assert np.array_equal(actions, qpos[1:])
-            texts = tuple(segment[0].strip() for segment in annotations[f'episode_{raw_id}'])
-            dataset._gt_texts_by_episode[ep] = texts
             stage, end = dataset._gt_stage_index[ep], dataset._subtask_segment_end[ep]
             offsets = np.arange(len(stage))[:, None] + np.arange(32)
             target = np.minimum(offsets, end[:, None])
@@ -97,7 +97,8 @@ def main():
         print('METADATA_AUDIT_OK '+task+' '+json.dumps(reports[task]), flush=True)
         (ROOT / 'reports/gt_metadata_audit_partial.json').write_text(json.dumps(reports, indent=2)+'\n')
     report = dict(passed=True, tasks=12, episodes=600, frames=sum(info['frames'] for info in tasks.values()),
-                  input_raw_root=str(args.raw_root), input_dataset_root=str(args.dataset_root), tasks_report=reports)
+                  input_raw_root=str(args.raw_root), input_dataset_root=str(args.dataset_root),
+                  gt_subtask_segment_mode=args.subtask_segments, tasks_report=reports)
     (ROOT / 'reports/gt_metadata_audit.json').write_text(json.dumps(report, indent=2)+'\n')
     print('ALL_METADATA_AUDITS_PASSED', flush=True)
 

@@ -95,6 +95,30 @@ bash train_task.sh rearrange_blocks --dry-run
 
 默认配置保留 `skip_dit_load_from_pretrain=false`、上述 Wan 动作骨干转换路径和 `resume=null`。`--resume` 仅在用户显式要求续训时使用。初始化来源核对结果见 `reports/wan_initialization_audit.json`。
 
+## V72 subtask 分段
+
+所有任务默认使用 `gt_subtask_segment_mode: v72_semantic`。训练读取原始标注时，仅合并相邻且文本在统一大小写、空白后相同的段，累计它们的时长；被其他指令隔开的同名段分别保留。阶段编号、GT 文本列表及动作/视频的末尾保持边界一起更新。`gt_subtask_event_instance_tasks: [press_button]` 保留每一次按键事件，满足按次数执行的任务语义。
+
+| 任务 | 每条轨迹原始段数 → 默认 V72 段数 |
+| --- | --- |
+| `classify_blocks` | 24 → 2 |
+| `rearrange_blocks` | 11 → 3 |
+| `swap_blocks` | 14 → 5 |
+| `storage_blocks` | 16–24 → 6 或 8 |
+| `put_back_block` | 10 → 3 |
+| `observe_and_pickup` | 4 → 2 |
+| `swap_T` | 7 → 4 |
+
+`cover_blocks`、`battery_try`、`place_block_mat`、`blocks_ranking_try` 的阶段边界和 `press_button` 的独立事件保持原有行为。已核对 600 条轨迹的每帧文本，合并后均保持相同，所以现有 T5 缓存、图像、动作数据及归一化统计可直接复用；魔搭资源版本保持不变。
+
+需要复现原始 GT 分段时，可显式选择：
+
+```bash
+bash train_task.sh classify_blocks --subtask-segments raw_annotation
+```
+
+新任务默认从 Wan 初始化开始训练。分段改变会更新受影响任务的 sampling contract；显式续训旧状态时沿用原训练器的合同变更处理，重新开始完整的数据 epoch。完整核对见 `reports/v72_semantic_subtask_audit.json`。
+
 ## 保留的训练与采样逻辑
 
 - Seed 42；8 GPU × microbatch 8 × accumulation 1 = global batch 64；BF16；AdamW fused；LR 1e-5；weight decay 0.01；max grad norm 1。
@@ -103,12 +127,12 @@ bash train_task.sh rearrange_blocks --dry-run
 - 每任务使用参考缓存中对应的 50 条 episode，保留原始顺序。绝对 qpos 动作维度 14、proprio 维度 14，使用原 z-score 归一化方法。
 - 输入仅包含当前 RGB 三视角和当前 proprio，没有历史帧、在线进度模型或数值进度。相机拼接为 384×320 RobotWin mosaic。
 - 从当前帧预测 32 个动作，视频采样为 t,t+4,...,t+32，共 9 帧。
-- GT 来自原始 `language_annotation.json`，按原始逐段时长展开，再截到 LeRobot 长度。`state[t]` 与原始 qpos[t]、`action[t]` 与原始 qpos[t+1] 精确对齐。
+- GT 来自原始 `language_annotation.json`，默认按上述 V72 规则构造阶段，再截到 LeRobot 长度。`state[t]` 与原始 qpos[t]、`action[t]` 与原始 qpos[t+1] 精确对齐。
 - 当前 GT subtask 构造固定 Wan prompt，使用 128×4096 BF16 T5 context；padding context 置零，context mask 保持全部可见。
-- 每个 GT segment 独立处理。跨 subtask 的动作后缀重复本段最后动作；视频后缀重复本段最后已采样帧，继续参与 loss。
+- 每个 V72 GT 阶段独立处理。跨真正 subtask 边界的动作后缀重复本阶段最后动作；视频后缀重复本阶段最后已采样帧，继续参与 loss。合并段内部的原始边界继续使用真实未来动作和视频。
 - 所有合法真实帧均可作为 anchor，包括短 segment 和尾部。每 epoch 按 seed+epoch 无放回打乱；DDP 对齐使用 -1 零损失样本，恢复时精确跳过已消费的 global microbatch。
 
-迁移只改变任务选择、资源路径、输出路径和恢复状态；模型架构、优化器、loss、图像处理与采样算法沿用原代码。
+模型架构、优化器、loss、图像处理和每个 epoch 的真实帧采样顺序沿用原代码。本次更新额外将上述 7 个任务的 GT 阶段边界对齐 V72；其余 5 个任务保留原有行为。
 
 ## 代码与验证记录
 
@@ -116,7 +140,7 @@ bash train_task.sh rearrange_blocks --dry-run
 
 `data/RMBench/` 保留数据转换代码。`scripts/build_rmbench_raw_source_map.py` 构造原始数据对应关系，`scripts/compute_task_stats.py` 使用原算法计算归一化，`scripts/build_gt_text_cache.py` 可从公共 T5 离线重建 GT 文本缓存。启动时根据当前项目位置重建资源路径，因此无需原服务器目录。
 
-`provenance/` 保留来源版本、训练代码差异和文件 SHA256；`reports/` 保留验证结果：12 任务、600 episodes 的标量/GT/sampler 检查，24 episodes 的 623 次实际 RGB/action/context 取样，以及完整环境迁移与启动配置校验。打包和验证均未启动新的 GPU 训练。
+`provenance/` 保留原始来源版本、训练代码差异和文件 SHA256；`reports/gt_metadata_audit.json` 记录初始原始分段的标量/GT/sampler 验证。更新后的阶段、文本、动作/视频保持及采样顺序验证见 `reports/v72_semantic_subtask_audit.json`，真实 RGB/action/context 取样见 `reports/gt_rgb_sample_audit.json`，启动配置见 `reports/github_launch_audit.json`。打包和验证均未启动新的 GPU 训练。
 
 完整资源额外校验会读取约 257 GB：`bash download_assets.sh --check --verify`。共享本地存储可用 `bash setup.sh --source /path/to/complete/snapshot --link-local`，或用 `--source /path/to/complete/snapshot` 复制资源。
 
