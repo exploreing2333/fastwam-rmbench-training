@@ -1,0 +1,32 @@
+GitHub 克隆后，一行下载数据/预训练权重/环境并恢复：
+bash setup.sh
+
+进入迁移后的项目目录，再分别执行以下命令（默认每条使用8张GPU，global batch=64，200000 steps）。
+参考cover_blocks之外的11个任务：
+
+bash train_task.sh press_button
+bash train_task.sh battery_try
+bash train_task.sh place_block_mat
+bash train_task.sh classify_blocks
+bash train_task.sh rearrange_blocks
+bash train_task.sh swap_blocks
+bash train_task.sh storage_blocks
+bash train_task.sh blocks_ranking_try
+bash train_task.sh put_back_block
+bash train_task.sh observe_and_pickup
+bash train_task.sh swap_T
+
+参考任务：
+bash train_task.sh cover_blocks
+
+按顺序训练上述11个任务（同一时刻只跑一个任务）：
+bash train_tasks_sequential.sh
+
+4卡，仍保持global batch=64：
+bash train_task.sh rearrange_blocks --gpus 4
+
+指定GPU组：
+CUDA_VISIBLE_DEVICES=0,1,2,3 bash train_task.sh rearrange_blocks --gpus 4
+
+先只检查启动命令，不启动训练：
+bash train_task.sh rearrange_blocks --dry-run

@@ -1,0 +1,26 @@
+{
+    "contact_points": [
+        {
+            "id": [0, 1, 2, 3],
+            "description": "On the upper part of the box",
+            "usage": "Used to grasp the box with the left arm."
+        },
+        {
+            "id": [4, 5, 6, 7],
+            "description": "On the lower part of the box",
+            "usage": "Used to handover the box with the right arm."
+        }
+    ],
+    "functional_points": [
+        {
+            "id": 0,
+            "description": "On the bottom of the block",
+            "usage": "Used to place the block on table or other surfaces."
+        },
+        {
+            "id": 1,
+            "description": "On the top of the block",
+            "usage": "Used to indicate the position of other objects when they come into contact with the block."
+        }
+    ]
+}

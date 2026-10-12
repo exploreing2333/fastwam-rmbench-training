@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "uncompressed_fixture_bytes": 37000000,
+  "compressed_fixture_bytes": 3427,
+  "streaming_large_output_verified": true,
+  "truncated_input_rejected": true,
+  "statically_linked": true
+}

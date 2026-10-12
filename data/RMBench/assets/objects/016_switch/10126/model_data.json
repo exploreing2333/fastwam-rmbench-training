@@ -1,0 +1,99 @@
+{
+    "scale": 1.5,
+    "transform_matrix": [
+        [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ]
+    ],
+    "init_qpos": [],
+    "target_points": [],
+    "contact_points": [
+        {
+            "matrix": [
+                [
+                    -1.0,
+                    0.0,
+                    -0.0,
+                    -0.026669999584555626
+                ],
+                [
+                    -0.0,
+                    -0.0,
+                    1.0,
+                    0.0
+                ],
+                [
+                    0.0,
+                    1.0,
+                    -0.0,
+                    0.009999999776482582
+                ],
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            ],
+            "base": "rocker_link"
+        },
+        {
+            "matrix": [
+                [
+                    -1.0,
+                    0.0,
+                    0.0,
+                    0.029999999329447746
+                ],
+                [
+                    0.0,
+                    -0.0,
+                    1.0,
+                    0.0
+                ],
+                [
+                    0.0,
+                    1.0,
+                    -0.0,
+                    0.009999999776482582
+                ],
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            ],
+            "base": "rocker_link"
+        }
+    ],
+    "functional_points": [],
+    "orientation_point": [],
+    "contact_points_group": [],
+    "contact_points_mask": [],
+    "target_points_description": [],
+    "contact_points_description": [],
+    "functional_points_description": [],
+    "orientation_point_description": []
+}

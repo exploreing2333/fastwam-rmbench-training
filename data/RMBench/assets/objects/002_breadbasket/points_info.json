@@ -1,0 +1,10 @@
+{
+    "contact_points": [],
+    "functional_points": [
+        {
+            "id": 0,
+            "description": "At the bottom center of the basket",
+            "usage": "Used to indicate the position where objects should be placed inside the basket."
+        }
+    ]
+}

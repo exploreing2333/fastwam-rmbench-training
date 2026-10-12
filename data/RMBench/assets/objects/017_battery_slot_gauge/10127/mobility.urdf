@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<robot name="battery_box_2aa_meter_wire_v2_fit_big_battery_flat_keep_height">
+
+  <!-- ================= Materials ================= -->
+  <material name="mat_dark"><color rgba="0.15 0.15 0.15 1"/></material>
+  <material name="mat_gray"><color rgba="0.55 0.55 0.58 1"/></material>
+  <material name="mat_red"><color rgba="0.90 0.15 0.15 1"/></material>
+  <material name="mat_white"><color rgba="0.95 0.95 0.95 1"/></material>
+  <material name="mat_yellow"><color rgba="0.95 0.85 0.10 1"/></material>
+
+  <!-- ================= Open-top 2-slot battery box (Y widened; Z unchanged) ================= -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0.012" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.003"/>
+    </inertial>
+
+    <!-- Bottom plate (ONLY Y changed: 0.060 -> 0.102) -->
+    <visual>
+      <origin xyz="0 0 0.0015" rpy="0 0 0"/>
+      <geometry><box size="0.080 0.102 0.003"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0015" rpy="0 0 0"/>
+      <geometry><box size="0.080 0.102 0.003"/></geometry>
+    </collision>
+
+    <!-- Side walls (Z size/pos unchanged; ONLY move outward in Y) -->
+    <visual>
+      <origin xyz="0 0.0485 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.080 0.005 0.015"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.0485 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.080 0.005 0.015"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 -0.0485 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.080 0.005 0.015"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.0485 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.080 0.005 0.015"/></geometry>
+    </collision>
+
+    <!-- End walls (Z size/pos unchanged; ONLY Y size changed to match new width) -->
+    <visual>
+      <origin xyz="0.0375 0 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.005 0.102 0.015"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0375 0 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.005 0.102 0.015"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="-0.0375 0 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.005 0.102 0.015"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0375 0 0.0105" rpy="0 0 0"/>
+      <geometry><box size="0.005 0.102 0.015"/></geometry>
+    </collision>
+
+    <!-- Middle divider (UNCHANGED) -->
+    <visual>
+      <origin xyz="0 0 0.009" rpy="0 0 0"/>
+      <geometry><box size="0.070 0.004 0.012"/></geometry>
+      <material name="mat_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.009" rpy="0 0 0"/>
+      <geometry><box size="0.070 0.004 0.012"/></geometry>
+    </collision>
+
+    <!-- Two low rails (Z unchanged; move outward in Y + widen rail a bit in Y) -->
+    <visual>
+      <origin xyz="0 0.024 0.0045" rpy="0 0 0"/>
+      <geometry><box size="0.070 0.020 0.003"/></geometry>
+      <material name="mat_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.024 0.0045" rpy="0 0 0"/>
+      <geometry><box size="0.070 0.020 0.003"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 -0.024 0.0045" rpy="0 0 0"/>
+      <geometry><box size="0.070 0.020 0.003"/></geometry>
+      <material name="mat_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.024 0.0045" rpy="0 0 0"/>
+      <geometry><box size="0.070 0.020 0.003"/></geometry>
+    </collision>
+  </link>
+
+  <!-- ================= Multimeter body (UNCHANGED) ================= -->
+  <link name="meter_link">
+    <inertial>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <mass value="0.6"/>
+      <inertia ixx="0.002" ixy="0" ixz="0" iyy="0.002" iyz="0" izz="0.002"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.120 0.080 0.060"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <geometry><box size="0.120 0.080 0.060"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0.000 0.000 0.059" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.030" length="0.004"/></geometry>
+      <material name="mat_white"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0.000 0.000 0.0615" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.032" length="0.001"/></geometry>
+      <material name="mat_gray"/>
+    </visual>
+  </link>
+
+  <joint name="meter_fixed" type="fixed">
+    <parent link="base_link"/>
+    <child link="meter_link"/>
+    <origin xyz="0.150 0.000 0.000" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ================= Needle (UNCHANGED) ================= -->
+  <link name="needle_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.01"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.0035" length="0.003"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0.016 0.0 0.0" rpy="0 0 0"/>
+      <geometry><box size="0.032 0.0035 0.002"/></geometry>
+      <material name="mat_red"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0.034 0.0035 0.0" rpy="0 0 0.70"/>
+      <geometry><box size="0.012 0.0028 0.002"/></geometry>
+      <material name="mat_red"/>
+    </visual>
+    <visual>
+      <origin xyz="0.034 -0.0035 0.0" rpy="0 0 -0.70"/>
+      <geometry><box size="0.012 0.0028 0.002"/></geometry>
+      <material name="mat_red"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0.016 0.0 0.0" rpy="0 0 0"/>
+      <geometry><box size="0.032 0.0035 0.002"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="needle_joint" type="revolute">
+    <parent link="meter_link"/>
+    <child link="needle_link"/>
+    <origin xyz="0.000 0.000 0.062" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="0.3" velocity="12.0"/>
+    <dynamics damping="0.02" friction="0.02"/>
+  </joint>
+
+  <!-- ================= Wire (UNCHANGED) ================= -->
+  <link name="wire_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.02"/>
+      <inertia ixx="2e-6" ixy="0" ixz="0" iyy="2e-6" iyz="0" izz="2e-6"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0.070 0.030 0.020" rpy="0 0 0.35"/>
+      <geometry><cylinder radius="0.005" length="0.100"/></geometry>
+      <material name="mat_gray"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0.130 0.020 0.030" rpy="0 1.15 0.20"/>
+      <geometry><cylinder radius="0.005" length="0.080"/></geometry>
+      <material name="mat_gray"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0.175 0.010 0.035" rpy="0 0.20 -0.45"/>
+      <geometry><cylinder radius="0.005" length="0.080"/></geometry>
+      <material name="mat_gray"/>
+    </visual>
+
+    <visual>
+      <origin xyz="0.205 0.000 0.040" rpy="0 0 0"/>
+      <geometry><box size="0.012 0.012 0.012"/></geometry>
+      <material name="mat_dark"/>
+    </visual>
+  </link>
+
+  <joint name="wire_fixed" type="fixed">
+    <parent link="base_link"/>
+    <child link="wire_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>

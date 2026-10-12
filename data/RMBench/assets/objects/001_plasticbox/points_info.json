@@ -1,0 +1,21 @@
+{
+    "contact_points": [
+        {
+            "id": [0, 1, 2, 3, 4, 5, 6, 7],
+            "description": "On the edge of the plastic box",
+            "usage": "Used for grasping the plastic box."
+        }
+    ],
+    "functional_points": [
+        {
+            "id": 0,
+            "description": "At the inside bottom of the plastic box",
+            "usage": "Used to place items inside the plastic box."
+        },
+        {
+            "id": 1,
+            "description": "At the inside bottom of the plastic box",
+            "usage": "Used to place items inside the plastic box."
+        }
+    ]
+}

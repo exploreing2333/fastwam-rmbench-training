@@ -1,0 +1,12 @@
+{
+  "phase": "copy_complete",
+  "started_at": "2026-10-12T01:43:28.508529+00:00",
+  "files_total": 7923,
+  "bytes_total": 248662779903,
+  "files_done": 7923,
+  "bytes_done": 248662779903,
+  "copy_parallelism": 4,
+  "gpu_jobs_started": 0,
+  "updated_at": "2026-10-12T02:16:07.986567+00:00",
+  "environment_archives_complete": true
+}

@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "pretrained_assets_registry_match": {
+    "wan_video_dit": "1f5ab7703c6fc803fdded85ff040c316",
+    "wan_video_vae": "e1de6c02cdac79f8b739f4d3698cd216",
+    "wan_video_text_encoder": "9c8818c2cbea55eca56c7b447df170da"
+  },
+  "wan_video_shards": 3,
+  "action_initializer_present": true,
+  "wan_tokenizer_present": true,
+  "only_required_public_pretrained_models": true,
+  "gpu_training_started": false
+}

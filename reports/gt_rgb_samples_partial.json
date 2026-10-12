@@ -1,0 +1,122 @@
+{
+  "press_button": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 57,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "battery_try": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 24,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "cover_blocks": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 36,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "place_block_mat": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 18,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "classify_blocks": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 120,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "rearrange_blocks": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 55,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "swap_blocks": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 76,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "storage_blocks": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 95,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "blocks_ranking_try": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 30,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "put_back_block": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 52,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "observe_and_pickup": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 20,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  },
+  "swap_T": {
+    "passed": true,
+    "episodes_sampled": 2,
+    "actual_getitem_boundary_checks": 40,
+    "shape_contract": "video3x9x384x320_action32x14_proprio1x14_context128x4096",
+    "same_subtask_action_hold_exact": true,
+    "same_subtask_video_hold_exact": true,
+    "current_only": true,
+    "gt_subtask_only": true
+  }
+}

@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<robot name="simple_button_v2">
+
+  <!-- ===================== 材质定义 ===================== -->
+  <material name="base_gray">
+    <color rgba="0.3 0.3 0.3 1"/>
+  </material>
+
+  <material name="button_red">
+    <color rgba="0.9 0.1 0.1 1"/>
+  </material>
+
+  <!-- ===================== 底座（固定） ===================== -->
+  <link name="base">
+    <!-- 外观 -->
+    <visual>
+      <!-- 以 link 原点为圆柱中心，沿 Z 轴对称：-0.01 ~ +0.01 -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.035" length="0.020"/>
+      </geometry>
+      <material name="base_gray"/>
+    </visual>
+
+    <!-- 碰撞体积 -->
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.035" length="0.020"/>
+      </geometry>
+    </collision>
+
+    <!-- 惯性：圆柱，m=0.07 kg, r=0.035, h=0.02 -->
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.07"/>
+      <!-- Ixx = Iyy ≈ 2.38e-5, Izz ≈ 4.29e-5 -->
+      <inertia ixx="2.38e-5" ixy="0" ixz="0"
+               iyy="2.38e-5" iyz="0"
+               izz="4.29e-5"/>
+    </inertial>
+  </link>
+
+  <!-- ===================== 按钮帽（可动） ===================== -->
+  <link name="button_cap">
+    <!-- 外观：圆柱按钮，长度 0.02，中心在本地原点 -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.030" length="0.020"/>
+      </geometry>
+      <material name="button_red"/>
+    </visual>
+
+    <!-- 碰撞体积 -->
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.030" length="0.020"/>
+      </geometry>
+    </collision>
+
+    <!-- 惯性：圆柱，m=0.02 kg, r=0.03, h=0.02 -->
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.02"/>
+      <!-- Ixx = Iyy ≈ 5.17e-6, Izz ≈ 9.0e-6 -->
+      <inertia ixx="5.17e-6" ixy="0" ixz="0"
+               iyy="5.17e-6" iyz="0"
+               izz="9.0e-6"/>
+    </inertial>
+  </link>
+
+  <!-- ===================== 滑动关节 ===================== -->
+  <!--
+    几何关系说明（单位：m）：
+    - base 圆柱：中心在 z=0，顶面在 z=+0.01
+    - button_cap 圆柱：长度 0.02，中心在它自己的原点
+
+    关节定义：child 位姿 = parent 位姿 * origin * T(q * axis)
+
+    这里设置：
+      origin.xyz = (0, 0, 0.026)
+
+    当 q = 0 时：
+      button_cap 中心在 z = 0.026
+      按钮下表面 z = 0.026 - 0.01 = 0.016  （高于底座顶面 0.01，悬空 6 mm）
+
+    当 q = -0.006 时（按下极限）：
+      中心 z = 0.026 - 0.006 = 0.020
+      下表面 z = 0.020 - 0.01 = 0.010  （刚好与底座顶面齐平，不发生几何插入）
+  -->
+  <joint name="button_joint" type="prismatic">
+    <parent link="base"/>
+    <child  link="button_cap"/>
+    <origin xyz="0 0 0.028" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.006" upper="0.0" effort="5.0" velocity="0.5"/>
+    <dynamics damping="1.0" friction="0.0"/>
+  </joint>
+
+
+</robot>

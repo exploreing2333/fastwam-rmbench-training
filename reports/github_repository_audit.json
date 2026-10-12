@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "code_files": 2335,
+  "code_bytes": 24487889,
+  "largest_file_bytes": 2638605,
+  "native_training_source_unchanged": true,
+  "datasets_and_weights_excluded": true,
+  "credentials_excluded": true,
+  "gpu_jobs_started": 0,
+  "checked_at": "2026-10-12T03:47:51.806332+00:00"
+}

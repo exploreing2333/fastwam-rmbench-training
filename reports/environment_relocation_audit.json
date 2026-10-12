@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "executable": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+  "relocated_prefix": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam",
+  "platform": "Linux-5.4.250-2-velinux1u1-amd64-x86_64-with-glibc2.31",
+  "torch_version": "2.7.1+cu128",
+  "torch_cuda": "12.8",
+  "transformers_version": "4.57.1",
+  "deepspeed_version": "0.18.5",
+  "gpu_training_started": false,
+  "imports": {
+    "torch": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/torch/__init__.py",
+    "torchvision": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/torchvision/__init__.py",
+    "accelerate": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/accelerate/__init__.py",
+    "deepspeed": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/deepspeed/__init__.py",
+    "transformers": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/transformers/__init__.py",
+    "av": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/av/__init__.py",
+    "h5py": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/h5py/__init__.py",
+    "pyarrow": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/pyarrow/__init__.py",
+    "cv2": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/cv2/__init__.py",
+    "hydra": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/hydra/__init__.py",
+    "omegaconf": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/omegaconf/__init__.py",
+    "safetensors": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/lib/python3.10/site-packages/safetensors/__init__.py",
+    "fastwam": "/home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/src/fastwam/__init__.py",
+    "fastwam_qwen": "/home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/src/fastwam_qwen/__init__.py"
+  },
+  "original_environment_required": false,
+  "original_source_required": false
+}

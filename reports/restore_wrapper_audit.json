@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "external_zstd_not_required": true,
+  "full_restore_wrapper_extracts_archive": true,
+  "already_extracted_directory_reused": true,
+  "training_arguments_forwarded_exactly": true,
+  "full_gpu_training_not_started": true
+}

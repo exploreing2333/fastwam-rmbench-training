@@ -1,0 +1,22 @@
+{
+  "created_at": "2026-10-12T01:43:28.297206+00:00",
+  "reference_run": "/home/cenzl/VLA/LatentWAM/FastWAM/runs/rmbench_fastwam_gt_cover_current_gbs64_200k/2026-09-30_fastwam_wan_gt_cover_current_gbs64_200k_resume75k_r2",
+  "source_code": "/home/cenzl/VLA/LatentWAM/FastWAM",
+  "raw_dataset": "/home/tos/252806029/VLA_DATASET/RMBench",
+  "trained_checkpoints_included": false,
+  "original_git_head": "45d8e1458921d83f8ad6cf9ce993d371208dabd0",
+  "intended_tasks": [
+    "press_button",
+    "battery_try",
+    "cover_blocks",
+    "place_block_mat",
+    "classify_blocks",
+    "rearrange_blocks",
+    "swap_blocks",
+    "storage_blocks",
+    "blocks_ranking_try",
+    "put_back_block",
+    "observe_and_pickup",
+    "swap_T"
+  ]
+}

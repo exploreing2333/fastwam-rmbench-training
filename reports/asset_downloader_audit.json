@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "local_copy": true,
+  "shared_storage_links": true,
+  "http_range_resume": true,
+  "download_sha256": true,
+  "zero_byte_files": true,
+  "http_access_denied": true,
+  "existing_corruption_detection": true,
+  "path_traversal_rejected": true,
+  "upstream_lfs_reference_restoration": true,
+  "gpu_jobs_started": 0
+}

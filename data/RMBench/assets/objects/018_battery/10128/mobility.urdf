@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot name="aa_battery">
+
+  <material name="bat_body">
+    <color rgba="0.20 0.55 0.95 1"/>
+  </material>
+  <material name="metal">
+    <color rgba="0.75 0.75 0.78 1"/>
+  </material>
+
+  <!-- root link (to satisfy articulation-style loaders) -->
+  <link name="base_link"/>
+
+  <link name="battery_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.025"/>
+      <inertia ixx="2e-6" ixy="0" ixz="0" iyy="2e-6" iyz="0" izz="2e-6"/>
+    </inertial>
+
+    <!-- ================= Main body ================= -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.02" length="0.050"/>
+      </geometry>
+      <material name="bat_body"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.02" length="0.050"/>
+      </geometry>
+    </collision>
+
+    <!-- ================= Positive cap (+Z) ================= -->
+    <visual>
+      <origin xyz="0 0 0.026" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.01" length="0.004"/>
+      </geometry>
+      <material name="metal"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.026" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.01" length="0.004"/>
+      </geometry>
+    </collision>
+
+    <!-- ================= Negative cap (-Z) ================= -->
+    <visual>
+      <origin xyz="0 0 -0.026" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.01" length="0.002"/>
+      </geometry>
+      <material name="metal"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 -0.026" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.01" length="0.002"/>
+      </geometry>
+    </collision>
+
+  </link>
+
+  <joint name="base_to_battery" type="fixed">
+    <parent link="base_link"/>
+    <child link="battery_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+</robot>

@@ -1,0 +1,6 @@
+{
+  "repo_id": "cenzl/fastwam-rmbench-training-assets",
+  "repo_type": "dataset",
+  "revision": "main",
+  "description": "Exact resources for the GT current-only 200k training snapshot"
+}

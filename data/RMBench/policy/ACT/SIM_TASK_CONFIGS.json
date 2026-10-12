@@ -1,0 +1,72 @@
+{
+    "sim-storage_blocks-demo_clean-50": {
+        "dataset_dir": "./processed_data/sim-storage_blocks/demo_clean-50",
+        "num_episodes": 50,
+        "episode_len": 1000,
+        "camera_names": [
+            "cam_high",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    },
+    "sim-press_button-demo_clean-100": {
+        "dataset_dir": "./processed_data/sim-press_button/demo_clean-100",
+        "num_episodes": 100,
+        "episode_len": 1000,
+        "camera_names": [
+            "cam_high",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    },
+    "sim-swap_blocks-demo_clean-100": {
+        "dataset_dir": "./processed_data/sim-swap_blocks/demo_clean-100",
+        "num_episodes": 100,
+        "episode_len": 1000,
+        "camera_names": [
+            "cam_high",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    },
+    "sim-stack_blocks_five_dual-demo_clean-100": {
+        "dataset_dir": "./processed_data/sim-stack_blocks_five_dual/demo_clean-100",
+        "num_episodes": 100,
+        "episode_len": 1000,
+        "camera_names": [
+            "cam_high",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    },
+    "sim-storage_blocks-demo_clean-100": {
+        "dataset_dir": "./processed_data/sim-storage_blocks/demo_clean-100",
+        "num_episodes": 100,
+        "episode_len": 1000,
+        "camera_names": [
+            "cam_high",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    },
+    "sim-classify_blocks-demo_clean-100": {
+        "dataset_dir": "./processed_data/sim-classify_blocks/demo_clean-100",
+        "num_episodes": 100,
+        "episode_len": 1000,
+        "camera_names": [
+            "cam_high",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    },
+    "sim-cover_block-demo_clean-100": {
+        "dataset_dir": "./processed_data/sim-cover_block/demo_clean-100",
+        "num_episodes": 100,
+        "episode_len": 1000,
+        "camera_names": [
+            "cam_high",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    }
+}

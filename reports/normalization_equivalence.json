@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "tasks": 12,
+  "native_reference_method_used": true,
+  "reference_cover_stats_match": true,
+  "maximum_cover_absolute_difference": 1.7881393432617188e-07,
+  "default_training_still_recomputes_stats": true,
+  "optional_flag": "--cached-stats"
+}

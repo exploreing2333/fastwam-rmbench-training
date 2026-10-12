@@ -1,0 +1,99 @@
+{
+    "scale": 1.0,
+    "transform_matrix": [
+        [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+        ],
+        [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ]
+    ],
+    "init_qpos": [],
+    "target_points": [],
+    "contact_points": [],
+    "functional_points": [
+        {
+            "matrix": [
+                [
+                    -0.0,
+                    -1.0,
+                    0.0,
+                    0.0
+                ],
+                [
+                    1.0,
+                    -0.0,
+                    0.0,
+                    0.019999999552965164
+                ],
+                [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                ],
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            ],
+            "base": "base_link"
+        },
+        {
+            "matrix": [
+                [
+                    -0.0,
+                    -1.0,
+                    0.0,
+                    0.0
+                ],
+                [
+                    1.0,
+                    -0.0,
+                    0.0,
+                    -0.019999999552965164
+                ],
+                [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                ],
+                [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ]
+            ],
+            "base": "base_link"
+        }
+    ],
+    "orientation_point": [],
+    "contact_points_group": [],
+    "contact_points_mask": [],
+    "target_points_description": [],
+    "contact_points_description": [],
+    "functional_points_description": [],
+    "orientation_point_description": []
+}

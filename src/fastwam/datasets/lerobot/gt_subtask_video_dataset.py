@@ -1,0 +1,152 @@
+"""Current-only FastWAM with authoritative, frame-aligned GT subtasks.
+
+No ProgressModel output, history image, event anchor, or init cache is loaded.
+Only the original FastWAM camera layout and subtask terminal-hold operations
+are reused from the deployed-subtask dataset; the labels come from RMBench GT.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+import numpy as np
+import torch
+
+from fastwam_qwen.datasets.robot_video_dataset import (
+    DEFAULT_PROMPT,
+    RobotVideoDatasetNoT5,
+)
+from .progress_subtask_video_dataset import ProgressSubtaskRobotVideoDataset
+
+
+class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
+    def __init__(
+        self,
+        *args,
+        subtask_source_map: str,
+        gt_subtask_text_embedding_cache_dir: str,
+        **kwargs,
+    ) -> None:
+        for name in (
+            "progress_cache_root",
+            "progress_subtask_text_embedding_cache_dir",
+            "text_embedding_cache_dir",
+            "tmd3_latent_cache_root",
+        ):
+            if kwargs.get(name) not in (None, ""):
+                raise ValueError(f"GT current-only training cannot load {name}.")
+        expected = {
+            "history_num_frames": 1,
+            "robometer_history_num_frames": 0,
+            "require_qwen_history": False,
+            "progress_require_gt_subtask_exact": False,
+            "long_image_history_latents": 0,
+            "long_image_future_latents": 0,
+            "skip_rgb_when_precomputed_latents": False,
+            "skip_padding_as_possible": False,
+            "training_shuffle_unit": "trajectory",
+            "concat_multi_camera": "robotwin",
+        }
+        for name, value in expected.items():
+            if kwargs.get(name, value) != value:
+                raise ValueError(f"GT current-only training requires {name}={value!r}.")
+            kwargs[name] = value
+        self.subtask_source_map = Path(subtask_source_map).expanduser().resolve()
+        self.gt_subtask_text_embedding_cache_dir = Path(
+            gt_subtask_text_embedding_cache_dir
+        ).expanduser().resolve()
+        self.subtask_trajectory_mode = True
+        self.subtask_terminal_hold = True
+        self.subtask_segment_source = "gt_annotation"
+        self._gt_stage_index = {}
+        self._subtask_segment_index = {}
+        self._subtask_segment_end = {}
+        self._gt_texts_by_episode = {}
+        self._gt_contexts = {}
+        super().__init__(*args, **kwargs)
+        if self.current_obs_index != 0 or self.action_horizon != 32:
+            raise ValueError("Expected one current condition and a 32-control action chunk.")
+        if len(self.video_sample_indices) != 9:
+            raise ValueError("Expected current RGB plus eight stride-4 future video targets.")
+        processor = self.lerobot_dataset.processor
+        if processor.action_state_transforms or processor.use_stepwise_action_norm:
+            raise ValueError("Terminal hold requires absolute-qpos, non-stepwise normalization.")
+        ProgressSubtaskRobotVideoDataset._load_gt_subtask_trajectories(self)
+        source = json.loads(self.subtask_source_map.read_text(encoding="utf-8"))
+        rows = {int(row["episode_index"]): row for row in source["entries"]}
+        annotations = {}
+        for episode in self._gt_stage_index:
+            row = rows[episode]
+            task = row["source_task_name"]
+            if task not in annotations:
+                path = Path(source["raw_root"]) / task / "demo_clean/language_annotation.json"
+                annotations[task] = json.loads(path.read_text(encoding="utf-8"))
+            self._gt_texts_by_episode[episode] = tuple(
+                str(segment[0]).strip()
+                for segment in annotations[task][f"episode_{row['source_episode_id']}"]
+            )
+            for text in self._gt_texts_by_episode[episode]:
+                if text not in self._gt_contexts:
+                    self._gt_contexts[text] = self._load_gt_context(text)
+
+    def _load_gt_context(self, text: str) -> torch.Tensor:
+        prompt = DEFAULT_PROMPT.format(task=text)
+        digest = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+        path = self.gt_subtask_text_embedding_cache_dir / (
+            f"{digest}.t5_len{self.context_len}.wan22ti2v5b.pt"
+        )
+        payload = torch.load(path, map_location="cpu", weights_only=True)
+        context, mask = payload["context"], payload["mask"].bool()
+        if tuple(context.shape) != (self.context_len, 4096):
+            raise ValueError(f"Invalid GT T5 context shape in {path}.")
+        if tuple(mask.shape) != (self.context_len,) or not bool(mask.any()):
+            raise ValueError(f"Invalid GT T5 mask in {path}.")
+        if not bool(torch.isfinite(context).all()):
+            raise ValueError(f"Nonfinite GT T5 context in {path}.")
+        context = context.clone()
+        context[~mask] = 0
+        return context
+
+    def _aligned_anchor_indices(self) -> list[int]:
+        # All GT frames are admitted, including short boundary suffixes. Do not
+        # filter them through V72's predicted-condition/GT agreement mask.
+        indices = self.lerobot_dataset.episode_data_index
+        return [
+            anchor
+            for start, stop in zip(indices["from"].tolist(), indices["to"].tolist())
+            for anchor in range(int(start), int(stop), self.trajectory_anchor_stride)
+        ]
+
+    @property
+    def sampling_contract(self) -> str:
+        digest = hashlib.sha256()
+        for episode in sorted(self._gt_stage_index):
+            digest.update(str(episode).encode("utf-8"))
+            digest.update(np.asarray(self._gt_stage_index[episode], dtype=np.int32).tobytes())
+            digest.update(json.dumps(self._gt_texts_by_episode[episode]).encode("utf-8"))
+        return (
+            f"gt_subtask_currentonly_stride{self.trajectory_anchor_stride}_"
+            f"terminalhold_frame_shuffle_without_replacement_{digest.hexdigest()[:16]}_v1"
+        )
+
+    def _merge_cameras(self, video):
+        return ProgressSubtaskRobotVideoDataset._merge_cameras(self, video)
+
+    def _get(self, idx):
+        result = super()._get(idx)
+        episode = int(result["episode_index"])
+        frame = int(result["frame_index"])
+        stage = int(self._gt_stage_index[episode][frame])
+        text = self._gt_texts_by_episode[episode][stage]
+        ProgressSubtaskRobotVideoDataset._apply_subtask_terminal_hold(self, result)
+        result["context"] = self._gt_contexts[text].clone()
+        # Original FastWAM leaves zeroed T5 padding visible to cross-attention.
+        result["context_mask"] = torch.ones(self.context_len, dtype=torch.bool)
+        result["prompt"] = DEFAULT_PROMPT.format(task=text)
+        result["current_subtask"] = text
+        result["gt_subtask_index"] = torch.tensor(stage, dtype=torch.long)
+        result["gt_subtask_end_frame"] = torch.tensor(
+            int(self._subtask_segment_end[episode][frame]), dtype=torch.long
+        )
+        return result

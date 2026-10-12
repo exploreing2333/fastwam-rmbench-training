@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "tasks": [
+    "press_button",
+    "battery_try",
+    "cover_blocks",
+    "place_block_mat",
+    "classify_blocks",
+    "rearrange_blocks",
+    "swap_blocks",
+    "storage_blocks",
+    "blocks_ranking_try",
+    "put_back_block",
+    "observe_and_pickup",
+    "swap_T"
+  ],
+  "default_gpus": 8,
+  "global_batch_size": 64,
+  "4gpu_accumulation": 2,
+  "reduced_workers_option": true,
+  "actual_hydra_entrypoint_resolves": true,
+  "shell_syntax": true,
+  "gpu_jobs_started": 0
+}

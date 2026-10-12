@@ -1,0 +1,50 @@
+[setup] Ready: /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable
+[queue] Starting task press_button
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29800 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/press_button/2026-10-12_02-06-49_ef512a --config-name launch_config
+[training] task=press_button episodes=50 frames=26302 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task battery_try
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29801 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/battery_try/2026-10-12_02-06-49_7ad26e --config-name launch_config
+[training] task=battery_try episodes=50 frames=33512 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task cover_blocks
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29802 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/cover_blocks/2026-10-12_02-06-53_690245 --config-name launch_config
+[training] task=cover_blocks episodes=50 frames=51077 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task place_block_mat
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29803 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/place_block_mat/2026-10-12_02-06-55_1fa5a8 --config-name launch_config
+[training] task=place_block_mat episodes=50 frames=53489 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task classify_blocks
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29804 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/classify_blocks/2026-10-12_02-06-59_b94bb3 --config-name launch_config
+[training] task=classify_blocks episodes=50 frames=47596 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task rearrange_blocks
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29805 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/rearrange_blocks/2026-10-12_02-07-03_ba7169 --config-name launch_config
+[training] task=rearrange_blocks episodes=50 frames=20085 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task swap_blocks
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29806 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/swap_blocks/2026-10-12_02-07-04_5223a9 --config-name launch_config
+[training] task=swap_blocks episodes=50 frames=30017 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task storage_blocks
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29807 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/storage_blocks/2026-10-12_02-07-05_ec1ebd --config-name launch_config
+[training] task=storage_blocks episodes=50 frames=38726 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task blocks_ranking_try
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29808 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/blocks_ranking_try/2026-10-12_02-07-05_092d42 --config-name launch_config
+[training] task=blocks_ranking_try episodes=50 frames=73739 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task put_back_block
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29809 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/put_back_block/2026-10-12_02-07-06_e09130 --config-name launch_config
+[training] task=put_back_block episodes=50 frames=17562 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task observe_and_pickup
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29810 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/observe_and_pickup/2026-10-12_02-07-06_097526 --config-name launch_config
+[training] task=observe_and_pickup episodes=50 frames=7473 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] Starting task swap_T
+/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python -u -m accelerate.commands.launch --config_file /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/accelerate_configs/accelerate_zero1_ds.yaml --num_processes 8 --num_machines 1 --machine_rank 0 --main_process_ip 127.0.0.1 --main_process_port 29811 /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/scripts/train.py --config-path /home/tos/252806029/HDH/fastwam_rmbench_gt_current_200k_portable/runs/swap_T/2026-10-12_02-07-07_9ea080 --config-name launch_config
+[training] task=swap_T episodes=50 frames=17133 global_batch=64 (8 GPUs x 8 x accumulation 1)
+[dry-run] No GPU training process was launched.
+[queue] All requested tasks finished.
