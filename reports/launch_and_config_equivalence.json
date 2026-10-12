@@ -32,5 +32,7 @@
     "put_back_block",
     "observe_and_pickup",
     "swap_T"
-  ]
+  ],
+  "observe_and_pickup_target_specific_labels": true,
+  "observe_and_pickup_original_subtask_durations_preserved": true
 }

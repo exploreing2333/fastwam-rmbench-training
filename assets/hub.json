@@ -2,12 +2,12 @@
   "provider": "modelscope",
   "repo_id": "ccenzl/fastwam-rmbench-training-assets",
   "repo_type": "dataset",
-  "revision": "6c0522b3785fafef84bded2ad7f321f2c2dc1542",
-  "description": "Exact resources for the GT current-only 200k training snapshot",
+  "revision": "c91a7b92ddaad08627d4d1c32f229a16ecf7b558",
+  "description": "GT current-only 200k resources with target-specific observe_and_pickup annotations",
   "huggingface_backup": {
     "repo_id": "cenzl/fastwam-rmbench-training-assets",
     "repo_type": "dataset",
     "revision": "611eafce61072f5818d719f4987b8d939731e88d",
-    "description": "Exact resources for the GT current-only 200k training snapshot"
+    "description": "Historical original resource snapshot; excludes the observe_and_pickup target-label update"
   }
 }

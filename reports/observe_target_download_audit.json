@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "provider": "modelscope",
+  "revision": "c91a7b92ddaad08627d4d1c32f229a16ecf7b558",
+  "bundle_id": "fastwam-rmbench-gt-current-200k-observe-targets-20261012-4852d2d7b5bc",
+  "authenticated": false,
+  "changed_files_downloaded": 41,
+  "new_wan_t5_contexts": 38,
+  "download_bytes": 40037053,
+  "old_generic_annotation_replaced": true,
+  "every_updated_file_sha256_verified": true,
+  "full_remote_resource_sha256_checks": 5489,
+  "gpu_jobs_started": 0,
+  "checked_at": "2026-10-12T14:14:27.940284+00:00"
+}

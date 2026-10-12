@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "task": "observe_and_pickup",
+  "episodes": 50,
+  "frames": 7473,
+  "target_descriptions": 19,
+  "unique_new_contexts": 38,
+  "stages_per_episode": 2,
+  "original_durations_and_stage_boundaries_preserved": true,
+  "all_frames_use_target_specific_labels": true,
+  "sampling_order_and_resume_preserved": true,
+  "sampling_contract": "gt_subtask_currentonly_stride1_terminalhold_frame_shuffle_without_replacement_057592000a2c3440_v1",
+  "previous_sampling_contract": "gt_subtask_currentonly_stride1_terminalhold_frame_shuffle_without_replacement_77fa29d945fe9c4e_v1",
+  "real_sample_episodes": [
+    500,
+    503,
+    504,
+    505,
+    517
+  ],
+  "actual_getitem_checks": 40,
+  "exact_real_action_and_context_checks": true,
+  "gpu_jobs_started": 0
+}

@@ -78,7 +78,7 @@ bash train_task.sh rearrange_blocks --dry-run
 | --- | --- |
 | `data/RMBench/` | 完整原始数据、GT 标注、pi05 处理数据、转换与采集代码、模拟资源 |
 | `data/lerobot/rmbench_all_12tasks_demo_clean_50/` | 原训练使用的完整 LeRobot 缓存，600 episodes、416711 frames |
-| `data/gt_subtask_text_embeds/` | 46 个 GT subtask 对应的 Wan T5 文本缓存 |
+| `data/gt_subtask_text_embeds/` | 82 个当前 GT subtask 对应的 Wan T5 文本缓存，另保留 2 个旧描述缓存 |
 | `models/` | 公共 Wan 2.2、VAE、T5、tokenizer，以及由 Wan 权重插值生成的动作骨干初始化 |
 | `environment/` | 完整 conda-pack 环境、CUDA toolkit，以及实际依赖版本 |
 | `vendor/` | 原环境依赖的 curobo、LIBERO 源码与资源 |
@@ -109,7 +109,7 @@ bash train_task.sh rearrange_blocks --dry-run
 | `observe_and_pickup` | 4 → 2 |
 | `swap_T` | 7 → 4 |
 
-`cover_blocks`、`battery_try`、`place_block_mat`、`blocks_ranking_try` 的阶段边界和 `press_button` 的独立事件保持原有行为。已核对 600 条轨迹的每帧文本，合并后均保持相同，所以现有 T5 缓存、图像、动作数据及归一化统计可直接复用；魔搭资源版本保持不变。
+`cover_blocks`、`battery_try`、`place_block_mat`、`blocks_ranking_try` 的阶段边界和 `press_button` 的独立事件保持原有行为。V72 合并操作保留各帧原有文本、图像、动作和归一化统计；下面的 `observe_and_pickup` 目标标注更新额外替换该任务的文本及对应 T5 缓存。
 
 需要复现原始 GT 分段时，可显式选择：
 
@@ -118,6 +118,27 @@ bash train_task.sh classify_blocks --subtask-segments raw_annotation
 ```
 
 新任务默认从 Wan 初始化开始训练。分段改变会更新受影响任务的 sampling contract；显式续训旧状态时沿用原训练器的合同变更处理，重新开始完整的数据 epoch。完整核对见 `reports/v72_semantic_subtask_audit.json`。
+
+## observe_and_pickup 具体目标标注
+
+该任务的全部 50 条轨迹使用新增的目标物体标注，覆盖 19 种外观描述。例如灰色鼠标轨迹的两个训练阶段为：
+
+```text
+Observe the medium gray computer mouse on the shelf and wait for the wall to appear.
+Pick up the matching medium gray computer mouse from the table.
+```
+
+训练仍按 V72 规则将原始 4 段合并成观察、拾取两个阶段，各段时长与动作/视频末尾保持边界沿用原标注。每个阶段的具体描述进入实际训练 prompt 和 Wan T5 context；资源新增 38 个文本缓存。`raw_annotation` 选项恢复原始 4 段分段，仍使用新的具体目标描述。
+
+新标注位于 `data/RMBench/data/data/observe_and_pickup/demo_clean/language_annotation.json`，目标元数据及旧标注备份一并保存在魔搭资源中。GitHub 中的 `provenance/observe_and_pickup_target_labels.json` 保留每条轨迹的目标描述、模型编号和标注来源。图像、动作数据、归一化统计和其他 11 个任务的标注可复用。
+
+已有项目在项目目录执行下列命令，补齐本次更新的标注及缓存，再启动新训练：
+
+```bash
+git pull --ff-only && bash setup.sh && bash train_task.sh observe_and_pickup --num-workers 2
+```
+
+初始化仍从 Wan、第 0 步开始。验证结果见 `reports/observe_target_labels_audit.json`；可用 `python scripts/audit_observe_target_labels.py --rgb-samples` 在已激活的项目环境中复查实际训练样本。
 
 ## 保留的训练与采样逻辑
 

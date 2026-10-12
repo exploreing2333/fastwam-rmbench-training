@@ -6,11 +6,32 @@
     "src/fastwam/datasets/lerobot/gt_subtask_video_dataset.py"
   ],
   "core_model_optimizer_loss_sampler_unchanged": true,
-  "reference_episodes_normalization_and_assets_unchanged": true,
+  "reference_episodes_normalization_and_assets_unchanged": false,
   "default_gt_subtask_segment_mode": "v72_semantic",
   "event_instance_tasks": [
     "press_button"
   ],
   "legacy_mode": "raw_annotation",
-  "gpu_jobs_started": 0
+  "gpu_jobs_started": 0,
+  "observe_and_pickup_target_update": {
+    "task": "observe_and_pickup",
+    "episodes": 50,
+    "target_descriptions": 19,
+    "new_wan_t5_contexts": 38,
+    "gt_subtask_segment_mode": "v72_semantic",
+    "stages_per_episode": 2,
+    "raw_subtask_durations_preserved": true,
+    "other_task_annotations_unchanged": true,
+    "image_action_data_and_norm_stats_reused": true,
+    "initialization": "Wan 2.2 pretrained, resume=null, optimizer step 0",
+    "annotation_sha256": "69af83dff91bb1e8a6213f41ab3a426617f7d716d8f5a3402b7bf72996d5d23c",
+    "target_labels_sha256": "9c84beee49b366e6359496e867b66d7c8af902e54a7bb818bfce444e0ee441f7",
+    "original_annotation_sha256": "cda19acbcd5242e023cd51f6ee2dd7ee09831dd9289aaa152a6dc3e8214a715c",
+    "text_encoder": "same bundled Wan UMT5 XXL encoder in BF16",
+    "cache_build_device": "cpu",
+    "cache_build_threads": 4,
+    "gpu_jobs_started": 0,
+    "updated_at": "2026-10-12T14:04:44.305766+00:00"
+  },
+  "reference_episodes_image_action_data_and_normalization_unchanged": true
 }

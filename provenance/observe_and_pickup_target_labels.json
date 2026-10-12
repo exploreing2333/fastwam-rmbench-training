@@ -1,0 +1,607 @@
+{
+    "task": "observe_and_pickup",
+    "episode_count": 50,
+    "source_annotation_sha256": "cda19acbcd5242e023cd51f6ee2dd7ee09831dd9289aaa152a6dc3e8214a715c",
+    "records": {
+        "episode_0": {
+            "seed": 0,
+            "target_object_index": 2,
+            "target_modelname": "010_mouse",
+            "target_model_id": 1,
+            "target_description": "medium gray computer mouse",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_1": {
+            "seed": 1,
+            "target_object_index": 0,
+            "target_modelname": "011_stapler",
+            "target_model_id": 1,
+            "target_description": "red stapler with white markings",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_2": {
+            "seed": 2,
+            "target_object_index": 3,
+            "target_modelname": "009_toycar",
+            "target_model_id": 1,
+            "target_description": "bright blue toy car with yellow headlights",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_3": {
+            "seed": 3,
+            "target_object_index": 1,
+            "target_modelname": "012_bell",
+            "target_model_id": 1,
+            "target_description": "blue service bell with a yellow button",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_4": {
+            "seed": 4,
+            "target_object_index": 2,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 0,
+            "target_description": "black playing-card box with gold lettering",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_5": {
+            "seed": 5,
+            "target_object_index": 4,
+            "target_modelname": "011_stapler",
+            "target_model_id": 1,
+            "target_description": "red stapler with white markings",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_6": {
+            "seed": 6,
+            "target_object_index": 3,
+            "target_modelname": "009_toycar",
+            "target_model_id": 0,
+            "target_description": "pink toy car",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_7": {
+            "seed": 7,
+            "target_object_index": 0,
+            "target_modelname": "012_bell",
+            "target_model_id": 1,
+            "target_description": "blue service bell with a yellow button",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_8": {
+            "seed": 8,
+            "target_object_index": 2,
+            "target_modelname": "012_bell",
+            "target_model_id": 0,
+            "target_description": "silver service bell with a black base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_9": {
+            "seed": 9,
+            "target_object_index": 0,
+            "target_modelname": "012_bell",
+            "target_model_id": 1,
+            "target_description": "blue service bell with a yellow button",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_10": {
+            "seed": 10,
+            "target_object_index": 2,
+            "target_modelname": "010_mouse",
+            "target_model_id": 0,
+            "target_description": "large dark gray computer mouse",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_11": {
+            "seed": 11,
+            "target_object_index": 1,
+            "target_modelname": "009_toycar",
+            "target_model_id": 0,
+            "target_description": "pink toy car",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_12": {
+            "seed": 12,
+            "target_object_index": 0,
+            "target_modelname": "010_mouse",
+            "target_model_id": 2,
+            "target_description": "small dark gray computer mouse",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_13": {
+            "seed": 13,
+            "target_object_index": 4,
+            "target_modelname": "009_toycar",
+            "target_model_id": 3,
+            "target_description": "green toy car with a black windshield",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_14": {
+            "seed": 14,
+            "target_object_index": 0,
+            "target_modelname": "012_bell",
+            "target_model_id": 0,
+            "target_description": "silver service bell with a black base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_15": {
+            "seed": 15,
+            "target_object_index": 1,
+            "target_modelname": "009_toycar",
+            "target_model_id": 3,
+            "target_description": "green toy car with a black windshield",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_16": {
+            "seed": 16,
+            "target_object_index": 1,
+            "target_modelname": "010_mouse",
+            "target_model_id": 1,
+            "target_description": "medium gray computer mouse",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_17": {
+            "seed": 17,
+            "target_object_index": 0,
+            "target_modelname": "011_stapler",
+            "target_model_id": 4,
+            "target_description": "blue stapler with a gray metal base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_18": {
+            "seed": 18,
+            "target_object_index": 1,
+            "target_modelname": "012_bell",
+            "target_model_id": 1,
+            "target_description": "blue service bell with a yellow button",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_19": {
+            "seed": 19,
+            "target_object_index": 3,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 0,
+            "target_description": "black playing-card box with gold lettering",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_20": {
+            "seed": 20,
+            "target_object_index": 3,
+            "target_modelname": "009_toycar",
+            "target_model_id": 1,
+            "target_description": "bright blue toy car with yellow headlights",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_21": {
+            "seed": 21,
+            "target_object_index": 2,
+            "target_modelname": "010_mouse",
+            "target_model_id": 1,
+            "target_description": "medium gray computer mouse",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_22": {
+            "seed": 22,
+            "target_object_index": 1,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 0,
+            "target_description": "black playing-card box with gold lettering",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_23": {
+            "seed": 23,
+            "target_object_index": 4,
+            "target_modelname": "012_bell",
+            "target_model_id": 1,
+            "target_description": "blue service bell with a yellow button",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_24": {
+            "seed": 24,
+            "target_object_index": 2,
+            "target_modelname": "012_bell",
+            "target_model_id": 1,
+            "target_description": "blue service bell with a yellow button",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_25": {
+            "seed": 25,
+            "target_object_index": 3,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 0,
+            "target_description": "black playing-card box with gold lettering",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_26": {
+            "seed": 26,
+            "target_object_index": 2,
+            "target_modelname": "011_stapler",
+            "target_model_id": 0,
+            "target_description": "dark blue stapler with a black center panel",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_27": {
+            "seed": 27,
+            "target_object_index": 2,
+            "target_modelname": "011_stapler",
+            "target_model_id": 4,
+            "target_description": "blue stapler with a gray metal base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_28": {
+            "seed": 28,
+            "target_object_index": 2,
+            "target_modelname": "011_stapler",
+            "target_model_id": 4,
+            "target_description": "blue stapler with a gray metal base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_29": {
+            "seed": 29,
+            "target_object_index": 4,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 2,
+            "target_description": "red playing-card box",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_30": {
+            "seed": 30,
+            "target_object_index": 3,
+            "target_modelname": "011_stapler",
+            "target_model_id": 6,
+            "target_description": "rounded blue stapler with white markings",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_31": {
+            "seed": 31,
+            "target_object_index": 4,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 2,
+            "target_description": "red playing-card box",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_32": {
+            "seed": 32,
+            "target_object_index": 4,
+            "target_modelname": "009_toycar",
+            "target_model_id": 3,
+            "target_description": "green toy car with a black windshield",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_33": {
+            "seed": 33,
+            "target_object_index": 1,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 0,
+            "target_description": "black playing-card box with gold lettering",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_34": {
+            "seed": 34,
+            "target_object_index": 3,
+            "target_modelname": "011_stapler",
+            "target_model_id": 2,
+            "target_description": "slim red stapler",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_35": {
+            "seed": 35,
+            "target_object_index": 0,
+            "target_modelname": "009_toycar",
+            "target_model_id": 0,
+            "target_description": "pink toy car",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_36": {
+            "seed": 37,
+            "target_object_index": 4,
+            "target_modelname": "011_stapler",
+            "target_model_id": 3,
+            "target_description": "slim white stapler",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_37": {
+            "seed": 38,
+            "target_object_index": 2,
+            "target_modelname": "011_stapler",
+            "target_model_id": 3,
+            "target_description": "slim white stapler",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_38": {
+            "seed": 39,
+            "target_object_index": 4,
+            "target_modelname": "013_playingcards",
+            "target_model_id": 1,
+            "target_description": "white playing-card deck with a face-card illustration",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_39": {
+            "seed": 40,
+            "target_object_index": 3,
+            "target_modelname": "012_bell",
+            "target_model_id": 0,
+            "target_description": "silver service bell with a black base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_40": {
+            "seed": 41,
+            "target_object_index": 2,
+            "target_modelname": "010_mouse",
+            "target_model_id": 1,
+            "target_description": "medium gray computer mouse",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_41": {
+            "seed": 42,
+            "target_object_index": 2,
+            "target_modelname": "009_toycar",
+            "target_model_id": 5,
+            "target_description": "small blue-and-orange toy car",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_42": {
+            "seed": 43,
+            "target_object_index": 0,
+            "target_modelname": "009_toycar",
+            "target_model_id": 2,
+            "target_description": "mint-green toy car",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_43": {
+            "seed": 45,
+            "target_object_index": 1,
+            "target_modelname": "011_stapler",
+            "target_model_id": 6,
+            "target_description": "rounded blue stapler with white markings",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_44": {
+            "seed": 46,
+            "target_object_index": 1,
+            "target_modelname": "012_bell",
+            "target_model_id": 1,
+            "target_description": "blue service bell with a yellow button",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_45": {
+            "seed": 47,
+            "target_object_index": 2,
+            "target_modelname": "010_mouse",
+            "target_model_id": 0,
+            "target_description": "large dark gray computer mouse",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_46": {
+            "seed": 48,
+            "target_object_index": 4,
+            "target_modelname": "009_toycar",
+            "target_model_id": 5,
+            "target_description": "small blue-and-orange toy car",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_47": {
+            "seed": 49,
+            "target_object_index": 3,
+            "target_modelname": "009_toycar",
+            "target_model_id": 5,
+            "target_description": "small blue-and-orange toy car",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_48": {
+            "seed": 50,
+            "target_object_index": 0,
+            "target_modelname": "012_bell",
+            "target_model_id": 0,
+            "target_description": "silver service bell with a black base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        },
+        "episode_49": {
+            "seed": 51,
+            "target_object_index": 4,
+            "target_modelname": "011_stapler",
+            "target_model_id": 4,
+            "target_description": "blue stapler with a gray metal base",
+            "verification": [
+                "enlarged shelf-frame visual review",
+                "deterministic seed replay",
+                "environment uses the same target_object_idx for shelf display and pickup"
+            ]
+        }
+    }
+}
