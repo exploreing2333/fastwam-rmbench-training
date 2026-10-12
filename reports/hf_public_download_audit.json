@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "http_status": 206,
+  "content_range": "bytes 0-4095/59782424",
+  "authenticated": false,
+  "bytes_read": 4096,
+  "resource_path": "data/RMBench/data/data/battery_try/demo_clean/data/episode27.hdf5"
+}

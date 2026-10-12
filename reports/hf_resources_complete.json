@@ -1,0 +1,23 @@
+{
+  "status": "complete",
+  "completed_at": "2026-10-12T08:10:48.635880+00:00",
+  "github": "https://github.com/exploreing2333/fastwam-rmbench-training",
+  "huggingface": "https://huggingface.co/datasets/cenzl/fastwam-rmbench-training-assets",
+  "local_path": "/home/tos/252806029/HDH/fastwam_rmbench_training",
+  "setup_command": "bash setup.sh",
+  "training_example": "bash train_task.sh rearrange_blocks",
+  "gpu_jobs_started": 0,
+  "upload": {
+    "status": "complete",
+    "repo_id": "cenzl/fastwam-rmbench-training-assets",
+    "revision": "611eafce61072f5818d719f4987b8d939731e88d",
+    "bundle_id": "fastwam-rmbench-gt-current-200k-20261012-821036ea9ceb",
+    "files": 5449,
+    "bytes": 256823064822,
+    "remote_sha256_checks": 3499,
+    "completed_at": "2026-10-12T08:10:21.730789+00:00",
+    "trained_checkpoints_included": false,
+    "gpu_jobs_started": 0,
+    "updated_at": "2026-10-12T08:10:23.609988+00:00"
+  }
+}
