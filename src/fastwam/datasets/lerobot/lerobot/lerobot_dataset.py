@@ -15,6 +15,7 @@
 # limitations under the License.
 import contextlib
 import logging
+import os
 import shutil
 from pathlib import Path
 from typing import Callable, List, Literal
@@ -649,10 +650,12 @@ class LeRobotDataset(torch.utils.data.Dataset):
             files = sorted(str(path) for path in (self.root / "data").rglob("*.parquet"))
             if not files:
                 raise FileNotFoundError(f"No parquet files found under {self.root / 'data'}")
-            hf_dataset = load_dataset("parquet", data_files=files, split="train")
+            hf_dataset = load_dataset("parquet", data_files=files, split="train",
+                                      cache_dir=os.environ.get("HF_DATASETS_CACHE"))
         else:
             files = [str(self.root / self.meta.get_data_file_path(ep_idx)) for ep_idx in self.episodes]
-            hf_dataset = load_dataset("parquet", data_files=files, split="train")
+            hf_dataset = load_dataset("parquet", data_files=files, split="train",
+                                      cache_dir=os.environ.get("HF_DATASETS_CACHE"))
 
         # TODO(aliberts): hf_dataset.set_format("torch")
         hf_dataset.set_transform(hf_transform_to_torch)

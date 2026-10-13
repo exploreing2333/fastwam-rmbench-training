@@ -1,16 +1,19 @@
 """One command per task; fresh GT-current-only reference training by default."""
 import argparse
 from datetime import datetime, timezone
+import fcntl
 import json
 import os
 from pathlib import Path
 import re
 import shlex
+import signal
 import subprocess
 import sys
 import uuid
 
 from omegaconf import OmegaConf
+from training_processes import conflicting_training_processes
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,6 +39,8 @@ def main():
     cli = parser.parse_args()
     if cli.microbatch <= 0 or cli.num_workers < 0 or cli.max_steps <= 0:
         parser.error('microbatch/max-steps must be positive and num-workers must be nonnegative')
+    if cli.master_port is not None and not 1 <= cli.master_port <= 65535:
+        parser.error('master-port must be between 1 and 65535')
     unit = cli.gpus * cli.microbatch
     accumulation = cli.grad_accum
     if accumulation is None:
@@ -106,17 +111,41 @@ def main():
         parser.error(f'requested {cli.gpus} GPUs but only {available} are visible; use --gpus to select a supported count')
     if not torch.cuda.is_bf16_supported():
         parser.error('the reference training requires BF16-capable GPUs')
+    check = [sys.executable, str(ROOT / 'scripts/check_runtime.py'), '--gpus', str(cli.gpus),
+             '--microbatch', str(cli.microbatch), '--num-workers', str(cli.num_workers),
+             '--master-port', str(port), '--output', str(run_dir / 'runtime_preflight.json')]
+    if subprocess.call(check, cwd=ROOT) != 0:
+        return 1
+    uuids = [str(getattr(torch.cuda.get_device_properties(i), 'uuid', '')) for i in range(cli.gpus)]
+    record['gpu_uuids'] = uuids if all(uuids) else []
+    # Serialize check+spawn so two launchers cannot pass the same idle check.
+    with (ROOT / 'runs/.launch.lock').open('a') as launch_lock:
+        fcntl.flock(launch_lock, fcntl.LOCK_EX)
+        conflicts = conflicting_training_processes(ROOT, cli.gpus, record['gpu_uuids'])
+        if conflicts:
+            parser.error('training is already running on these GPUs: '
+                         + ', '.join(sorted({row['run_dir'] for row in conflicts}))
+                         + '; inspect with bash stop_training.sh --list')
+        (run_dir / 'launch_command.json').write_text(json.dumps(record, indent=2) + '\n')
+        if cli.foreground:
+            process = subprocess.Popen(command, cwd=ROOT, start_new_session=True)
+        else:
+            log = run_dir / 'stdout.log'
+            with log.open('ab', buffering=0) as stream:
+                process = subprocess.Popen(command, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT,
+                                           stdin=subprocess.DEVNULL, start_new_session=True)
+            record['log'] = str(log)
+        (run_dir / 'training.pid').write_text(str(process.pid) + '\n')
+        (run_dir / 'training.pgid').write_text(str(process.pid) + '\n')
+        record['pid'] = process.pid
+        (run_dir / 'launch_command.json').write_text(json.dumps(record, indent=2) + '\n')
     if cli.foreground:
-        return subprocess.call(command, cwd=ROOT)
-    log = run_dir / 'stdout.log'
-    with log.open('ab', buffering=0) as stream:
-        process = subprocess.Popen(command, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT,
-                                   stdin=subprocess.DEVNULL, start_new_session=True)
-    (run_dir / 'training.pid').write_text(str(process.pid) + '\n')
-    (run_dir / 'training.pgid').write_text(str(process.pid) + '\n')
-    record.update(pid=process.pid, log=str(log))
-    (run_dir / 'launch_command.json').write_text(json.dumps(record, indent=2) + '\n')
-    print(f'[started] pid={process.pid} log={log}', flush=True)
+        try:
+            return process.wait()
+        except KeyboardInterrupt:
+            os.killpg(process.pid, signal.SIGINT)
+            return process.wait()
+    print(f'[started] pid={process.pid} log={record["log"]}', flush=True)
     return 0
 
 

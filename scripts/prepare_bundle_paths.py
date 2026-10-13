@@ -6,8 +6,11 @@ from pathlib import Path
 
 root = Path(os.environ['FASTWAM_BUNDLE_ROOT']).resolve()
 site = Path(sysconfig.get_paths()['purelib'])
-(site / 'fastwam_bundle.pth').write_text('\n'.join(str(root / name) for name in
-                                       ('src', 'vendor/curobo_src', 'vendor/LIBERO')) + '\n')
+pth_path = site / 'fastwam_bundle.pth'
+pth_content = '\n'.join(str(root / name) for name in
+                         ('src', 'vendor/curobo_src', 'vendor/LIBERO')) + '\n'
+if not pth_path.is_file() or pth_path.read_text() != pth_content:
+    pth_path.write_text(pth_content)
 source = json.loads((root / 'data/source_map_template.json').read_text())
 for key in ('dataset_root', 'processed_root', 'raw_root'):
     source[key] = str(root / source[key])

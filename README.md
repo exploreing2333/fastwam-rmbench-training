@@ -72,6 +72,50 @@ bash train_task.sh rearrange_blocks --dry-run
 
 `--num-workers 2` 可减少每个 GPU 进程的数据加载 worker；默认 8，沿用参考配置。`--gradient-checkpointing` 可显式启用显存优化；默认关闭。`--cached-stats` 可使用按相同原代码计算的任务归一化统计；默认仍重新计算。
 
+## 迁移服务器检查与 CPFS 报错修复
+
+`multiprocessing.resource_sharer → SocketListener.bind → OSError: [Errno 95] Operation not supported` 表示临时目录所在文件系统不能建立 Unix socket。旧版运行时会把终端设置的 `TMPDIR` 覆盖为 `.runtime/cache/tmp`，因此仅在终端执行 `export TMPDIR=/tmp` 不足以解决 CPFS 上的报错。
+
+当前启动器在导入 PyTorch/Accelerate 前选择并测试 IPC 临时目录，默认使用 `/tmp/fastwam-ipc-UID`，同时处理 `tempfile` 与 multiprocessing 各自的目录缓存。需要自定义时可设置 `FASTWAM_IPC_TMPDIR=/tmp/fastwam-ipc`；该目录必须可写、路径较短且支持 Unix socket。Hugging Face、Arrow、Torch、Triton 等文件缓存继续保存在 `${FASTWAM_RUNTIME_ROOT}/cache/`，与 IPC 临时目录分别配置。环境路径在进入项目工作目录前转换为绝对路径。
+
+已有服务器更新代码即可复用现有魔搭资源：
+
+```bash
+git pull --ff-only
+```
+
+如果之前已手改 `src/fastwam/runtime.py`，导致上述更新被本地修改阻止，先将该文件保存到 Git stash，再更新；保留 stash 供后续审查，避免直接恢复旧的 TMPDIR 覆盖逻辑：
+
+```bash
+git stash push -m 'runtime-before-portability-fix' -- src/fastwam/runtime.py
+git pull --ff-only
+```
+
+重复启动前，先列出当前项目的旧训练作业：
+
+```bash
+bash stop_training.sh --list
+bash stop_training.sh --run-dir runs/observe_and_pickup/RUN_ID --stop --force
+```
+
+将 `RUN_ID` 替换为列表中需要停止的失败作业。若明确要停止当前项目列出的全部训练，可使用 `bash stop_training.sh --all --stop --force`。脚本按当前项目的训练入口、run 目录及进程启动时间识别进程；进程仍受 `strace` 等调试器跟踪时会报告 `TracerPid`，需先检查并关闭对应的旧跟踪器，再重新停止作业。
+
+在目标服务器验证 8 卡、两 worker 与真实任务数据：
+
+```bash
+bash check_runtime.sh --gpus 8 --num-workers 2 --real-data --task observe_and_pickup --output .runtime/runtime_check.json
+```
+
+检查内容包括实际导入的代码位置、Unix socket、两 worker 的张量传输、文件缓存写入/重命名/锁、实际 Arrow 缓存位置、每张 GPU 的 BF16 前向/反向与 fused AdamW、小规模真实数据读取，以及现有作业和共享内存容量。输出 `RUNTIME_CHECK_PASSED` 后再开始训练；这验证目标服务器当时的环境，完整模型能否运行仍以实际 optimizer step 为准。
+
+若 `/dev/shm` 容量不足，可扩大容器共享内存，或将检查和训练命令中的 `--num-workers 2` 改为 `--num-workers 0`。零 worker 保留 global batch、阶段构造及训练配置，数据读取在训练主进程中进行。首次恢复后可先前台检查两步训练，再启动正式 200000 步任务：
+
+```bash
+bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --max-steps 2
+```
+
+正常完成两步后，去掉 `--foreground --max-steps 2` 启动正式训练。启动器自动执行上述环境预检，保存 `runtime_preflight.json`，并对当前项目占用重叠 GPU 的旧作业进行检查；启动锁防止两个命令同时重复启动。复查结果见 `reports/runtime_all_tasks_data_audit.json`、`reports/runtime_activation_audit.json` 与 `tests/test_runtime_portability.py`。数据、预训练权重、模型、loss、归一化及采样规则沿用当前配置。
+
 ## 资源目录
 
 | 目录 | 内容 |

@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "relative_runtime_root_normalized": true,
+  "paths_with_spaces_passed": true,
+  "cache_environment_set_before_imports": true,
+  "invalid_pythonhome_cleared": true,
+  "bootstrap_failure_propagated": true
+}

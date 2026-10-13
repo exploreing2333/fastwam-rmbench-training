@@ -3,7 +3,10 @@
   "reference_training_source": "/home/cenzl/VLA/LatentWAM/FastWAM",
   "intentional_native_source_changes": [
     "src/fastwam/datasets/lerobot/gt_subtask_segments.py",
-    "src/fastwam/datasets/lerobot/gt_subtask_video_dataset.py"
+    "src/fastwam/datasets/lerobot/gt_subtask_video_dataset.py",
+    "src/fastwam/runtime.py",
+    "src/fastwam/runtime_paths.py",
+    "src/fastwam/datasets/lerobot/lerobot/lerobot_dataset.py"
   ],
   "core_model_optimizer_loss_sampler_unchanged": true,
   "reference_episodes_normalization_and_assets_unchanged": false,
@@ -33,5 +36,26 @@
     "gpu_jobs_started": 0,
     "updated_at": "2026-10-12T14:04:44.305766+00:00"
   },
-  "reference_episodes_image_action_data_and_normalization_unchanged": true
+  "reference_episodes_image_action_data_and_normalization_unchanged": true,
+  "runtime_portability": {
+    "updated_at": "2026-10-13T05:51:21.650208+00:00",
+    "problem": "CPFS Unix socket failure: cached TMPDIR overridden by runtime_cache_root/tmp",
+    "ipc_directory_probe_and_tempfile_multiprocessing_cache_reset": true,
+    "cache_environment_before_import": true,
+    "explicit_parquet_cache_dir": true,
+    "relative_runtime_root_normalized": true,
+    "bootstrap_errors_propagated": true,
+    "unchanged_pth_not_rewritten": true,
+    "automatic_ipc_gpu_shm_cache_port_preflight": true,
+    "overlapping_checkout_jobs_rejected": true,
+    "selected_run_process_stop_with_start_time_identity": true,
+    "core_model_optimizer_loss_normalization_sampler_unchanged": true,
+    "modelscope_resources_unchanged": true,
+    "resources_revision": "c91a7b92ddaad08627d4d1c32f229a16ecf7b558",
+    "target_server_gpu_training_verified": false,
+    "regression_tests": 7,
+    "real_data_tasks": 12,
+    "real_data_batches": 48,
+    "gpu_jobs_started": 0
+  }
 }

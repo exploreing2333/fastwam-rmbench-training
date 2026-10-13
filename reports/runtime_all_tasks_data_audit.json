@@ -1,0 +1,312 @@
+{
+  "passed": true,
+  "tasks": 12,
+  "episodes_sampled": 12,
+  "real_multiprocess_batches": 48,
+  "workers": 2,
+  "configured_arrow_cache_used_for_all_tasks": true,
+  "gpu_jobs_started": 0,
+  "checked_at": "2026-10-13T05:28:04.215139+00:00",
+  "tasks_report": {
+    "press_button": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-kt1wkzkn",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:22.747163+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-d9491067a65cadef/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "press_button"
+    },
+    "battery_try": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-wtu3pd4g",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:33.049500+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-55ac942cab8dd03b/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "battery_try"
+    },
+    "cover_blocks": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-ers9j3qy",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:35.773195+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-477f4a6d597b1cc8/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "cover_blocks"
+    },
+    "place_block_mat": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-g5gy07gx",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:38.454985+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-c603750769df2b49/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "place_block_mat"
+    },
+    "classify_blocks": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-terhsw0w",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:40.948311+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-bcc9dafefade0a04/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "classify_blocks"
+    },
+    "rearrange_blocks": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-j_5al6y_",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:43.511371+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-b74edc162f8377cb/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "rearrange_blocks"
+    },
+    "swap_blocks": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-x2i2mxxv",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:45.922382+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-b9ab93dd82179d8e/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "swap_blocks"
+    },
+    "storage_blocks": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-mikvd0qc",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:48.749535+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-9afe541b43378859/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "storage_blocks"
+    },
+    "blocks_ranking_try": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-xgmhb0c_",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:51.356470+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-32131a593cb5cbb2/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "blocks_ranking_try"
+    },
+    "put_back_block": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-q4iaxvq2",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:53.781440+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-0e4c828938699931/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "put_back_block"
+    },
+    "observe_and_pickup": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-h_2pf_ff",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:27:56.217903+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-df4f0f7ec4aa1bdd/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "observe_and_pickup"
+    },
+    "swap_T": {
+      "passed": true,
+      "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+      "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+      "tmpdir": "/tmp/fastwam-ipc-0",
+      "tempfile_directory": "/tmp/fastwam-ipc-0",
+      "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-8p8gntqt/listener-cl8gfm6e",
+      "unix_socket_passed": true,
+      "tensor_loader_workers": 2,
+      "tensor_loader_batches": 4,
+      "cache_write_rename_lock_checks": [
+        "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+      ],
+      "cpu_only": true,
+      "checked_at": "2026-10-13T05:28:01.922431+00:00",
+      "arrow_cache_files": [
+        "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-40c59799f93ab9c0/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+      ],
+      "real_data_batches": 4,
+      "task": "swap_T"
+    }
+  }
+}

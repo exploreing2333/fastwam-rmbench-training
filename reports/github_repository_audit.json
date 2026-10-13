@@ -1,17 +1,21 @@
 {
   "passed": true,
-  "code_files": 2349,
-  "code_bytes": 24569538,
+  "code_files": 2363,
+  "code_bytes": 24629725,
   "largest_file_bytes": 2638605,
   "native_training_source_unchanged": false,
   "datasets_and_weights_excluded": true,
   "credentials_excluded": true,
   "gpu_jobs_started": 0,
-  "checked_at": "2026-10-12T14:16:00.208600+00:00",
+  "checked_at": "2026-10-13T05:53:34.808926+00:00",
   "intentional_native_training_source_changes": [
     "src/fastwam/datasets/lerobot/gt_subtask_segments.py",
-    "src/fastwam/datasets/lerobot/gt_subtask_video_dataset.py"
+    "src/fastwam/datasets/lerobot/gt_subtask_video_dataset.py",
+    "src/fastwam/runtime.py",
+    "src/fastwam/runtime_paths.py",
+    "src/fastwam/datasets/lerobot/lerobot/lerobot_dataset.py"
   ],
   "core_model_optimizer_loss_sampler_unchanged": true,
-  "observe_and_pickup_target_specific_annotation_update": true
+  "observe_and_pickup_target_specific_annotation_update": true,
+  "runtime_portability_fixes": true
 }

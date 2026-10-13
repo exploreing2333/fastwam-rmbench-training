@@ -22,9 +22,10 @@ then
   bash "${bundle_root}/download_assets.sh"
 fi
 runtime_root="${FASTWAM_RUNTIME_ROOT:-${bundle_root}/.runtime}"
+mkdir -p "${runtime_root}"
+runtime_root="$(cd -- "${runtime_root}" && pwd -P)"
 export FASTWAM_RUNTIME_ROOT="${runtime_root}"
 environment_prefix="${runtime_root}/fastwam"
-mkdir -p "${runtime_root}"
 exec 9>"${runtime_root}/bootstrap.lock"
 flock -x 9
 

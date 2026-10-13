@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "tasks": 12,
+  "zero_worker_mode_passed": true,
+  "occupied_master_port_rejected": true,
+  "training_config_preserved": true,
+  "gpu_jobs_started": 0,
+  "checked_at": "2026-10-13T05:45:19.679715+00:00",
+  "tasks_report": {
+    "press_button": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "battery_try": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "cover_blocks": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "place_block_mat": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "classify_blocks": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "rearrange_blocks": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "swap_blocks": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "storage_blocks": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "blocks_ranking_try": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "put_back_block": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "observe_and_pickup": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    },
+    "swap_T": {
+      "passed": true,
+      "gpus": 8,
+      "global_batch": 64,
+      "workers": 2,
+      "wan_initialization": true,
+      "gt_subtask_segment_mode": "v72_semantic"
+    }
+  }
+}

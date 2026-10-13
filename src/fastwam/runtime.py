@@ -13,6 +13,7 @@ from einops import repeat
 from omegaconf import OmegaConf
 
 from .trainer import Wan22Trainer
+from .runtime_paths import configure_ipc_tmpdir
 from .utils.logging_config import get_logger, setup_logging
 from .utils.video_io import save_mp4
 from .utils import misc
@@ -21,16 +22,21 @@ logger = get_logger(__name__)
 
 
 def _configure_runtime_cache(cfg: DictConfig) -> None:
+    # CPFS can store dataset/cache files but cannot necessarily host AF_UNIX
+    # sockets used by DataLoader workers. Never replace the validated IPC path
+    # with runtime_cache_root/tmp.
+    configure_ipc_tmpdir()
     cache_root_value = cfg.get("runtime_cache_root")
     if cache_root_value in (None, "null", ""):
         return
     cache_root = Path(str(cache_root_value)).expanduser().resolve()
     cache_paths = {
         "HF_HOME": cache_root / "huggingface",
+        "HF_HUB_CACHE": cache_root / "huggingface" / "hub",
+        "HF_LEROBOT_HOME": cache_root / "huggingface" / "lerobot",
         "HF_DATASETS_CACHE": cache_root / "huggingface" / "datasets",
         "TORCH_HOME": cache_root / "torch",
         "XDG_CACHE_HOME": cache_root / "xdg",
-        "TMPDIR": cache_root / "tmp",
         "TRITON_CACHE_DIR": cache_root / "triton",
         "WANDB_DIR": cache_root / "wandb",
     }
@@ -38,9 +44,7 @@ def _configure_runtime_cache(cfg: DictConfig) -> None:
         path.mkdir(parents=True, exist_ok=True)
     for name, path in cache_paths.items():
         os.environ[name] = str(path)
-    # `tempfile` may have cached /tmp during Python/Accelerate imports. Reset
-    # its resolved directory so subsequent compiler and dataset temporaries
-    # honor the configured /home TMPDIR.
+    # Imports may have cached another temporary directory before configuration.
     tempfile.tempdir = None
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

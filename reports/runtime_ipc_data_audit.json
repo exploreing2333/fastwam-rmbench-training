@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "runtime_source": "/home/tos/252806029/HDH/fastwam_rmbench_training/src/fastwam/runtime.py",
+  "python": "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/fastwam/bin/python",
+  "tmpdir": "/tmp/fastwam-ipc-0",
+  "tempfile_directory": "/tmp/fastwam-ipc-0",
+  "unix_socket_address": "/tmp/fastwam-ipc-0/pymp-ycjuow31/listener-pl7gqk6x",
+  "unix_socket_passed": true,
+  "tensor_loader_workers": 2,
+  "tensor_loader_batches": 4,
+  "cache_write_rename_lock_checks": [
+    "/home/tos/252806029/HDH/fastwam_rmbench_training/runs",
+    "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012",
+    "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets",
+    "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/torch",
+    "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/triton"
+  ],
+  "cpu_only": true,
+  "checked_at": "2026-10-13T05:24:50.312355+00:00",
+  "arrow_cache_files": [
+    "/home/cenzl/VLA/LatentWAM/FastWAM/data/portable_rmbench_validation_20261012/cache/huggingface/datasets/parquet/default-df4f0f7ec4aa1bdd/0.0.0/9c460aabd2aa27d1496e5e38d2060760561f0ac2cd6a110134eefa5b3f153b8d/parquet-train.arrow"
+  ],
+  "real_data_batches": 4,
+  "task": "observe_and_pickup"
+}

@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "checked_at": "2026-10-13T05:53:28.827909+00:00",
+  "reported_target_error": "OSError: [Errno 95] Operation not supported in multiprocessing SocketListener.bind",
+  "failure_source": "https://chatgpt.com/share/6acdae0a-a518-83ec-a2fb-bc8de51b6a02",
+  "regression_tests_passed": 7,
+  "real_data_tasks": 12,
+  "real_data_batches": 48,
+  "data_workers": 2,
+  "cache_write_rename_and_locks_verified": true,
+  "configured_arrow_paths_verified": true,
+  "all_12_launch_configs_passed": true,
+  "zero_worker_fallback_passed": true,
+  "occupied_port_rejected": true,
+  "relative_and_space_containing_paths_passed": true,
+  "bootstrap_failure_propagated": true,
+  "unrelated_process_preserved_during_selected_run_stop": true,
+  "modelscope_resource_manifest_and_hub_byte_unchanged": true,
+  "all_portable_training_yaml_byte_unchanged": true,
+  "model_optimizer_loss_normalization_and_sampler_source_unchanged": true,
+  "gpu_jobs_started": 0,
+  "target_server_gpu_and_full_model_training_verified": false,
+  "retained_optional_v72_evaluation_wrapper": {
+    "path": "src/TMD2/robometer_subprocess.py",
+    "socket_path": "/tmp/fw_v72_PID_RANDOM.sock",
+    "external_robometer_environment_required": true,
+    "used_by_portable_gt_training": false
+  }
+}
