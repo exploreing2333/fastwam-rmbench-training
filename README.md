@@ -190,9 +190,22 @@ bash train_task.sh classify_blocks --subtask-segments raw_annotation
 
 没有 checkpoint 的新任务从 Wan 初始化开始训练。分段改变会更新受影响任务的 sampling contract；续训旧状态时沿用原训练器的合同变更处理，重新开始完整的数据 epoch。完整核对见 `reports/v72_semantic_subtask_audit.json`。
 
-### put_back_block 按键段的填充 action loss 消融
+### 按键段的填充 action loss 消融
 
-`portable_put_back_block.yaml` 配置 `exclude_terminal_hold_loss_subtasks: ["Press the button."]`。只有这个任务的指定子任务增加 `action_loss_mask=action_real_mask`；其他阶段为全真 mask。32 步 action 的数据填充、GT 合并边界、视频目标、真实停顿和采样顺序保持原有逻辑。人工补出的 action 后缀不参与 action loss；分母仍为 32，不按剩余真实长度重新放大尾部样本。设置空列表可恢复原监督。
+以下四个任务通过 `exclude_terminal_hold_loss_subtasks` 启用填充区 action loss 屏蔽：
+
+| 任务 | 精确匹配的子任务标签 |
+| --- | --- |
+| `put_back_block` | `Press the button.` |
+| `rearrange_blocks` | `Press button.` |
+| `blocks_ranking_try` | `Press the button.` |
+| `press_button` | 左键和中键各第 1～9 次的 18 种完整编号标签，例如 `Press the left button for the first time.` |
+
+这些指定子任务使用 `action_loss_mask=action_real_mask`；同一任务的其他阶段为全真 mask。32 步 action 的数据填充、GT 合并边界、视频目标、真实停顿和采样顺序保持原有逻辑。人工补出的 action 后缀不参与 action loss；分母仍为 32，不按剩余真实长度重新放大尾部样本。设置空列表可恢复原监督。`press_button` 的 `Press the confirm button.` 和 `swap_blocks` 保留原监督。
+
+更新代码后继续运行原启动命令即可；自动 resume 会恢复完整训练状态，并使用当前任务配置中的 loss 屏蔽列表。此次更新不改变数据和文本标签，不需要重新下载资源或重置采样位置。
+
+四个启用任务及 `swap_blocks` 对照任务的全部 250 条标注已核对资源清单 SHA256，覆盖 696 个被屏蔽填充监督的按键段；标签和边界 mask 检查见 `reports/rmbench_selected_press_hold_loss_validation_20261015.json`。
 
 2026-10-15 对全部 600 条轨迹、416711 帧的核对中，资源清单 SHA256、原始关节目标与 LeRobot action 的下一帧对应关系全部通过。按键段的实际终点如下，比例为人工填充占该类按键段全部 action 目标的比例：
 
@@ -205,7 +218,7 @@ bash train_task.sh classify_blocks --subtask-segments raw_annotation
 | press_button 确认键 | 50 | 99–100 | 15.59% | 压住按钮 |
 | swap_blocks | 50 | 65–76 | 23.62% | 压住按钮 |
 
-前三类及左键/中键具有类似的阶段歧义，适合评估取消人工填充监督的消融；填充比例本身不能证明失败原因。当前仅启用 `put_back_block`，其他任务配置未修改。`swap_blocks` 和确认键的填充支持保持按压，保留原监督。逐帧结果见 `reports/rmbench_all_tasks_padding_audit_20261015.json`，按键终点结果见 `reports/rmbench_press_endpoints_audit_20261015.json`。
+前三类及左键/中键具有类似的阶段歧义，现已全部启用取消人工填充监督的消融；填充比例本身不能证明失败原因，收益仍需训练和验证确认。`swap_blocks` 和确认键的填充支持保持按压，保留原监督。逐帧结果见 `reports/rmbench_all_tasks_padding_audit_20261015.json`，按键终点结果见 `reports/rmbench_press_endpoints_audit_20261015.json`。
 
 ## observe_and_pickup 具体目标标注
 

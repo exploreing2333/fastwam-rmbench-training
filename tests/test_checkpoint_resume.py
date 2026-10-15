@@ -17,6 +17,16 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from checkpoint_resume import inspect_training_state, latest_training_state
 import train_task
+from fastwam.datasets.lerobot.press_button_labels import ORDINALS
+
+
+EXPECTED_HOLD_LOSS_EXCLUSIONS = {
+    'put_back_block': ['Press the button.'],
+    'rearrange_blocks': ['Press button.'],
+    'blocks_ranking_try': ['Press the button.'],
+    'press_button': [f'Press the {button} button for the {ordinal} time.'
+                     for button in ('left', 'middle') for ordinal in ORDINALS[:9]],
+}
 
 
 class ResumeTests(unittest.TestCase):
@@ -111,7 +121,7 @@ class ResumeTests(unittest.TestCase):
                 self.assertEqual(code,0);self.assertIn('mode=fresh step=0',output)
                 record=json.loads(next((self.root/'runs'/task).glob('*/dry_runs/*/launch_command.json')).read_text())
                 exclusions=record['exclude_terminal_hold_loss_subtasks']
-                self.assertEqual(exclusions,['Press the button.'] if task=='put_back_block' else [])
+                self.assertEqual(exclusions,EXPECTED_HOLD_LOSS_EXCLUSIONS.get(task,[]))
 
     def test_completed_run_is_skipped_and_fresh_is_explicit(self):
         self.state(step=200000)

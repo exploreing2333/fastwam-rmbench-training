@@ -220,6 +220,26 @@ data:
     subtask_source_map: ${oc.env:FASTWAM_RUNTIME_ROOT}/rmbench_source_map.json
     gt_subtask_text_embedding_cache_dir: ${oc.env:FASTWAM_BUNDLE_ROOT}/data/gt_subtask_text_embeds
     gt_subtask_segment_mode: v72_semantic
+    # Exclude left/middle release-pose holds; the confirm press retains its loss.
+    exclude_terminal_hold_loss_subtasks:
+    - Press the left button for the first time.
+    - Press the left button for the second time.
+    - Press the left button for the third time.
+    - Press the left button for the fourth time.
+    - Press the left button for the fifth time.
+    - Press the left button for the sixth time.
+    - Press the left button for the seventh time.
+    - Press the left button for the eighth time.
+    - Press the left button for the ninth time.
+    - Press the middle button for the first time.
+    - Press the middle button for the second time.
+    - Press the middle button for the third time.
+    - Press the middle button for the fourth time.
+    - Press the middle button for the fifth time.
+    - Press the middle button for the sixth time.
+    - Press the middle button for the seventh time.
+    - Press the middle button for the eighth time.
+    - Press the middle button for the ninth time.
     gt_subtask_event_instance_tasks:
     - press_button
     press_button_label_mode: ordinal_per_press_v1

@@ -1,0 +1,142 @@
+{
+  "scope": "Exact label coverage and action-loss mask checks against all annotations of four configured tasks plus swap_blocks control",
+  "training_launched": false,
+  "data_assets_changed": false,
+  "unit_tests": {
+    "loss_tests_passed": 6,
+    "resume_tests_passed": 9,
+    "task_launch_configs_checked": 12
+  },
+  "tasks": {
+    "put_back_block": {
+      "episodes": 50,
+      "annotation_sha256": "94494343d4fc9d3f7e87f5b1c53119d5cdea6fa64d6f9b54ebeca0db04af2763",
+      "annotation_matches_asset_manifest": true,
+      "configured_labels": [
+        "Press the button."
+      ],
+      "masked_segments": 50,
+      "masked_segments_by_label": {
+        "Press the button.": 50
+      },
+      "preserved_segments_by_label": {
+        "Pick up the block and move it to the center position.": 50,
+        "Move the block back to the front mat.": 12,
+        "Move the block back to the back mat.": 13,
+        "Move the block back to the left mat.": 10,
+        "Move the block back to the right mat.": 15
+      },
+      "artificial_action_targets_excluded_per_epoch": 24800,
+      "boundary_mask_cases_checked": 450
+    },
+    "rearrange_blocks": {
+      "episodes": 50,
+      "annotation_sha256": "c0501d775dd90ff9ab5f80b32fa5925edced1ffc3b532ecb68976f66fb35ad61",
+      "annotation_matches_asset_manifest": true,
+      "configured_labels": [
+        "Press button."
+      ],
+      "masked_segments": 50,
+      "masked_segments_by_label": {
+        "Press button.": 50
+      },
+      "preserved_segments_by_label": {
+        "Pick up the left block and move it to the left empty mat.": 28,
+        "Pick up the right block and move it between the two mats.": 28,
+        "Pick up the right block and move it to the right empty mat.": 22,
+        "Pick up the left block and move it between the two mats.": 22
+      },
+      "artificial_action_targets_excluded_per_epoch": 24800,
+      "boundary_mask_cases_checked": 450
+    },
+    "blocks_ranking_try": {
+      "episodes": 50,
+      "annotation_sha256": "7421b00a7fe0d754d5fd9025a37a95d26704835ddeba2615472af3776b7f1ca5",
+      "annotation_matches_asset_manifest": true,
+      "configured_labels": [
+        "Press the button."
+      ],
+      "masked_segments": 198,
+      "masked_segments_by_label": {
+        "Press the button.": 198
+      },
+      "preserved_segments_by_label": {
+        "Swap the middle block and the right block.": 69,
+        "Swap the left block and the right block.": 52,
+        "Swap the left block and the middle block.": 27
+      },
+      "artificial_action_targets_excluded_per_epoch": 98208,
+      "boundary_mask_cases_checked": 1038
+    },
+    "press_button": {
+      "episodes": 50,
+      "annotation_sha256": "8c809e09df0d135cdf4ebc6c800f62a6bdffa2b1e505a791ea74505129829211",
+      "annotation_matches_asset_manifest": true,
+      "configured_labels": [
+        "Press the left button for the first time.",
+        "Press the left button for the second time.",
+        "Press the left button for the third time.",
+        "Press the left button for the fourth time.",
+        "Press the left button for the fifth time.",
+        "Press the left button for the sixth time.",
+        "Press the left button for the seventh time.",
+        "Press the left button for the eighth time.",
+        "Press the left button for the ninth time.",
+        "Press the middle button for the first time.",
+        "Press the middle button for the second time.",
+        "Press the middle button for the third time.",
+        "Press the middle button for the fourth time.",
+        "Press the middle button for the fifth time.",
+        "Press the middle button for the sixth time.",
+        "Press the middle button for the seventh time.",
+        "Press the middle button for the eighth time.",
+        "Press the middle button for the ninth time."
+      ],
+      "masked_segments": 398,
+      "masked_segments_by_label": {
+        "Press the left button for the first time.": 50,
+        "Press the left button for the second time.": 43,
+        "Press the middle button for the first time.": 50,
+        "Press the middle button for the second time.": 31,
+        "Press the middle button for the third time.": 26,
+        "Press the middle button for the fourth time.": 20,
+        "Press the middle button for the fifth time.": 13,
+        "Press the middle button for the sixth time.": 6,
+        "Press the middle button for the seventh time.": 5,
+        "Press the left button for the third time.": 38,
+        "Press the left button for the fourth time.": 34,
+        "Press the left button for the fifth time.": 29,
+        "Press the left button for the sixth time.": 20,
+        "Press the left button for the seventh time.": 14,
+        "Press the left button for the eighth time.": 10,
+        "Press the left button for the ninth time.": 6,
+        "Press the middle button for the eighth time.": 2,
+        "Press the middle button for the ninth time.": 1
+      },
+      "preserved_segments_by_label": {
+        "Press the confirm button.": 50
+      },
+      "artificial_action_targets_excluded_per_epoch": 197408,
+      "boundary_mask_cases_checked": 1344
+    },
+    "swap_blocks": {
+      "episodes": 50,
+      "annotation_sha256": "7992912723090da509aecd128ebfcfabbb37802d96f0acfef119713efdb4c195",
+      "annotation_matches_asset_manifest": true,
+      "configured_labels": [],
+      "masked_segments": 0,
+      "masked_segments_by_label": {},
+      "preserved_segments_by_label": {
+        "Use right arm to pick up the right block and move it to the middle tray.": 50,
+        "Use right arm to pick up the left block and move it to the right tray.": 50,
+        "Use right arm to pick up the right block and move it to the right tray.": 50,
+        "Use left arm to pick up the left block and move it to the left tray.": 50,
+        "Press the button.": 50
+      },
+      "artificial_action_targets_excluded_per_epoch": 0,
+      "boundary_mask_cases_checked": 750
+    }
+  },
+  "masked_segments_total": 696,
+  "result": "passed"
+}
