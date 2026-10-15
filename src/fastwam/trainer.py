@@ -1238,7 +1238,8 @@ class Wan22Trainer:
         # contract. Candidate tensors retain the dataset's [B,K,N,C,H,W] layout.
         for name, unbatched_ndim in (
             ("frame_index", 0), ("episode_index", 0), ("sample_weight", 0),
-            ("action_real_mask", 1), ("event_anchor_candidate_latents", 5),
+            ("action_real_mask", 1), ("action_loss_mask", 1),
+            ("event_anchor_candidate_latents", 5),
             ("event_anchor_candidate_indices", 2),
         ):
             value = sample.get(name)

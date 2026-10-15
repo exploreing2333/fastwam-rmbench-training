@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-15",
+  "scope": {
+    "padding_action_loss_exclusion": {
+      "put_back_block": ["Press the button."]
+    },
+    "default_latest_full_state_resume": "all 12 tasks and sequential launcher",
+    "gpu_training_started_for_validation": false,
+    "data_assets_changed": false
+  },
+  "validation": {
+    "all_task_data_audit": {
+      "episodes": 600,
+      "lerobot_frames": 416711,
+      "manifest_hashes": "passed",
+      "raw_state_and_next_frame_action_equality": "passed",
+      "report": "rmbench_all_tasks_padding_audit_20261015.json"
+    },
+    "actual_put_back_loader": {
+      "samples": 50,
+      "result": "passed",
+      "checks": [
+        "Artificial suffix has zero action-loss gradient only in the configured press stage",
+        "Real action targets and weights are preserved with a denominator of 32",
+        "Other stages retain the original supervision",
+        "GT boundaries and sample order are preserved"
+      ],
+      "report": "put_back_block_data_audit_20261015.json"
+    },
+    "portable_action_loss_unit_tests": {"passed": 6},
+    "source_gt_dataset_and_action_loss_tests": {"passed": 24, "subtests_passed": 9},
+    "portable_resume_unit_tests": {
+      "passed": 9,
+      "includes": [
+        "Latest complete task-local state; incomplete states skipped",
+        "A newer fresh run takes precedence over an older run with more steps",
+        "Weight-only and incomplete state cannot silently restart training",
+        "Saved GPU count, microbatch, accumulation and worker settings are inherited",
+        "All 12 task commands generate the expected configuration",
+        "Completed tasks skip training; --fresh explicitly restarts",
+        "Dry-run preserves the existing launch configuration",
+        "An active run cannot be launched again on another GPU set"
+      ]
+    },
+    "existing_real_full_state_layout": {
+      "task": "cover_blocks",
+      "step": 142000,
+      "world_size": 8,
+      "microbatch": 8,
+      "accumulation": 1,
+      "file_structure_validation": "passed",
+      "distributed_gpu_reload_executed": false
+    },
+    "sequential_launcher_dry_run": ["put_back_block", "swap_blocks"]
+  },
+  "interpretation": "Padding is a plausible endpoint bias, not an established sole cause of failure. Only put_back_block is enabled for the ablation. rearrange_blocks, blocks_ranking_try, and the left/middle press_button stages are candidates; swap_blocks and the confirmation press end in a depressed pose."
+}

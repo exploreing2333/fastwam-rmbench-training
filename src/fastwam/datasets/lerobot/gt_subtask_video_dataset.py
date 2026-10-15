@@ -30,11 +30,21 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         *args,
         subtask_source_map: str,
         gt_subtask_text_embedding_cache_dir: str,
+        exclude_terminal_hold_loss_subtasks=(),
         gt_subtask_segment_mode: str = "v72_semantic",
         gt_subtask_event_instance_tasks=("press_button",),
         press_button_label_mode: str | None = None,
         **kwargs,
     ) -> None:
+        if isinstance(exclude_terminal_hold_loss_subtasks, str):
+            raise ValueError("exclude_terminal_hold_loss_subtasks must be a sequence of subtask texts.")
+        if any(not isinstance(text, str) or not text.strip()
+               for text in exclude_terminal_hold_loss_subtasks):
+            raise ValueError("Terminal-hold loss exclusions must be non-empty subtask texts.")
+        self.exclude_terminal_hold_loss_subtasks = frozenset(
+            " ".join(text.casefold().split())
+            for text in exclude_terminal_hold_loss_subtasks
+        )
         for name in (
             "progress_cache_root",
             "progress_subtask_text_embedding_cache_dir",
@@ -97,6 +107,8 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
                 if text not in self._gt_contexts:
                     self._gt_contexts[text] = self._load_gt_context(text)
 
+        self._validate_terminal_hold_loss_subtasks()
+
     def _load_gt_subtask_trajectories(self) -> None:
         # Preserve the native annotation/episode/frame validation, then build a
         # semantic view without changing raw files or the population of anchors.
@@ -149,6 +161,27 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         context[~mask] = 0
         return context
 
+    def _validate_terminal_hold_loss_subtasks(self) -> None:
+        available = {
+            " ".join(text.casefold().split())
+            for texts in self._gt_texts_by_episode.values() for text in texts
+        }
+        missing = self.exclude_terminal_hold_loss_subtasks - available
+        if missing:
+            raise ValueError(f"Terminal-hold loss exclusions have no matching GT subtask: {sorted(missing)}")
+
+    def _apply_subtask_action_loss_mask(self, result: dict, text: str) -> None:
+        excluded = getattr(self, "exclude_terminal_hold_loss_subtasks", ())
+        if excluded:
+            # Keep the fixed-length carrier, real pauses, and segment boundary.
+            # A separate mask removes only artificial hold supervision; the
+            # action_is_pad denominator remains 32 even for a one-step suffix.
+            result["action_loss_mask"] = (
+                result["action_real_mask"].clone()
+                if " ".join(text.casefold().split()) in excluded
+                else torch.ones_like(result["action_real_mask"])
+            )
+
     def _aligned_anchor_indices(self) -> list[int]:
         # All GT frames are admitted, including short boundary suffixes. Do not
         # filter them through V72's predicted-condition/GT agreement mask.
@@ -181,6 +214,7 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         stage = int(self._gt_stage_index[episode][frame])
         text = self._gt_texts_by_episode[episode][stage]
         ProgressSubtaskRobotVideoDataset._apply_subtask_terminal_hold(self, result)
+        self._apply_subtask_action_loss_mask(result, text)
         result["context"] = self._gt_contexts[text].clone()
         # Original FastWAM leaves zeroed T5 padding visible to cross-attention.
         result["context_mask"] = torch.ones(self.context_len, dtype=torch.bool)

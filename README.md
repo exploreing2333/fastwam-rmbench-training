@@ -1,6 +1,6 @@
 # FastWAM RMBench 独立训练项目
 
-本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [魔搭 ModelScope](https://modelscope.cn/datasets/ccenzl/fastwam-rmbench-training-assets) 下载。默认从 **Wan 2.2 预训练权重初始化**，从第 0 步训练，`resume=null`。
+本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [魔搭 ModelScope](https://modelscope.cn/datasets/ccenzl/fastwam-rmbench-training-assets) 下载。启动时默认恢复本任务最近保存完成的完整训练状态；没有 checkpoint 时，从 **Wan 2.2 预训练权重初始化**。显式从头训练使用 `--fresh`。
 
 ## 一行下载并恢复环境
 
@@ -26,7 +26,7 @@ FASTWAM_RUNTIME_ROOT=/scratch/fastwam_rmbench_runtime bash setup.sh
 
 ## 每个任务一行启动
 
-每条命令默认使用 8 张 GPU，训练 200000 optimizer steps，global batch 为 64。首次训练命令也会自动完成资源下载与环境恢复。
+每条命令首次训练默认使用 8 张 GPU，总目标为 200000 optimizer steps，global batch 为 64。续训自动沿用 checkpoint 的 GPU 数、microbatch 和梯度累积。首次训练命令也会自动完成资源下载与环境恢复。
 
 参考任务 `cover_blocks` 以外的 11 个任务：
 
@@ -44,7 +44,7 @@ bash train_task.sh observe_and_pickup
 bash train_task.sh swap_T
 ```
 
-重新训练参考任务：
+训练或续训参考任务：
 
 ```bash
 bash train_task.sh cover_blocks
@@ -58,7 +58,30 @@ bash train_tasks_sequential.sh
 
 默认单任务后台运行，关闭终端后继续。日志和权重写到 `runs/TASK/RUN_ID/`，主日志为 `stdout.log`，PID/进程组分别记录在 `training.pid` 和 `training.pgid`。使用 `--foreground` 可在当前终端运行。
 
-4 卡仍保持 global batch=64，启动器自动改成 microbatch 8、accumulation 2：
+### 自动从最新 checkpoint 续训
+
+上述所有单任务命令及 `bash train_tasks_sequential.sh` 均默认自动续训，无需手填 checkpoint 路径：
+
+```bash
+bash train_task.sh put_back_block
+```
+
+启动器仅检查 `runs/put_back_block/*/checkpoints/state/step_*`，验证 `trainer_state.json`、模型、optimizer 分片、scheduler 和各 rank RNG 文件。多个 run 按完成标记的保存时间选择最新状态，同时间再按 step 排序；未完成或缺少文件的状态会跳过并打印原因。续训恢复模型、optimizer、scheduler、global step 和数据采样位置，默认复用原 run 目录，继续每 2000 步保存、最多保留最近两个 checkpoint。旧启动配置归档到 `launch_history/`，日志追加写入。`--dry-run` 将预览写入 `dry_runs/`，不会覆盖原启动配置。
+
+如果最新完整状态已经达到 `--max-steps`（默认 200000），该任务直接完成，不启动 GPU 进程；顺序训练会继续下一个任务。`--max-steps` 始终表示总步数。没有任何 checkpoint 才自动从头训练；仅有独立 `.pt` 权重或全部状态不完整时会明确报错，避免误当作完整续训。独立 `.pt` 没有 optimizer、scheduler 或采样状态。
+
+```bash
+# 显式从头训练，创建新 run
+bash train_task.sh put_back_block --fresh
+# 指定完整状态目录
+bash train_task.sh put_back_block --resume runs/put_back_block/RUN_ID/checkpoints/state/step_118000
+# 全部队列从各自最新状态恢复；完成的任务自动跳过
+bash train_tasks_sequential.sh
+```
+
+若显式指定 GPU 数、microbatch 或梯度累积，必须与所选完整状态一致。`--fresh` 也可用于顺序训练命令。
+
+首次使用 4 卡仍保持 global batch=64，启动器自动改成 microbatch 8、accumulation 2：
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1,2,3 bash train_task.sh rearrange_blocks --gpus 4
@@ -70,7 +93,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 bash train_task.sh rearrange_blocks --gpus 4
 bash train_task.sh rearrange_blocks --dry-run
 ```
 
-`--num-workers 2` 可减少每个 GPU 进程的数据加载 worker；默认 8，沿用参考配置。`--gradient-checkpointing` 可显式启用显存优化；默认关闭。`--cached-stats` 可使用按相同原代码计算的任务归一化统计；默认仍重新计算。
+`--num-workers 2` 可减少每个 GPU 进程的数据加载 worker；首次训练默认 8，续训未指定时沿用原 run 的数量。`--gradient-checkpointing` 可显式启用显存优化；首次训练默认关闭，续训保留原 run 已启用的选项。`--cached-stats` 可使用按相同原代码计算的任务归一化统计；默认仍重新计算。
 
 ## 迁移服务器检查与 CPFS 报错修复
 
@@ -137,7 +160,7 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 
 `models/ActionDiT_linear_interp_Wan22_alphascale_1024hdim.pt` 保存的是上述 Wan 权重转换结果，仅包含动作骨干；动作输入层 `action_encoder`、动作输出层 `head` 和 `proprio_encoder` 在训练启动时按 seed 42 新建。该文件不包含 RMBench 训练后的动作模型、动作头或 optimizer 状态。
 
-默认配置保留 `skip_dit_load_from_pretrain=false`、上述 Wan 动作骨干转换路径和 `resume=null`。`--resume` 仅在用户显式要求续训时使用。初始化来源核对结果见 `reports/wan_initialization_audit.json`。
+配置模板保留 `skip_dit_load_from_pretrain=false` 和上述 Wan 动作骨干转换路径。启动器默认将 `resume` 设为本任务最新完整训练状态；首次训练或 `--fresh` 时为 `null`。初始化来源核对结果见 `reports/wan_initialization_audit.json`。
 
 ## V72 subtask 分段
 
@@ -165,7 +188,24 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 bash train_task.sh classify_blocks --subtask-segments raw_annotation
 ```
 
-新任务默认从 Wan 初始化开始训练。分段改变会更新受影响任务的 sampling contract；显式续训旧状态时沿用原训练器的合同变更处理，重新开始完整的数据 epoch。完整核对见 `reports/v72_semantic_subtask_audit.json`。
+没有 checkpoint 的新任务从 Wan 初始化开始训练。分段改变会更新受影响任务的 sampling contract；续训旧状态时沿用原训练器的合同变更处理，重新开始完整的数据 epoch。完整核对见 `reports/v72_semantic_subtask_audit.json`。
+
+### put_back_block 按键段的填充 action loss 消融
+
+`portable_put_back_block.yaml` 配置 `exclude_terminal_hold_loss_subtasks: ["Press the button."]`。只有这个任务的指定子任务增加 `action_loss_mask=action_real_mask`；其他阶段为全真 mask。32 步 action 的数据填充、GT 合并边界、视频目标、真实停顿和采样顺序保持原有逻辑。人工补出的 action 后缀不参与 action loss；分母仍为 32，不按剩余真实长度重新放大尾部样本。设置空列表可恢复原监督。
+
+2026-10-15 对全部 600 条轨迹、416711 帧的核对中，资源清单 SHA256、原始关节目标与 LeRobot action 的下一帧对应关系全部通过。按键段的实际终点如下，比例为人工填充占该类按键段全部 action 目标的比例：
+
+| 任务/按键类型 | 段数 | 段长度 | 人工填充占比 | 填充重复的实际姿态 |
+| --- | ---: | ---: | ---: | --- |
+| put_back_block | 50 | 109–111 | 14.13% | 按后抬起并撤回原位 |
+| rearrange_blocks | 50 | 106–116 | 13.92% | 按后抬起并撤回原位 |
+| blocks_ranking_try | 198 | 48–77 | 27.60% | 按后抬起约 3.82 cm |
+| press_button 左键/中键 | 398 | 47–76 | 28.92% | 按后抬起约 3.82 cm |
+| press_button 确认键 | 50 | 99–100 | 15.59% | 压住按钮 |
+| swap_blocks | 50 | 65–76 | 23.62% | 压住按钮 |
+
+前三类及左键/中键具有类似的阶段歧义，适合评估取消人工填充监督的消融；填充比例本身不能证明失败原因。当前仅启用 `put_back_block`，其他任务配置未修改。`swap_blocks` 和确认键的填充支持保持按压，保留原监督。逐帧结果见 `reports/rmbench_all_tasks_padding_audit_20261015.json`，按键终点结果见 `reports/rmbench_press_endpoints_audit_20261015.json`。
 
 ## observe_and_pickup 具体目标标注
 
@@ -198,10 +238,10 @@ git pull --ff-only && bash setup.sh && bash train_task.sh observe_and_pickup --n
 - 从当前帧预测 32 个动作，视频采样为 t,t+4,...,t+32，共 9 帧。
 - GT 来自原始 `language_annotation.json`，默认按上述 V72 规则构造阶段，再截到 LeRobot 长度。`state[t]` 与原始 qpos[t]、`action[t]` 与原始 qpos[t+1] 精确对齐。
 - 当前 GT subtask 构造固定 Wan prompt，使用 128×4096 BF16 T5 context；padding context 置零，context mask 保持全部可见。
-- 每个 V72 GT 阶段独立处理。跨真正 subtask 边界的动作后缀重复本阶段最后动作；视频后缀重复本阶段最后已采样帧，继续参与 loss。合并段内部的原始边界继续使用真实未来动作和视频。
+- 每个 V72 GT 阶段独立处理。跨真正 subtask 边界的动作后缀重复本阶段最后动作；视频后缀重复本阶段最后已采样帧。除上述显式配置的 action loss 消融外，填充继续参与 loss。合并段内部的原始边界继续使用真实未来动作和视频。
 - 所有合法真实帧均可作为 anchor，包括短 segment 和尾部。每 epoch 按 seed+epoch 无放回打乱；DDP 对齐使用 -1 零损失样本，恢复时精确跳过已消费的 global microbatch。
 
-模型架构、优化器、loss、图像处理和每个 epoch 的真实帧采样顺序沿用原代码。本次更新额外将上述 7 个任务的 GT 阶段边界对齐 V72；其余 5 个任务保留原有行为。
+模型架构、优化器、图像处理和每个 epoch 的真实帧采样顺序沿用原代码。GT 阶段按上述 V72 规则合并；action loss 仅增加显式配置的按键段填充监督消融。
 
 ## 代码与验证记录
 

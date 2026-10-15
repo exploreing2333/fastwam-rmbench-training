@@ -8,6 +8,7 @@ from PIL import Image
 from fastwam.utils.logging_config import get_logger
 
 from .action_dit import ActionDiT
+from .action_loss import reduce_action_loss
 from .helpers.loader import load_wan22_ti2v_5b_components
 from .mot import MoT
 from .schedulers.scheduler_continuous import WanContinuousFlowMatchScheduler
@@ -1577,12 +1578,10 @@ class FastWAM(torch.nn.Module):
         loss_video = (loss_video_per_sample * video_weight * sample_weight).mean()
 
         action_loss_token = F.mse_loss(pred_action.float(), target_action.float(), reduction="none").mean(dim=2) # [B, T]
-        if action_is_pad is not None:
-            valid = (~action_is_pad).to(device=action_loss_token.device, dtype=action_loss_token.dtype)
-            valid_sum = valid.sum(dim=1).clamp(min=1.0)
-            action_loss_per_sample = (action_loss_token * valid).sum(dim=1) / valid_sum
-        else:
-            action_loss_per_sample = action_loss_token.mean(dim=1)
+        action_loss_mask = sample.get("action_loss_mask")
+        action_loss_per_sample = reduce_action_loss(
+            action_loss_token, action_is_pad, action_loss_mask,
+        )
 
         action_weight = self.train_action_scheduler.training_weight(timestep_action).to(
             action_loss_per_sample.device, dtype=action_loss_per_sample.dtype
@@ -1604,6 +1603,10 @@ class FastWAM(torch.nn.Module):
             if real_mask.shape != action_loss_token.shape:
                 raise ValueError("action_real_mask must match the action horizon.")
             valid_tokens = torch.ones_like(real_mask) if action_is_pad is None else ~action_is_pad
+            if action_loss_mask is not None:
+                valid_tokens = valid_tokens & action_loss_mask.to(
+                    device=valid_tokens.device, dtype=torch.bool,
+                )
             valid_tokens = valid_tokens & (sample_weight[:, None] > 0)
             # The scheduler returns a scalar for B=1 (offline evaluation).
             # Keep batch broadcasting without changing the loss or B>1 metrics.

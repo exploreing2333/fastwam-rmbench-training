@@ -220,6 +220,9 @@ data:
     subtask_source_map: ${oc.env:FASTWAM_RUNTIME_ROOT}/rmbench_source_map.json
     gt_subtask_text_embedding_cache_dir: ${oc.env:FASTWAM_BUNDLE_ROOT}/data/gt_subtask_text_embeds
     gt_subtask_segment_mode: v72_semantic
+    # Mask artificial action holds only for this stage; keep a 32-step denominator.
+    exclude_terminal_hold_loss_subtasks:
+    - Press the button.
     gt_subtask_event_instance_tasks:
     - press_button
     training_shuffle_unit: trajectory
