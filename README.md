@@ -122,7 +122,7 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 | --- | --- |
 | `data/RMBench/` | 完整原始数据、GT 标注、pi05 处理数据、转换与采集代码、模拟资源 |
 | `data/lerobot/rmbench_all_12tasks_demo_clean_50/` | 原训练使用的完整 LeRobot 缓存，600 episodes、416711 frames |
-| `data/gt_subtask_text_embeds/` | 82 个当前 GT subtask 对应的 Wan T5 文本缓存，另保留 2 个旧描述缓存 |
+| `data/gt_subtask_text_embeds/` | 100 个已登记 GT subtask 的 Wan T5 文本缓存，包括按键逐次编号标签 |
 | `models/` | 公共 Wan 2.2、VAE、T5、tokenizer，以及由 Wan 权重插值生成的动作骨干初始化 |
 | `environment/` | 完整 conda-pack 环境、CUDA toolkit，以及实际依赖版本 |
 | `vendor/` | 原环境依赖的 curobo、LIBERO 源码与资源 |
@@ -141,7 +141,11 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 
 ## V72 subtask 分段
 
-所有任务默认使用 `gt_subtask_segment_mode: v72_semantic`。训练读取原始标注时，仅合并相邻且文本在统一大小写、空白后相同的段，累计它们的时长；被其他指令隔开的同名段分别保留。阶段编号、GT 文本列表及动作/视频的末尾保持边界一起更新。`gt_subtask_event_instance_tasks: [press_button]` 保留每一次按键事件，满足按次数执行的任务语义。
+所有任务默认使用 `gt_subtask_segment_mode: v72_semantic`。训练读取 GT 标注时，仅合并相邻且文本在统一大小写、空白后相同的段，累计它们的时长；被其他指令隔开的同名段分别保留。阶段编号、GT 文本列表及动作/视频的末尾保持边界一起更新。`gt_subtask_event_instance_tasks: [press_button]` 保留每一次按键事件。
+
+`press_button` 的 50 条演示共 448 次按压。每次按压都有独立标签，例如 `Press the middle button for the third time.`；左键和中键各有第 1–9 次标签，确认键沿用原文。完整的目标次数、当前序号和持续帧数保存在 `data/RMBench/data/data/press_button/demo_clean/press_count_labels.json`，原标注保存在同目录的 `language_annotation.before_count_labels.json`。启动训练时，`press_button_label_mode: ordinal_per_press_v1` 会校验标签顺序和序号。
+
+目标总次数只作为数据元信息保存，不进入当前模型的文本条件。环境每次按压后复位按钮，已按次数只存在环境内部；当前模型仅看一帧三视角 RGB 和关节状态。若将同一按钮的一组按压合并为固定的“按 N 次”subtask，组末与下一次按压前可能出现近乎相同的输入，却要求不同动作。保留逐次边界也保证 32 步动作和视频目标在边界处保持于本次按压。若今后让目标总次数进入模型，在线验证必须从可观测输入提供同样的数值，并增加可用的已完成次数或历史条件。
 
 | 任务 | 每条轨迹原始段数 → 默认 V72 段数 |
 | --- | --- |
@@ -153,7 +157,7 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 | `observe_and_pickup` | 4 → 2 |
 | `swap_T` | 7 → 4 |
 
-`cover_blocks`、`battery_try`、`place_block_mat`、`blocks_ranking_try` 的阶段边界和 `press_button` 的独立事件保持原有行为。V72 合并操作保留各帧原有文本、图像、动作和归一化统计；下面的 `observe_and_pickup` 目标标注更新额外替换该任务的文本及对应 T5 缓存。
+`cover_blocks`、`battery_try`、`place_block_mat`、`blocks_ranking_try` 的阶段边界和 `press_button` 的独立事件保持原有行为。V72 合并操作保留各帧原有图像、动作和归一化统计；`press_button` 与下面的 `observe_and_pickup` 更新了 GT 文本及对应 T5 缓存。
 
 需要复现原始 GT 分段时，可显式选择：
 

@@ -21,6 +21,7 @@ from fastwam_qwen.datasets.robot_video_dataset import (
 )
 from .progress_subtask_video_dataset import ProgressSubtaskRobotVideoDataset
 from .gt_subtask_segments import build_gt_subtask_segments
+from .press_button_labels import validate_numbered_press_texts
 
 
 class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
@@ -31,6 +32,7 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         gt_subtask_text_embedding_cache_dir: str,
         gt_subtask_segment_mode: str = "v72_semantic",
         gt_subtask_event_instance_tasks=("press_button",),
+        press_button_label_mode: str | None = None,
         **kwargs,
     ) -> None:
         for name in (
@@ -67,6 +69,11 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
             raise ValueError("gt_subtask_event_instance_tasks must be a sequence of task names.")
         self.gt_subtask_segment_mode = gt_subtask_segment_mode
         self.gt_subtask_event_instance_tasks = tuple(gt_subtask_event_instance_tasks)
+        if press_button_label_mode not in (None, "ordinal_per_press_v1"):
+            raise ValueError(f"Unknown press_button label mode: {press_button_label_mode!r}")
+        if press_button_label_mode and "press_button" not in self.gt_subtask_event_instance_tasks:
+            raise ValueError("Numbered press labels require individual press boundaries")
+        self.press_button_label_mode = press_button_label_mode
         self.subtask_trajectory_mode = True
         self.subtask_terminal_hold = True
         self.subtask_segment_source = "gt_annotation"
@@ -104,6 +111,8 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
                 path = Path(source["raw_root"]) / task / "demo_clean/language_annotation.json"
                 annotations[task] = json.loads(path.read_text(encoding="utf-8"))
             raw_segments = annotations[task][f"episode_{row['source_episode_id']}"]
+            if task == "press_button" and getattr(self, "press_button_label_mode", None):
+                validate_numbered_press_texts(tuple(str(item[0]).strip() for item in raw_segments))
             segments = build_gt_subtask_segments(
                 raw_segments, task, self.gt_subtask_segment_mode,
                 self.gt_subtask_event_instance_tasks,

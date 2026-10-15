@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "episodes": 50,
+  "frames": 26302,
+  "press_segments": 448,
+  "unique_numbered_labels": 19,
+  "original_spans_unchanged": true,
+  "cross_press_action_targets": 0,
+  "cross_press_video_targets": 0,
+  "held_action_targets": 222208,
+  "sampling_contract": "gt_subtask_currentonly_stride1_terminalhold_frame_shuffle_without_replacement_0e9ae775976cf125_v1"
+}

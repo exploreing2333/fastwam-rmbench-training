@@ -1,0 +1,135 @@
+{
+  "previous_bundle_id": "fastwam-rmbench-gt-current-200k-observe-targets-20261012-4852d2d7b5bc",
+  "bundle_id": "fastwam-rmbench-gt-current-200k-press-ordinal-20261015-eb3ad7b8615d",
+  "changed_files": [
+    {
+      "path": "data/RMBench/data/data/press_button/demo_clean/language_annotation.json",
+      "size": 33533,
+      "sha256": "8c809e09df0d135cdf4ebc6c800f62a6bdffa2b1e505a791ea74505129829211",
+      "group": "dataset_and_simulator_assets"
+    },
+    {
+      "path": "data/RMBench/data/data/press_button/demo_clean/language_annotation.before_count_labels.json",
+      "size": 38534,
+      "sha256": "290f7a749a83f6707195bd57abd4f9405e9f676747d46f4580271f1c9c80a626",
+      "group": "dataset_and_simulator_assets"
+    },
+    {
+      "path": "data/RMBench/data/data/press_button/demo_clean/press_count_labels.json",
+      "size": 106757,
+      "sha256": "7a5216eb00b8b2cafcf964dc30d9d83f0dda7cdfde4985a7ef9246b78b2c853a",
+      "group": "dataset_and_simulator_assets"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/9ae99c6f0534f0144c424cf01e7cd102ca1b77aa6fb59ca9738b9f0d9f75a3c0.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "e9907d4a37f4273d6c41af430d295cef65b7bec3c93e96b7aaef13161b14a655",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/c38c2dd5a569a3bc4ca5008b871627f184601d604854db5eb8a091a96e4aee92.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "bf1920f8f4be78fd605454d932110cab001c1cd76d2a044cca2c64a687290678",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/95f87c80e0b991dc5c4fbdd182f0a60d10a8c1ffbaaeb2d024daf121d487131d.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "6e2273b411d764dbea16e9895990e04c990e8017edc733bacf19de247f62cbf9",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/fe855fee58df7d4286f1f311e72b9de31a44f0ae32dea938ed06a884d0254407.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "a7dc6991dda9fced4319df6a069aa34daa01a76f8762ded76a21185f912a0c51",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/36eac016e714b026a3b0714165d8cdad7a1467b7206396a4fe05b8e92c0f271a.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "561f16a02f4998a8e80630088e04b0a3a1caaf4c431284eb897ac3207c991ced",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/aa2d90b8d2d6684232390cec25d2f297068b5c1fe397df06758d0828906b8828.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "3f932a773508156d0c761c6d5157838911e29326ecbd4630df2cd52a83a7fbd3",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/16cdaa78a6d758fb286365d808b22b048f60bbf44ea767678136ac363de9784f.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "d28301a74b0dadbd19ebde6ab45ac0c0155cf68919c569534a63a00d155b8fc8",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/980c97b8a8dbf81fcc970b9c94445da12f23d9de34e8ae88096ca2bfe8836635.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "c1f1235a884aea3cffcd2f304fb9156ce785e849758306d0a8c3e4dfc299a683",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/a630c967583ca5367326e8a9296b19b63cecc87379d937512422da263354a5e9.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "43a65681ee8eca809323a366b7decb05664c8896389fc7042124aa8d8eebdfb9",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/cb2af72ddd09f985bf78deef8ccc8ad25cea208f423d6f20c3d76904dc1bb4f8.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "addb5ea295699c8f2c46c33c829ff7a5812367a0dd3548664cbdb3bede521794",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/3393648d441f2aa58342c8ebf220eed2135c5b217642d60a0d26c9f9b8ae90da.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "47727f17e0b6ac01b7d1b546be6a24cf418db60201184cd6b0f519ce2bf7fac7",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/c97ca9f46f1dfa3ba3b6d872a776b25f35528459c32819c996b4e1c8955b02ab.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "8e526c5dc6955f49cbd0cd454bb957884b3dfe6ebefac625d3bd4688e56f18fe",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/b362eeaa65df6cce8f60e5041d63e672f5b20de20e4eab7ea555a880d2d89686.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "20f3fce4f806798a61910d37c3aabdf516c8072e6005e270e86695faa46134bf",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/e6c5f7d838c0d5817558dba4731ff8499c7f20ec2fa0485a7d6efa7a1c4e982b.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "d4362f5a09fab1901ffe3acab27218c75600ab1d0fd533c5160eb6aa1600ce1e",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/7b4660a9ccf67929949d08782f2e15621a5efe7c713a7ee33765d2238d4d3aee.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "4e82ebc7b72b0db36cfefdc9f5b28b7c0959fb33fa160f7a8c7bfd52fb02cec4",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/f7a459b174f20ea57ddcd7b1bc814cb3c1fdb8fc99c5eeadd918d8bb7df515f5.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "b36d0b492e3091d470d9c0e3ee095f956f415ce32c17f495d5efd9c29674ce00",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/7223438496f008910357548acad6a037d3cf7abfea2ee179134257ac49746772.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "fadfbc25c449082653b030d39432b3d4f57ecae6e8796b5e377a69e301de5293",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/b224b6b2b3d6b8424ae2d6c7d843c1f984c4592f7de4b4fdac660b91e9536d37.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "83fb9639dace60f2a43344e62468210a60a6bd9eddba536a22b826ac6faa535a",
+      "group": "gt_text_cache"
+    }
+  ],
+  "changed_bytes": 19112466,
+  "total_files": 5509,
+  "total_bytes": 256882159165
+}

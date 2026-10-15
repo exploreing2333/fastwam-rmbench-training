@@ -222,6 +222,7 @@ data:
     gt_subtask_segment_mode: v72_semantic
     gt_subtask_event_instance_tasks:
     - press_button
+    press_button_label_mode: ordinal_per_press_v1
     training_shuffle_unit: trajectory
     trajectory_anchor_stride: 1
   val: null
