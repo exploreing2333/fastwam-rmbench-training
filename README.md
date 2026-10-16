@@ -1,6 +1,6 @@
 # FastWAM RMBench 独立训练项目
 
-本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [魔搭 ModelScope](https://modelscope.cn/datasets/ccenzl/fastwam-rmbench-training-assets) 下载。启动时默认恢复本任务最近保存完成的完整训练状态；没有 checkpoint 时，从 **Wan 2.2 预训练权重初始化**。显式从头训练使用 `--fresh`。
+本项目保留 `rmbench_fastwam_gt_cover_current_gbs64_200k` 当前代码、实际环境和保存的训练配置，为 RMBench 的 12 个任务分别训练模型。GitHub 保存代码、配置、数据处理程序和任务元数据；权重、完整环境、原始数据、GT 标注和训练数据从 [魔搭 ModelScope](https://modelscope.cn/datasets/ccenzl/fastwam-rmbench-training-assets) 下载。每次启动默认创建新 run，从 **Wan 2.2 预训练权重初始化**开始训练。只有显式加 `--resume` 才查找并恢复本任务最近保存完成的完整训练状态。
 
 ## 一行下载并恢复环境
 
@@ -26,7 +26,7 @@ FASTWAM_RUNTIME_ROOT=/scratch/fastwam_rmbench_runtime bash setup.sh
 
 ## 每个任务一行启动
 
-每条命令首次训练默认使用 8 张 GPU，总目标为 200000 optimizer steps，global batch 为 64。续训自动沿用 checkpoint 的 GPU 数、microbatch 和梯度累积。首次训练命令也会自动完成资源下载与环境恢复。
+每条命令默认从头训练，使用 8 张 GPU，总目标为 200000 optimizer steps，global batch 为 64。加 `--resume` 续训时自动沿用 checkpoint 的 GPU 数、microbatch 和梯度累积。首次训练命令也会自动完成资源下载与环境恢复。
 
 参考任务 `cover_blocks` 以外的 11 个任务：
 
@@ -44,7 +44,7 @@ bash train_task.sh observe_and_pickup
 bash train_task.sh swap_T
 ```
 
-训练或续训参考任务：
+从头训练参考任务：
 
 ```bash
 bash train_task.sh cover_blocks
@@ -58,28 +58,31 @@ bash train_tasks_sequential.sh
 
 默认单任务后台运行，关闭终端后继续。日志和权重写到 `runs/TASK/RUN_ID/`，主日志为 `stdout.log`，PID/进程组分别记录在 `training.pid` 和 `training.pgid`。使用 `--foreground` 可在当前终端运行。
 
-### 自动从最新 checkpoint 续训
+### 默认从头训练，显式加 --resume 续训
 
-上述所有单任务命令及 `bash train_tasks_sequential.sh` 均默认自动续训，无需手填 checkpoint 路径：
+上述所有单任务命令及 `bash train_tasks_sequential.sh` 均默认创建新 run，从 Wan 初始化开始训练；已有 checkpoint 会保留。加 `--resume` 可自动选择最新完整 checkpoint，无需手填路径：
 
 ```bash
+# 默认从头训练，即使本任务已有 checkpoint
 bash train_task.sh put_back_block
+# 从本任务最新完整 checkpoint 续训
+bash train_task.sh put_back_block --resume
 ```
 
-启动器仅检查 `runs/put_back_block/*/checkpoints/state/step_*`，验证 `trainer_state.json`、模型、optimizer 分片、scheduler 和各 rank RNG 文件。多个 run 按完成标记的保存时间选择最新状态，同时间再按 step 排序；未完成或缺少文件的状态会跳过并打印原因。续训恢复模型、optimizer、scheduler、global step 和数据采样位置，默认复用原 run 目录，继续每 2000 步保存、最多保留最近两个 checkpoint。旧启动配置归档到 `launch_history/`，日志追加写入。`--dry-run` 将预览写入 `dry_runs/`，不会覆盖原启动配置。
+使用 `--resume` 时，启动器仅检查 `runs/put_back_block/*/checkpoints/state/step_*`，验证 `trainer_state.json`、模型、optimizer 分片、scheduler 和各 rank RNG 文件。多个 run 按完成标记的保存时间选择最新状态，同时间再按 step 排序；未完成或缺少文件的状态会跳过并打印原因。续训恢复模型、optimizer、scheduler、global step 和数据采样位置，默认复用原 run 目录，继续每 2000 步保存、最多保留最近两个 checkpoint。旧启动配置归档到 `launch_history/`，日志追加写入。`--dry-run` 将预览写入 `dry_runs/`，不会覆盖原启动配置。
 
-如果最新完整状态已经达到 `--max-steps`（默认 200000），该任务直接完成，不启动 GPU 进程；顺序训练会继续下一个任务。`--max-steps` 始终表示总步数。没有任何 checkpoint 才自动从头训练；仅有独立 `.pt` 权重或全部状态不完整时会明确报错，避免误当作完整续训。独立 `.pt` 没有 optimizer、scheduler 或采样状态。
+使用 `--resume` 且所选完整状态已经达到 `--max-steps`（默认 200000）时，该任务直接完成，不启动 GPU 进程；顺序训练会继续下一个任务。不加 `--resume` 时，即使旧 run 已完成，也从头训练。`--max-steps` 始终表示总步数。加 `--resume` 但没有任何 checkpoint 时从头训练；仅有独立 `.pt` 权重或全部状态不完整时会明确报错。独立 `.pt` 没有 optimizer、scheduler 或采样状态。
 
 ```bash
-# 显式从头训练，创建新 run
+# --fresh 保留为默认从头训练行为的显式写法
 bash train_task.sh put_back_block --fresh
 # 指定完整状态目录
 bash train_task.sh put_back_block --resume runs/put_back_block/RUN_ID/checkpoints/state/step_118000
 # 全部队列从各自最新状态恢复；完成的任务自动跳过
-bash train_tasks_sequential.sh
+bash train_tasks_sequential.sh --resume
 ```
 
-若显式指定 GPU 数、microbatch 或梯度累积，必须与所选完整状态一致。`--fresh` 也可用于顺序训练命令。
+使用 `--resume` 时，若显式指定 GPU 数、microbatch 或梯度累积，必须与所选完整状态一致。`--fresh` 也可用于顺序训练命令，与 `--resume` 互斥。
 
 首次使用 4 卡仍保持 global batch=64，启动器自动改成 microbatch 8、accumulation 2：
 
@@ -160,7 +163,7 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 
 `models/ActionDiT_linear_interp_Wan22_alphascale_1024hdim.pt` 保存的是上述 Wan 权重转换结果，仅包含动作骨干；动作输入层 `action_encoder`、动作输出层 `head` 和 `proprio_encoder` 在训练启动时按 seed 42 新建。该文件不包含 RMBench 训练后的动作模型、动作头或 optimizer 状态。
 
-配置模板保留 `skip_dit_load_from_pretrain=false` 和上述 Wan 动作骨干转换路径。启动器默认将 `resume` 设为本任务最新完整训练状态；首次训练或 `--fresh` 时为 `null`。初始化来源核对结果见 `reports/wan_initialization_audit.json`。
+配置模板保留 `skip_dit_load_from_pretrain=false` 和上述 Wan 动作骨干转换路径。启动器默认将 `resume` 设为 `null`；只有显式加 `--resume` 才选择本任务最新完整训练状态或指定的状态目录。初始化来源核对结果见 `reports/wan_initialization_audit.json`。
 
 ## V72 subtask 分段
 
@@ -188,7 +191,7 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 bash train_task.sh classify_blocks --subtask-segments raw_annotation
 ```
 
-没有 checkpoint 的新任务从 Wan 初始化开始训练。分段改变会更新受影响任务的 sampling contract；续训旧状态时沿用原训练器的合同变更处理，重新开始完整的数据 epoch。完整核对见 `reports/v72_semantic_subtask_audit.json`。
+默认从 Wan 初始化开始训练。分段改变会更新受影响任务的 sampling contract；显式加 `--resume` 续训旧状态时沿用原训练器的合同变更处理，重新开始完整的数据 epoch。完整核对见 `reports/v72_semantic_subtask_audit.json`。
 
 ### 按键段的填充 action loss 消融
 
@@ -203,7 +206,7 @@ bash train_task.sh classify_blocks --subtask-segments raw_annotation
 
 这些指定子任务使用 `action_loss_mask=action_real_mask`；同一任务的其他阶段为全真 mask。32 步 action 的数据填充、GT 合并边界、视频目标、真实停顿和采样顺序保持原有逻辑。人工补出的 action 后缀不参与 action loss；分母仍为 32，不按剩余真实长度重新放大尾部样本。设置空列表可恢复原监督。`press_button` 的 `Press the confirm button.` 和 `swap_blocks` 保留原监督。
 
-更新代码后继续运行原启动命令即可；自动 resume 会恢复完整训练状态，并使用当前任务配置中的 loss 屏蔽列表。此次更新不改变数据和文本标签，不需要重新下载资源或重置采样位置。
+更新代码后运行原启动命令将从头训练；需要恢复完整训练状态时加 `--resume`。两种方式均使用当前任务配置中的 loss 屏蔽列表。此次 loss 更新不改变数据和文本标签，不需要重新下载资源；续训时保留原采样位置。
 
 四个启用任务及 `swap_blocks` 对照任务的全部 250 条标注已核对资源清单 SHA256，覆盖 696 个被屏蔽填充监督的按键段；标签和边界 mask 检查见 `reports/rmbench_selected_press_hold_loss_validation_20261015.json`。
 

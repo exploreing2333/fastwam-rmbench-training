@@ -1,4 +1,4 @@
-"""One command per task; resume the latest complete task state by default."""
+"""Start each task from Wan initialization; opt into checkpoint recovery with --resume."""
 import argparse
 from datetime import datetime, timezone
 import fcntl
@@ -31,9 +31,9 @@ def main():
     parser.add_argument('--run-id')
     parser.add_argument('--master-port', type=int)
     resume_group = parser.add_mutually_exclusive_group()
-    resume_group.add_argument('--resume', nargs='?', const='latest', default='latest',
-                              help='Latest complete task checkpoint (default), or an explicit full-state directory.')
-    resume_group.add_argument('--fresh', action='store_true', help='Start a new run from Wan initialization.')
+    resume_group.add_argument('--resume', nargs='?', const='latest', default=None,
+                              help='Resume the latest complete task checkpoint, or an explicit full-state directory.')
+    resume_group.add_argument('--fresh', action='store_true', help='Start a new run from Wan initialization (default).')
     parser.add_argument('--max-steps', type=int, default=200000)
     parser.add_argument('--gradient-checkpointing', action='store_true')
     parser.add_argument('--cached-stats', action='store_true', help='Use bundled statistics computed with the unchanged reference algorithm.')
@@ -43,7 +43,7 @@ def main():
     parser.add_argument('--dry-run', action='store_true')
     cli = parser.parse_args()
     selected, skipped = None, []
-    if not cli.fresh:
+    if cli.resume is not None:
         try:
             if cli.resume == 'latest':
                 selected, skipped = latest_training_state(ROOT/'runs'/cli.task)

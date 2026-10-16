@@ -4,6 +4,7 @@ import io
 import json
 import os
 from pathlib import Path
+import runpy
 import shutil
 import sys
 import tempfile
@@ -95,13 +96,18 @@ class ResumeTests(unittest.TestCase):
         weight.parent.mkdir(parents=True);weight.write_bytes(b'weights')
         with self.assertRaisesRegex(ValueError,'weights-only'):
             latest_training_state(task)
+        code,output=self.launch('put_back_block','--dry-run')
+        self.assertEqual(code,0);self.assertIn('mode=fresh step=0',output)
+        with contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as exc:
+            self.launch('put_back_block','--resume','--dry-run')
+        self.assertEqual(exc.exception.code,2)
 
     def test_launcher_restores_batch_and_preserves_existing_launch_in_dry_run(self):
         p=self.state();run=p.parent.parent.parent
         original=run/'launch_config.yaml'
         previous='num_workers: 2\nmodel:\n  mot_checkpoint_mixed_attn: true\n'
         original.write_text(previous)
-        code,output=self.launch('put_back_block','--dry-run')
+        code,output=self.launch('put_back_block','--resume','--dry-run')
         self.assertEqual(code,0);self.assertIn('mode=full_state step=2000',output)
         self.assertEqual(original.read_text(),previous)
         record=json.loads(next(run.glob('dry_runs/*/launch_command.json')).read_text())
@@ -113,27 +119,51 @@ class ResumeTests(unittest.TestCase):
         self.assertEqual(cfg.num_workers,2)
         self.assertTrue(cfg.model.mot_checkpoint_mixed_attn)
 
-    def test_all_task_commands_start_fresh_only_when_no_checkpoint_exists(self):
+    def test_all_task_commands_start_fresh_even_when_checkpoint_exists(self):
         tasks=json.loads((self.root/'data/task_manifest.json').read_text())['tasks']
         for task in tasks:
             with self.subTest(task=task):
+                saved=self.state(task=task)
                 code,output=self.launch(task,'--dry-run')
                 self.assertEqual(code,0);self.assertIn('mode=fresh step=0',output)
                 record=json.loads(next((self.root/'runs'/task).glob('*/dry_runs/*/launch_command.json')).read_text())
                 exclusions=record['exclude_terminal_hold_loss_subtasks']
                 self.assertEqual(exclusions,EXPECTED_HOLD_LOSS_EXCLUSIONS.get(task,[]))
+                self.assertIsNone(record['resume'])
+                self.assertEqual(record['gpus'],8)
+                self.assertNotEqual(Path(record['run_dir']),saved.parent.parent.parent)
+                self.assertTrue((saved/'trainer_state.json').is_file())
 
-    def test_completed_run_is_skipped_and_fresh_is_explicit(self):
+    def test_completed_run_is_skipped_only_with_resume(self):
         self.state(step=200000)
-        code,output=self.launch('put_back_block')
+        code,output=self.launch('put_back_block','--resume')
         self.assertEqual(code,0);self.assertIn('[complete]',output)
-        code,output=self.launch('put_back_block','--fresh','--dry-run')
-        self.assertEqual(code,0);self.assertIn('mode=fresh step=0',output)
+        for flags in ([],['--fresh']):
+            code,output=self.launch('put_back_block',*flags,'--dry-run')
+            self.assertEqual(code,0);self.assertIn('mode=fresh step=0',output)
+
+    def test_explicit_resume_path_selects_requested_state(self):
+        saved=self.state(step=2000,stamp=100)
+        self.state(step=4000,stamp=200)
+        code,output=self.launch('put_back_block','--resume',str(saved),'--dry-run')
+        self.assertEqual(code,0);self.assertIn('mode=full_state step=2000',output)
+
+    def test_sequential_launcher_resumes_only_with_flag(self):
+        for flags in ([],['--resume'],['--fresh']):
+            with self.subTest(flags=flags), \
+                 patch.object(sys,'argv',['train_tasks_sequential.py','--tasks','put_back_block','press_button',*flags]), \
+                 patch('subprocess.run') as launch,contextlib.redirect_stdout(io.StringIO()):
+                runpy.run_path(str(ROOT/'scripts/train_tasks_sequential.py'),run_name='__main__')
+            self.assertEqual(launch.call_count,2)
+            for call in launch.call_args_list:
+                command=call.args[0]
+                self.assertEqual('--resume' in command,'--resume' in flags)
+                self.assertEqual('--fresh' in command,'--fresh' in flags)
 
     def test_incompatible_resume_gpu_count_is_rejected(self):
         self.state(world=4)
         with contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as exc:
-            self.launch('put_back_block','--gpus','8','--dry-run')
+            self.launch('put_back_block','--resume','--gpus','8','--dry-run')
         self.assertEqual(exc.exception.code,2)
 
     def test_active_run_is_not_relaunched_or_overwritten_even_on_disjoint_gpus(self):
@@ -147,7 +177,7 @@ class ResumeTests(unittest.TestCase):
              patch.object(train_task,'find_training_processes',return_value=[{'run_dir':str(run)}]), \
              patch.object(train_task,'conflicting_training_processes',return_value=[]), \
              contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as exc:
-            self.launch('put_back_block')
+            self.launch('put_back_block','--resume')
         self.assertEqual(exc.exception.code,2)
         launch.assert_not_called()
         self.assertEqual(original.read_text(),'num_workers: 2\n')

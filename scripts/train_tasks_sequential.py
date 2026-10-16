@@ -1,4 +1,4 @@
-"""Train remaining tasks sequentially; one distributed task at a time."""
+"""Train tasks sequentially from initialization; add --resume to recover each task."""
 import argparse
 import json
 from pathlib import Path
@@ -14,7 +14,11 @@ parser.add_argument('--microbatch', type=int)
 parser.add_argument('--num-workers', type=int)
 parser.add_argument('--subtask-segments', choices=('v72_semantic', 'raw_annotation'))
 parser.add_argument('--dry-run', action='store_true')
-parser.add_argument('--fresh', action='store_true')
+resume_group = parser.add_mutually_exclusive_group()
+resume_group.add_argument('--resume', action='store_true',
+                          help='Resume each task from its latest complete training state.')
+resume_group.add_argument('--fresh', action='store_true',
+                          help='Start each task from Wan initialization (default).')
 parser.add_argument('--max-steps', type=int, default=200000)
 args = parser.parse_args()
 tasks = args.tasks or manifest['remaining_tasks']
@@ -29,6 +33,8 @@ for task in tasks:
         command.extend(['--microbatch',str(args.microbatch)])
     if args.fresh:
         command.append('--fresh')
+    if args.resume:
+        command.append('--resume')
     if args.dry_run:
         command.append('--dry-run')
     if args.subtask_segments:
