@@ -129,8 +129,19 @@ def create_fastwam(
     train_progress_adapter_only: bool = False,
     event_memory_video_conditioning: bool = False,
     event_memory_augmentation=None,
+    init_frame_context_injection: bool = False,
+    memorywam_init_config=None,
+    init_frame_kv_config=None,
 ):
     from .models.wan22.fastwam import FastWAM
+    if memorywam_init_config is not None and init_frame_kv_config is not None:
+        raise ValueError("Episode training and subtask init-KV training are separate modes.")
+    if init_frame_kv_config is not None:
+        from .models.wan22.init_frame_kv import InitFrameKVFastWAM
+        FastWAM = InitFrameKVFastWAM
+    if memorywam_init_config is not None:
+        from .models.wan22.memorywam_init import MemoryWAMInit
+        FastWAM = MemoryWAMInit
 
     if isinstance(video_dit_config, DictConfig):
         video_dit_config = OmegaConf.to_container(video_dit_config, resolve=True)
@@ -172,7 +183,7 @@ def create_fastwam(
     if not isinstance(loss, dict):
         raise ValueError(f"`loss` must be dict-like, got {type(loss)}")
 
-    return FastWAM.from_wan22_pretrained(
+    model = FastWAM.from_wan22_pretrained(
         device=device,
         torch_dtype=model_dtype,
         model_id=model_id,
@@ -214,11 +225,17 @@ def create_fastwam(
             train_progress_adapter_only
         ),
         event_memory_video_conditioning=bool(event_memory_video_conditioning),
+        init_frame_context_injection=bool(init_frame_context_injection),
         event_memory_augmentation=(
             OmegaConf.to_container(event_memory_augmentation, resolve=True)
             if isinstance(event_memory_augmentation, DictConfig) else event_memory_augmentation
         ),
     )
+    if memorywam_init_config is not None:
+        model.configure_memorywam(memorywam_init_config)
+    if init_frame_kv_config is not None:
+        model.configure_init_frame_kv(init_frame_kv_config)
+    return model
 
 
 def create_fastwam_joint(

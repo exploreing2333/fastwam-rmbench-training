@@ -33,6 +33,7 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
         exclude_terminal_hold_loss_subtasks=(),
         gt_subtask_segment_mode: str = "v72_semantic",
         gt_subtask_event_instance_tasks=("press_button",),
+        gt_subtask_annotation_files=None,
         press_button_label_mode: str | None = None,
         **kwargs,
     ) -> None:
@@ -70,6 +71,12 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
                 raise ValueError(f"GT current-only training requires {name}={value!r}.")
             kwargs[name] = value
         self.subtask_source_map = Path(subtask_source_map).expanduser().resolve()
+        if gt_subtask_annotation_files is not None and not hasattr(gt_subtask_annotation_files, "items"):
+            raise ValueError("gt_subtask_annotation_files must map task names to annotation files.")
+        self.gt_subtask_annotation_files = {
+            str(task): Path(path).expanduser().resolve()
+            for task, path in (gt_subtask_annotation_files or {}).items()
+        }
         self.gt_subtask_text_embedding_cache_dir = Path(
             gt_subtask_text_embedding_cache_dir
         ).expanduser().resolve()
@@ -109,6 +116,11 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
 
         self._validate_terminal_hold_loss_subtasks()
 
+    def _gt_annotation_path(self, raw_root, task: str) -> Path:
+        return getattr(self, "gt_subtask_annotation_files", {}).get(
+            task, Path(raw_root) / task / "demo_clean/language_annotation.json"
+        )
+
     def _load_gt_subtask_trajectories(self) -> None:
         # Preserve the native annotation/episode/frame validation, then build a
         # semantic view without changing raw files or the population of anchors.
@@ -120,7 +132,7 @@ class GroundTruthSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
             row = rows[episode]
             task = row["source_task_name"]
             if task not in annotations:
-                path = Path(source["raw_root"]) / task / "demo_clean/language_annotation.json"
+                path = self._gt_annotation_path(source["raw_root"], task)
                 annotations[task] = json.loads(path.read_text(encoding="utf-8"))
             raw_segments = annotations[task][f"episode_{row['source_episode_id']}"]
             if task == "press_button" and getattr(self, "press_button_label_mode", None):

@@ -142,6 +142,27 @@ class ResumeTests(unittest.TestCase):
             code,output=self.launch('put_back_block',*flags,'--dry-run')
             self.assertEqual(code,0);self.assertIn('mode=fresh step=0',output)
 
+    def test_observe_init_resume_requires_matching_inputs_and_annotation_source(self):
+        saved = self.state(task='observe_and_pickup')
+        previous = saved.parent.parent.parent / 'launch_config.yaml'
+        cfg = OmegaConf.load(self.root / 'configs/portable_observe_and_pickup.yaml')
+        OmegaConf.save(cfg, previous)
+        code, output = self.launch('observe_and_pickup', '--resume', '--dry-run')
+        self.assertEqual(code, 0)
+        self.assertIn('mode=full_state step=2000', output)
+        for path, value in (
+            ('model.init_frame_kv_config', None),
+            ('data.train._target_', 'fastwam.datasets.lerobot.gt_subtask_video_dataset.GroundTruthSubtaskRobotVideoDataset'),
+            ('data.train.gt_subtask_annotation_files', {}),
+        ):
+            changed = OmegaConf.create(OmegaConf.to_container(cfg))
+            OmegaConf.update(changed, path, value, merge=False)
+            OmegaConf.save(changed, previous)
+            with self.subTest(path=path), contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as exc:
+                self.launch('observe_and_pickup', '--resume', '--dry-run')
+            self.assertEqual(exc.exception.code, 2)
+        self.assertTrue((saved / 'trainer_state.json').is_file())
+
     def test_explicit_resume_path_selects_requested_state(self):
         saved=self.state(step=2000,stamp=100)
         self.state(step=4000,stamp=200)

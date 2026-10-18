@@ -16,6 +16,33 @@ from .schedulers.scheduler_continuous import WanContinuousFlowMatchScheduler
 logger = get_logger(__name__)
 
 
+class InitFrameContextProjector(nn.Module):
+    """Rearrange every first-frame VAE value into spatial action-context tokens."""
+
+    def __init__(self, latent_channels: int, context_dim: int, height: int = 24, width: int = 20):
+        super().__init__()
+        if height % 2 or width % 2:
+            raise ValueError("First-frame VAE grid must have even height and width.")
+        self.latent_channels = int(latent_channels)
+        self.height = int(height)
+        self.width = int(width)
+        self.patchify = nn.PixelUnshuffle(2)
+        self.projection = nn.Linear(4 * latent_channels, context_dim)
+        self.row_position = nn.Parameter(torch.zeros(1, height // 2, 1, context_dim))
+        self.col_position = nn.Parameter(torch.zeros(1, 1, width // 2, context_dim))
+        nn.init.normal_(self.row_position, std=0.01)
+        nn.init.normal_(self.col_position, std=0.01)
+
+    def forward(self, anchors: torch.Tensor) -> torch.Tensor:
+        if anchors.ndim != 5 or anchors.shape[1:3] != (self.latent_channels, 1):
+            raise ValueError(f"Expected one first-frame VAE latent [B,{self.latent_channels},1,H,W], got {tuple(anchors.shape)}.")
+        if anchors.shape[-2:] != (self.height, self.width):
+            raise ValueError(f"Expected first-frame VAE grid {(self.height, self.width)}, got {tuple(anchors.shape[-2:])}.")
+        patches = self.patchify(anchors[:, :, 0]).permute(0, 2, 3, 1)
+        tokens = self.projection(patches)
+        return (tokens + self.row_position + self.col_position).flatten(1, 2)
+
+
 class FastWAM(torch.nn.Module):
     """MoT world model with video/action experts."""
 
@@ -45,6 +72,7 @@ class FastWAM(torch.nn.Module):
         train_progress_adapter_only: bool = False,
         event_memory_video_conditioning: bool = False,
         event_memory_augmentation: Optional[dict] = None,
+        init_frame_context_injection: bool = False,
     ):
         """
         T  视频帧数
@@ -131,6 +159,11 @@ class FastWAM(torch.nn.Module):
         )
         self.event_memory_video_conditioning = bool(event_memory_video_conditioning)
         self.event_memory_augmentation = dict(event_memory_augmentation or {})
+        self.init_frame_context_injection = bool(init_frame_context_injection)
+        if self.init_frame_context_injection:
+            self.mot.init_frame_context_projector = InitFrameContextProjector(
+                latent_channels=int(self.vae.model.z_dim), context_dim=self.text_dim,
+            ).to(dtype=torch_dtype)
         self._inference_event_cache = None
         self.event_cache_hits = 0
         self.event_cache_misses = 0
@@ -170,6 +203,7 @@ class FastWAM(torch.nn.Module):
         train_progress_adapter_only: bool = False,
         event_memory_video_conditioning: bool = False,
         event_memory_augmentation: Optional[dict] = None,
+        init_frame_context_injection: bool = False,
     ):
         if video_dit_config is None:
             raise ValueError("`video_dit_config` is required for FastWAM.from_wan22_pretrained().")
@@ -250,6 +284,7 @@ class FastWAM(torch.nn.Module):
             train_progress_adapter_only=train_progress_adapter_only,
             event_memory_video_conditioning=event_memory_video_conditioning,
             event_memory_augmentation=event_memory_augmentation,
+            init_frame_context_injection=init_frame_context_injection,
         )
 
         # 保存模型来源路径
@@ -1390,6 +1425,22 @@ class FastWAM(torch.nn.Module):
         )
         return pred_video, ordered_predictions.index_select(0, inverse)
 
+    def _append_init_frame_action_context(
+        self,
+        context: torch.Tensor,
+        context_mask: torch.Tensor,
+        anchors: torch.Tensor,
+        valid_mask: Optional[torch.Tensor] = None,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        if valid_mask is not None:
+            if tuple(valid_mask.shape) != (anchors.shape[0], 1) or not bool(valid_mask.all()):
+                raise ValueError("Init-frame action context requires one valid frame-zero anchor per sample.")
+        tokens = self.mot.init_frame_context_projector(anchors)
+        if tokens.shape[0] != context.shape[0]:
+            raise ValueError("Init-frame and action-context batch sizes differ.")
+        token_mask = torch.ones(tokens.shape[:2], dtype=torch.bool, device=tokens.device)
+        return torch.cat((context, tokens), dim=1), torch.cat((context_mask, token_mask), dim=1)
+
     def training_loss(self, sample, tiled: bool = False):
         inputs = self.build_inputs(sample, tiled=tiled)
         input_latents = inputs["input_latents"]  # clean video latent
@@ -1413,15 +1464,14 @@ class FastWAM(torch.nn.Module):
             present_mask=inputs["progress_present"],
         )
 
-        # 视频加噪
         noise_video = torch.randn_like(input_latents)
         timestep_video = self.train_video_scheduler.sample_training_t(
             batch_size=batch_size,
             device=self.device,
             dtype=input_latents.dtype,
         )
-        latents = self.train_video_scheduler.add_noise(input_latents, noise_video, timestep_video)  # 加噪后的视频 latent
-        target_video = self.train_video_scheduler.training_target(input_latents, noise_video, timestep_video)  # 模型需要预测的视频 flow target
+        latents = self.train_video_scheduler.add_noise(input_latents, noise_video, timestep_video)
+        target_video = self.train_video_scheduler.training_target(input_latents, noise_video, timestep_video)
 
         if inputs["first_frame_latents"] is not None:
             latents[:, :, 0:1] = inputs["first_frame_latents"]
@@ -1457,8 +1507,18 @@ class FastWAM(torch.nn.Module):
         joint_event_video = getattr(self, "event_memory_video_conditioning", False)
         if joint_event_video and event_anchor_latents is None:
             raise ValueError("event_memory_video_conditioning requires event-anchor inputs.")
+        if self.init_frame_context_injection and event_anchor_latents is None:
+            raise ValueError("init_frame_context_injection requires a frame-zero VAE cache.")
+        if self.init_frame_context_injection and joint_event_video:
+            raise ValueError("Init-frame context injection and joint event video conditioning are mutually exclusive.")
+        action_context, action_context_mask = progress_context, progress_context_mask
+        if self.init_frame_context_injection:
+            action_context, action_context_mask = self._append_init_frame_action_context(
+                progress_context, progress_context_mask, event_anchor_latents,
+                inputs["event_anchor_valid_mask"],
+            )
         video_prediction_has_current = True
-        if event_anchor_latents is None:
+        if event_anchor_latents is None or self.init_frame_context_injection:
             video_pre = self.video_expert.pre_dit(
                 x=latents,
                 timestep=timestep_video,
@@ -1471,8 +1531,8 @@ class FastWAM(torch.nn.Module):
             action_pre = self.action_expert.pre_dit(
                 action_tokens=noisy_action,
                 timestep=timestep_action,
-                context=progress_context,
-                context_mask=progress_context_mask,
+                context=action_context,
+                context_mask=action_context_mask,
             )
             self._apply_progress_modulation(video_pre, "video", progress_modulations)
             self._apply_progress_modulation(action_pre, "action", progress_modulations)
@@ -2184,12 +2244,18 @@ class FastWAM(torch.nn.Module):
             present_mask=progress_present,
         )
 
+        current_video_context, current_video_context_mask = context, context_mask
+        light_init_context = self.init_frame_context_injection and event_anchor_latents is not None
+        if light_init_context and event_memory_mask_mode == "none":
+            context, context_mask = self._append_init_frame_action_context(
+                context, context_mask, event_anchor_latents, event_anchor_valid_mask,
+            )
         video_kv_cache, video_seq_len = self._build_event_memory_cache(
             current_latents=first_frame_latents,
-            event_anchor_latents=event_anchor_latents,
-            event_anchor_valid_mask=event_anchor_valid_mask,
-            context=event_video_context if event_anchor_latents is not None else context,
-            context_mask=event_video_context_mask if event_anchor_latents is not None else context_mask,
+            event_anchor_latents=None if light_init_context else event_anchor_latents,
+            event_anchor_valid_mask=None if light_init_context else event_anchor_valid_mask,
+            context=event_video_context if event_anchor_latents is not None and not light_init_context else current_video_context,
+            context_mask=event_video_context_mask if event_anchor_latents is not None and not light_init_context else current_video_context_mask,
             fuse_vae_embedding_in_latents=fuse_flag,
             event_memory_cache_key=event_memory_cache_key,
             event_memory_mask_mode=event_memory_mask_mode,
@@ -2199,7 +2265,7 @@ class FastWAM(torch.nn.Module):
             action_seq_len=latents_action.shape[1],
             device=first_frame_latents.device,
         )
-        if event_memory_mask_mode != "none":
+        if event_memory_mask_mode != "none" and not light_init_context:
             history_frames = (
                 int(event_anchor_valid_mask[0].sum().item())
                 if event_anchor_valid_mask is not None else int(event_anchor_latents.shape[2])

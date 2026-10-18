@@ -1,4 +1,4 @@
-"""Verify target-specific observe_and_pickup labels and actual training samples."""
+"""Verify historical target-specific label assets (not the current init-KV default)."""
 import argparse
 import hashlib
 import json
@@ -130,6 +130,12 @@ def main():
                     seen.add(kind)
                     selected.append(episode)
             cfg = OmegaConf.load(ROOT / f'configs/portable_{TASK}.yaml')
+            # This audit deliberately checks the historical target-label setup.
+            cfg.data.train._target_ = 'fastwam.datasets.lerobot.gt_subtask_video_dataset.GroundTruthSubtaskRobotVideoDataset'
+            for key in ('event_anchor_latent_cache_root', 'event_anchor_max_frames',
+                        'event_anchor_batch_grouping', 'event_anchor_cache_max_open_episodes',
+                        'init_frame_anchor_only', 'gt_subtask_annotation_files'):
+                cfg.data.train.pop(key, None)
             cfg.data.train.episode_indices = selected
             cfg.data.train.dataset_dirs = [str(args.dataset_root.resolve())]
             cfg.data.train.subtask_source_map = str(source_map)

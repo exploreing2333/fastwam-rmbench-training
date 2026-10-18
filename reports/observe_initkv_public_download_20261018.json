@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "revision": "ce969ab9ebfc89848afd3d6cf399d19fb8903f0b",
+  "bundle_id": "fastwam-rmbench-observe-initkv-original-20261018-88a1191d2d2a",
+  "authenticated": false,
+  "project_downloader": true,
+  "ready_marker": true,
+  "original_labels_exact": true,
+  "downloaded_files": [
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/language_annotation.before_target_labels.json",
+      "size": 16642,
+      "sha256": "cda19acbcd5242e023cd51f6ee2dd7ee09831dd9289aaa152a6dc3e8214a715c",
+      "group": "dataset_and_simulator_assets"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/356e3100f7374c495864fa140f183d22016c2e769dd0098efb3e8b81f2155963.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "48c61092f9f077072c84184182b90144cc69bdd2d37bbb4f9864ac321ce5b0c2",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/gt_subtask_text_embeds/b56ebe0bc9c78338c126c320d9be3565627716b01461ba4cf8ee84a8ae1b6cfb.t5_len128.wan22ti2v5b.pt",
+      "size": 1051869,
+      "sha256": "d87a76cd1db7627b749a74ee09122c7850f070eee2dc4493ee604938e1e3c90d",
+      "group": "gt_text_cache"
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode16.hdf5",
+      "size": 9954850,
+      "sha256": "48846275533bfbef8b1b06eab474737b1580a037c78c0369571535ae1361ef84",
+      "group": "dataset_and_simulator_assets"
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000536.parquet",
+      "size": 34092897,
+      "sha256": "e89c87681ef9b062358a358573cc8a806b2f838fcfff15eefa676f56e14cfb4a",
+      "group": "dataset_and_simulator_assets"
+    }
+  ],
+  "downloaded_bytes": 46168127,
+  "existing_files_reused_after_hash_verification": true,
+  "gpu_jobs_started": 0
+}

@@ -1,0 +1,50 @@
+{
+  "task": "observe_and_pickup",
+  "change": "episode-frame-zero full visual KV + original subtask labels",
+  "model_source_matches_running_swap_t_snapshot": true,
+  "model_source_sha256": {
+    "fastwam/models/wan22/init_frame_kv.py": "c904d7863f1a28bd4d199263f56e988281aeed7de980cda71eed996273e1ca28",
+    "fastwam/models/wan22/memorywam_init.py": "4108f784fee09c81f58145702f1cb2542688978e898f4baa2e2278d4b11effc2",
+    "fastwam/models/wan22/fastwam.py": "4bf1e57602edc2c3044472656e3e6f16acccca853443d4911f2081e3ebcae055",
+    "fastwam/models/wan22/mot.py": "1eeeade011ad5b652771e49b44b3a0e9a8f73c2a4a7ba9bda061059b82cd4e90",
+    "fastwam/models/wan22/wan_video_dit.py": "777e2b3668571d201305a10a21858d9f9ffa51349bc23b0689ba6cbc614c9305",
+    "fastwam/models/wan22/action_dit.py": "1301d9224149de43bb701f620a5d41858ecc63c6b19a573ec32edd45a3bdb0a2"
+  },
+  "config_baseline_matches_previous_revision": true,
+  "baseline_config_sha256": "6fa01c5296fa341b7a106a0cb55845ebf263a06712cfa64ba3177825a7bd2bc6",
+  "model_and_dataset_tests": "10 passed, 9 subtests passed",
+  "launcher_resume_tests": "12 passed, 18 subtests passed",
+  "data_audit": {
+    "passed": true,
+    "task": "observe_and_pickup",
+    "episodes": 50,
+    "frames": 7473,
+    "annotation_file": "/home/tos/252806029/HDH/fastwam_rmbench_training/data/RMBench/data/data/observe_and_pickup/demo_clean/language_annotation.before_target_labels.json",
+    "annotation_sha256": "cda19acbcd5242e023cd51f6ee2dd7ee09831dd9289aaa152a6dc3e8214a715c",
+    "canonical_annotation_sha256": "69af83dff91bb1e8a6213f41ab3a426617f7d716d8f5a3402b7bf72996d5d23c",
+    "active_subtasks": [
+      "Pick up the target object.",
+      "Wait for wall appear."
+    ],
+    "same_stage_boundaries_all_frames": true,
+    "same_sampler_order_three_epochs_and_resume": true,
+    "unrelated_training_settings_unchanged": true,
+    "init_frame": 0,
+    "full_vae_shape": [
+      1,
+      48,
+      24,
+      20
+    ],
+    "full_patch_tokens": 120,
+    "cache_episodes_verified": 50,
+    "actual_rgb_action_proprio_context_checks": 10,
+    "dataset_root": "/home/cenzl/VLA/LatentWAM/FastWAM/data/rmbench_lerobot_cache/huggingface/lerobot/rmbench_all_12tasks_demo_clean_50",
+    "cache_root": "/home/tos/252806029/HDH/fastwam_rmbench_training/.runtime/audit_init_frame_latents/observe_and_pickup",
+    "gpu_jobs_started": 0
+  },
+  "dry_run": "runs/observe_and_pickup/initkv_original_labels_preview/dry_runs/",
+  "new_training_started": false,
+  "default_training_cache": "${FASTWAM_RUNTIME_ROOT}/init_frame_latents/observe_and_pickup (prepared automatically after bundle asset restoration)",
+  "validation_cache_uses_existing_local_dataset_mirror": true
+}

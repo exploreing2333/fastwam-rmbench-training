@@ -1,0 +1,509 @@
+{
+  "passed": true,
+  "episodes": 50,
+  "frames": 7473,
+  "source_raw_root": "/home/cenzl/VLA/simulation_env/memoryb/RMBench/data/data",
+  "source_lerobot_root": "/home/cenzl/VLA/LatentWAM/FastWAM/data/rmbench_lerobot_cache/huggingface/lerobot/rmbench_all_12tasks_demo_clean_50",
+  "checks": [
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode37.hdf5",
+      "sha256": "e41b275e57826c0d7368a638da21ad695a022af167c7ef5e6f7acbd910eee96e",
+      "size": 10444373
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000500.parquet",
+      "sha256": "5c73f51de12782de0f514f3bdb698eb1ae2dfe866a6ee8fdbc018f0cbb1bbc45",
+      "size": 35083256
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode28.hdf5",
+      "sha256": "2c7c6ccd2332c0048303fbca0e26b8dccbfabfc6c06403baf4f96287310d3fea",
+      "size": 10769050
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000501.parquet",
+      "sha256": "ea571e2c39114e42b0a8eadfc7cd4b0a91787136cf3fe95895ac7cc7d2f04b18",
+      "size": 37967650
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode26.hdf5",
+      "sha256": "341e069e9c0fad2f12bf66272a7a03fc1f65077551e9d86b42cc7b6facaf76b9",
+      "size": 10990600
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000502.parquet",
+      "sha256": "643efbd67af3f0947234327c36311cb36e1ab6b9c1e6b6512585517d2b0a0480",
+      "size": 37537606
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode20.hdf5",
+      "sha256": "560db5c7c83198a1609792786662d1b30ad15a48cc44414eef7b54267f4182d6",
+      "size": 11839000
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000503.parquet",
+      "sha256": "1c4f7f385c6857744de8bb45941eda59745dce2736b95c180db36a3715faaba1",
+      "size": 40661958
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode44.hdf5",
+      "sha256": "eec81800b9f7393145ab09c70e05b6427b8244e2e7cbb38f15a513b4f2f844e5",
+      "size": 12002670
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000504.parquet",
+      "sha256": "74e6edcdde78d9c071a79373f9c97b71be97461a445b32995bf529f8b3983ddf",
+      "size": 40306291
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode16.hdf5",
+      "sha256": "48846275533bfbef8b1b06eab474737b1580a037c78c0369571535ae1361ef84",
+      "size": 9954850
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000505.parquet",
+      "sha256": "2e31f8fe299230148377523b764365d8a7f962a778717a3190e2defe21bde478",
+      "size": 35114913
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode34.hdf5",
+      "sha256": "5b619f2f1427ad972125e727d00fb21d3cb6a679ffb1641a0258245a4c392f05",
+      "size": 11416337
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000506.parquet",
+      "sha256": "4bd4f7b8fd8e9e83eb5745d0dead6e1669ae233ca90ecc8652e1aaec450585a2",
+      "size": 39183422
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode48.hdf5",
+      "sha256": "1e7309bd88fa1da6884ad3d73a0506086dc88fe72013c035ff2f05b65041c3b2",
+      "size": 11059600
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000507.parquet",
+      "sha256": "ad65d6a0a10cf03473debf5e3bf75f942e669d5a5698e6487a9553f838d287bc",
+      "size": 36846526
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode43.hdf5",
+      "sha256": "550c6d558b7e27cd8ca2ae079c0bfbf1c5a339afef6a4ae525d4be3fe66e626f",
+      "size": 10933096
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000508.parquet",
+      "sha256": "524e7244fbe50c39c78a3cd83ef0870836497e541717133071c61c3c87203265",
+      "size": 38563027
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode9.hdf5",
+      "sha256": "d81f25c40c3b79bdc5960614f3197a0f83f0b98efa63b1c2c54703274ef8285f",
+      "size": 11376378
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000509.parquet",
+      "sha256": "438269c6131c1439250aee998ff5c4658d4b63ea15730dd5db79977e24022bdc",
+      "size": 40494641
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode40.hdf5",
+      "sha256": "11661f18d9fee834db1c64e749db0ba67cc68f64dfd668023bb197379824707c",
+      "size": 11493929
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000510.parquet",
+      "sha256": "cb5978b0c6761b48aa8b9bbff4fa17172b016c0a87063812f8d8cff8324a0820",
+      "size": 36513775
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode3.hdf5",
+      "sha256": "596927b06988ac17f7c260ad93d33a0af27f5ddae6db8865e15297e3b9ce7dd9",
+      "size": 11751255
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000511.parquet",
+      "sha256": "68233dcfdb3d64a8f64afe671202a4b4efc965da1c3a0eb7a38729e0edb3688c",
+      "size": 40484266
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode47.hdf5",
+      "sha256": "16838a17bd6d04cd8775d900738555a976aeaafb6138ba5f4c8771b91c16d3f4",
+      "size": 12274772
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000512.parquet",
+      "sha256": "96fa83e9fae8748badec62c42b70b1205c05c6aae40b48bf5a87aa570860f5f0",
+      "size": 40432600
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode24.hdf5",
+      "sha256": "789a4f4d27865e56be17242d518f9cdd496f5adc56a411e5a13b7ee96f14bcc9",
+      "size": 11965514
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000513.parquet",
+      "sha256": "635ce3694f2b27187a56f2ba25875fc3947df56fe47d9b80a0ebf0a7d5e713c2",
+      "size": 42058669
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode13.hdf5",
+      "sha256": "009e8651d3ba88cf111edb4c7c63452717de2603ec66c4747f5857fdff07f3ca",
+      "size": 11077450
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000514.parquet",
+      "sha256": "80fd95385914ff4e4521cc7e3d4d82bb901e433917d09f52188f29a12c7713e7",
+      "size": 37642137
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode14.hdf5",
+      "sha256": "c686a74860271ba7485a0f4700e61a729da424ef4934bf2a90abf27199c9f683",
+      "size": 11981010
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000515.parquet",
+      "sha256": "a9b2237151ec0346870b171e0345991e77f7642d57b1ef76e41249cf87207c60",
+      "size": 42251526
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode18.hdf5",
+      "sha256": "310ece50454ab21c43d0ab59861e2afc0821f0a47fc669ee52dd9ef71e6cf602",
+      "size": 11399776
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000516.parquet",
+      "sha256": "bcc7fe182cc1625674bfd46be42f390dc688eef4cb5bf15efe02879146d001f7",
+      "size": 40073425
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode19.hdf5",
+      "sha256": "2d85be10f63ed9898f52260ea87bfd458b772b4757fa29c8086fb75fdcd21a8d",
+      "size": 11786740
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000517.parquet",
+      "sha256": "e611b5d6be99488393a0bac81e26d3f39c08706f5c2c7bae1cd4c13cc649abdd",
+      "size": 39352530
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode42.hdf5",
+      "sha256": "59b58eab3d65a521d14678474b493c2df46ac181325bdbd859ccd15329282b8b",
+      "size": 12128196
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000518.parquet",
+      "sha256": "8a00eba9eaacf529873a8ed19a67d4d6b7156e244b8d16bb36f991f9caaa215f",
+      "size": 43011777
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode31.hdf5",
+      "sha256": "338306323962a71ff9d1779d63932adafaca9167c9fd8e18cb46f05520e7616c",
+      "size": 12835960
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000519.parquet",
+      "sha256": "187536125a2b002db47b8432976a834fe3705397e34664270c496082be977fc6",
+      "size": 43850292
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode22.hdf5",
+      "sha256": "bcb8a66d860c54d800ca684acbe7c72c34982a2218979008a3148676a579a627",
+      "size": 11214120
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000520.parquet",
+      "sha256": "a762c7c8e21446da934648ed06ecbc500f23980e798d88ff3f536f059e677d98",
+      "size": 38104616
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode11.hdf5",
+      "sha256": "4ccd63a098119fc8f041c7a759c56f1cad4592917a3229d547e4693f1e8e6022",
+      "size": 11954048
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000521.parquet",
+      "sha256": "552ef19f4e6f7f265c83766fa93e6e02f713cfd4743384eb9d3f8ccfc214103a",
+      "size": 42445594
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode6.hdf5",
+      "sha256": "1545d1e6540c799b52f504b6a229bbabec25b64ed9c8d038976ce269e9bf7b89",
+      "size": 11671376
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000522.parquet",
+      "sha256": "063a409e99ee09f6b5ca2326e0257a34a704049526f7af228664ac225328eb1a",
+      "size": 39995135
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode8.hdf5",
+      "sha256": "561b669a6762781c0b8e9f44ebb31dbc1fc4fc3124a6fcb59a57af94cc0aa9ef",
+      "size": 11959900
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000523.parquet",
+      "sha256": "0f57642e0ac6b33cba35a5e81f2d92c7e0a181df50a26443449800a945161a06",
+      "size": 39460090
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode30.hdf5",
+      "sha256": "349087b9b4f90cfc356fd7db343417ab0b844b490635c5392f968cd102991176",
+      "size": 11134450
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000524.parquet",
+      "sha256": "f1f34d246da771ab44e9edb17fcc8bb3cc9abf7d8bf3568de4521617800ae80f",
+      "size": 38723941
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode29.hdf5",
+      "sha256": "07b7a7b3e8c80319f7e8ea36b9976115596de15a7afa168c5796de6dbc385fac",
+      "size": 13471900
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000525.parquet",
+      "sha256": "f0a18107b44a2220a9fc0c84895462e621315856c4d54b21d1d950640b35f25a",
+      "size": 49074699
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode49.hdf5",
+      "sha256": "4193513a8e3f141f071536283ff70db4bf58c2c7ec3af6a5191d5f29b40966f4",
+      "size": 11377077
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000526.parquet",
+      "sha256": "ce6037924baa3e6a4cf02c6e9eb57775b80d666e35dcffc143833ee29ccbf481",
+      "size": 39100251
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode2.hdf5",
+      "sha256": "338657bb311ba443ae19da36b69488f4235fef12b4188fd5ede06094ba4be0ad",
+      "size": 12776376
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000527.parquet",
+      "sha256": "6fc0e965a637e07ec190d1d5c459b75b0c532e85ae8183b32faefa17ff34cecd",
+      "size": 42915843
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode36.hdf5",
+      "sha256": "f805b80813c1af43161aa4f2962166b0b67d1b87977ac26efcda441ff836218e",
+      "size": 10764425
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000528.parquet",
+      "sha256": "dcf533a15c4d25b9f21b7bca635326f08855fd43606d6e461890b6a7f0a003b2",
+      "size": 35652173
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode1.hdf5",
+      "sha256": "3d3131814b692c230f7fd57259ecc2010e22dea00d3f140bb0a240b9044c6086",
+      "size": 11627050
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000529.parquet",
+      "sha256": "8b28d815c9abd7c423032a9481d6fd18ea5e514d454660b050aad2ec6435a4fa",
+      "size": 38782161
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode41.hdf5",
+      "sha256": "3eba186157fc625ab15b7e3f7054526ff8c83fd5e70e521f40dafbb080de594e",
+      "size": 11732984
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000530.parquet",
+      "sha256": "8d3f6c5a372e66788b4fdb279e7ddc30f98cc260fa311668e45b271495fbce8a",
+      "size": 39870048
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode10.hdf5",
+      "sha256": "b8e08fd60c72c36aab9cf7cf7744f952ba357b85b91dad07681c19567213838c",
+      "size": 11028400
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000531.parquet",
+      "sha256": "b464db441f6435ac83072c9c664eced7959eb659442a37564785a3197a69814d",
+      "size": 36460372
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode4.hdf5",
+      "sha256": "5fc1347272c7bfdc989c9062687985bea7c2cac0d81ec3eaaf06638eb01f3474",
+      "size": 13412859
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000532.parquet",
+      "sha256": "71df5b8b73f8a430d2bb1839307e5f13fb5796e38c2cda102def7e86d99007d1",
+      "size": 45034910
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode27.hdf5",
+      "sha256": "7ad81dfd2f327b5bd2a7730d1848c669d8e718a697557ffc769dcc3e11c49dea",
+      "size": 11766850
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000533.parquet",
+      "sha256": "7844ff991368270aeaf7337d107dd8e80526b277fe64f704ea3be22ac5393d41",
+      "size": 41307365
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode25.hdf5",
+      "sha256": "b8464b36a278cd72d64af7d19128de1d41764aa85ee3294c418f816f83ff2c41",
+      "size": 12483700
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000534.parquet",
+      "sha256": "ffb262ec4e2152df1cd739f4d1871b90d01ab69beda0e1908632147d31b018a2",
+      "size": 40164913
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode15.hdf5",
+      "sha256": "3a80ce8d88f485d576c8fc33de740a582c78048601b07634d82e5cdb29625b87",
+      "size": 11389331
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000535.parquet",
+      "sha256": "19b6403927d41891faed142e151a27296a6c544bc69d5b5204d2931e8ce8e2dc",
+      "size": 37950661
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode0.hdf5",
+      "sha256": "79070323684008fadbf77b9ef420632a6506723226db317cf2e4276c82c768c3",
+      "size": 10122682
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000536.parquet",
+      "sha256": "e89c87681ef9b062358a358573cc8a806b2f838fcfff15eefa676f56e14cfb4a",
+      "size": 34092897
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode33.hdf5",
+      "sha256": "266c0262d7057900dc8a684d369a9d1a7b62603e10ce345ec78579550fd71a23",
+      "size": 11053600
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000537.parquet",
+      "sha256": "d00fc02172e6a7d47b72d4e950ff8744d0819a7b1506fcf4a1b21addbc1e953c",
+      "size": 37122036
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode35.hdf5",
+      "sha256": "ca293809b7d97f458a68688185ae077c7535439e27aa88c7ef1179bc5490a773",
+      "size": 11000739
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000538.parquet",
+      "sha256": "b1a60a17c0949e5ce7746d3b0ca86b35bd64e7e35e5c376df4d9591b7f7df697",
+      "size": 38443542
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode5.hdf5",
+      "sha256": "c8d195d2aeca19dae4c4c6d9768e2b9200cf72acd5d50c92ee901965cce21833",
+      "size": 11366054
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000539.parquet",
+      "sha256": "5517a617c881d8aafde4e163924ec954a1ecd8a91b9c7eb7c84f0007d1dcaaf7",
+      "size": 38722977
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode32.hdf5",
+      "sha256": "cc4f846b744dc942ae5cc43863b2d7583e01f04ad22675a0caa2a986ce98a391",
+      "size": 10874650
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000540.parquet",
+      "sha256": "7d437d4b98add0b6e415742705beb232c1cd7651b919cc8e753135e44e4c004f",
+      "size": 38436297
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode7.hdf5",
+      "sha256": "b0b6c1ad3ce02bc48b0b5cb11ec9c3ba9a0bee977ef0c1d0f44b6a4be6d95b10",
+      "size": 11227300
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000541.parquet",
+      "sha256": "98bbe0c814cb7ed098fe7d322dfc002e58e1509d7ad238f96ea928c247a31751",
+      "size": 39556268
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode46.hdf5",
+      "sha256": "412b3cfa328887541ee989be392d94523cd49813e20d4eada25eb817f44433a6",
+      "size": 11281300
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000542.parquet",
+      "sha256": "18f3b559c71ee2ba0b12a09a8552f0d2ef0d54beafe03f838eabffbd1d4185dc",
+      "size": 38124272
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode38.hdf5",
+      "sha256": "5c46e4076e670ae47d8c2789f85912349f7d73ae01c7d8256c0d5302805043c2",
+      "size": 12051032
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000543.parquet",
+      "sha256": "7cff0bc4bd1bf1321c388f0e66e574128baad485e48e4b8f622360c4fd0265c0",
+      "size": 40562935
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode23.hdf5",
+      "sha256": "f2d1fed1fe5b0c961577bdcff13bb4c968c630c69e8c332a5ed10dd947da6fef",
+      "size": 11192500
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000544.parquet",
+      "sha256": "a45cebda4e6461d2f89e8b384d0209e6cdb2ae0c806a7bc88ef27b3a1592cecf",
+      "size": 39694521
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode12.hdf5",
+      "sha256": "9f623094dbc3ba1f26f27a57da894c6aed67d7f11bd5f52a3aaeff1b865ec404",
+      "size": 10481623
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000545.parquet",
+      "sha256": "ca5cd15d64ecb8678128fee75e187a20ff2d3aeae6450fba8668a8fa12745f3d",
+      "size": 34760923
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode21.hdf5",
+      "sha256": "34db2bee58fa070335928ea2cf4b977581892b8a7d34e2aa8daa26b744c5fbba",
+      "size": 11561800
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000546.parquet",
+      "sha256": "3abdd161ffcbada2073ac8eccc33b5c9e3fe234c1284b9a8a799dc7e3299e33a",
+      "size": 36808347
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode45.hdf5",
+      "sha256": "a9d0e3fb542e153cdcb9b9c4b8b0fe333176541994d50d836063aba07f97216a",
+      "size": 10977531
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000547.parquet",
+      "sha256": "4a3b9aa564eeef08a49713a679577e4bfa7d1a9baf8c59e0e7ac7e852e768a3d",
+      "size": 35705830
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode39.hdf5",
+      "sha256": "170e5e145e9f4294e26e82829bb1dfb724ea2ab1eb5d8cc8fd0b603f27f361bd",
+      "size": 10781528
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000548.parquet",
+      "sha256": "cf5726e8019a3a54aea1c5c0985fdec14546d38f2dad02403614552c5a6205ac",
+      "size": 36725093
+    },
+    {
+      "path": "data/RMBench/data/data/observe_and_pickup/demo_clean/data/episode17.hdf5",
+      "sha256": "1a5aa680c4230814c543f28bf02da5e168ee808bf29ab433ba84a0561c2dc189",
+      "size": 10835950
+    },
+    {
+      "path": "data/lerobot/rmbench_all_12tasks_demo_clean_50/data/chunk-000/episode_000549.parquet",
+      "sha256": "79fe49965e851bf0c725520255db93df3265c31d50f7486646182ebaf85af1c3",
+      "size": 36564842
+    }
+  ]
+}

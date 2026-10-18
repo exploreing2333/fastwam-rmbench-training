@@ -26,6 +26,35 @@ FASTWAM_RUNTIME_ROOT=/scratch/fastwam_rmbench_runtime bash setup.sh
 
 ## 每个任务一行启动
 
+### observe_and_pickup：轨迹初始帧 + 原始 subtask 标签
+
+`configs/portable_observe_and_pickup.yaml` 现使用与当前 Swap T 相同的 init-KV 方案。
+每条轨迹始终额外输入该轨迹第 0 帧的完整三相机 VAE 信息（48×24×20，patch 后 120 个 token），
+经可训练 Video DiT 在全部 30 层提供 K/V，供当前视觉和 action 分支注意力读取。
+使用共享视频 3D RoPE：init 时间为 0，当前帧与 action 的时间为轨迹绝对控制帧索引 / 16。
+训练时保留梯度，只在同一 batch 内复用相同轨迹及 subtask 的 init 分支；不跨 optimizer step 缓存 K/V。
+
+标签明确读取 `data/RMBench/data/data/observe_and_pickup/demo_clean/language_annotation.before_target_labels.json`，
+指令恢复为 `Wait for wall appear.` 和 `Pick up the target object.`。现有目标描述版 JSON 保留归档。
+原有 subtask 分段、逐帧采样、32 步 action、9 帧视频目标、归一化、损失、LR、每卡 BS=8、
+8 卡 global BS=64、200000 步均保持原设置；没有加入其他历史帧或冻结额外参数。
+
+```bash
+git pull --ff-only
+bash train_task.sh observe_and_pickup
+```
+
+这条训练命令默认从头开始，并自动检查当前资源版本、补齐魔搭数据和原始标签；无需另跑 `setup.sh`。
+魔搭的 `RESOURCE_MANIFEST.json` 中 `task_training_inputs.observe_and_pickup` 登记了当前使用的原始标签路径和校验值。
+50 条轨迹的原始 RGB/action 与训练缓存沿用已校验的原始数据，历史目标描述标签不进入当前训练。
+
+启动器在空闲 GPU 检查通过后，自动生成/校验 50 条轨迹的首帧 VAE 缓存，位于
+`${FASTWAM_RUNTIME_ROOT}/init_frame_latents/observe_and_pickup/`。VAE 只需一次离线编码，
+训练时直接读取 latent；`--dry-run` 仅生成配置预览。旧的 current-only / 目标描述标签 checkpoint
+不能作为此配置的完整状态 resume；后续此方案自身的 checkpoint 可以正常 `--resume`。
+
+审查脚本为 `scripts/audit_observe_init_frame.py`；旧的 `audit_observe_target_labels.py` 专门检查历史目标描述版资源。
+
 每条命令默认从头训练，使用 8 张 GPU，总目标为 200000 optimizer steps，global batch 为 64。加 `--resume` 续训时自动沿用 checkpoint 的 GPU 数、microbatch 和梯度累积。首次训练命令也会自动完成资源下载与环境恢复。
 
 参考任务 `cover_blocks` 以外的 11 个任务：
@@ -148,7 +177,7 @@ bash train_task.sh observe_and_pickup --gpus 8 --num-workers 2 --foreground --ma
 | --- | --- |
 | `data/RMBench/` | 完整原始数据、GT 标注、pi05 处理数据、转换与采集代码、模拟资源 |
 | `data/lerobot/rmbench_all_12tasks_demo_clean_50/` | 原训练使用的完整 LeRobot 缓存，600 episodes、416711 frames |
-| `data/gt_subtask_text_embeds/` | 100 个已登记 GT subtask 的 Wan T5 文本缓存，包括按键逐次编号标签 |
+| `data/gt_subtask_text_embeds/` | 102 个已登记 GT subtask 的 Wan T5 文本缓存，包括原始 observe_and_pickup、归档的目标描述和按键逐次编号标签 |
 | `models/` | 公共 Wan 2.2、VAE、T5、tokenizer，以及由 Wan 权重插值生成的动作骨干初始化 |
 | `environment/` | 完整 conda-pack 环境、CUDA toolkit，以及实际依赖版本 |
 | `vendor/` | 原环境依赖的 curobo、LIBERO 源码与资源 |
@@ -223,26 +252,20 @@ bash train_task.sh classify_blocks --subtask-segments raw_annotation
 
 前三类及左键/中键具有类似的阶段歧义，现已全部启用取消人工填充监督的消融；填充比例本身不能证明失败原因，收益仍需训练和验证确认。`swap_blocks` 和确认键的填充支持保持按压，保留原监督。逐帧结果见 `reports/rmbench_all_tasks_padding_audit_20261015.json`，按键终点结果见 `reports/rmbench_press_endpoints_audit_20261015.json`。
 
-## observe_and_pickup 具体目标标注
+## observe_and_pickup 历史目标描述标注（归档）
 
-该任务的全部 50 条轨迹使用新增的目标物体标注，覆盖 19 种外观描述。例如灰色鼠标轨迹的两个训练阶段为：
+历史版本曾为全部 50 条轨迹新增目标物体标注，覆盖 19 种外观描述。当前训练使用前述 init-KV + 原始标签方案；下列资源保留用于复查历史实验。例如灰色鼠标轨迹的历史两个阶段为：
 
 ```text
 Observe the medium gray computer mouse on the shelf and wait for the wall to appear.
 Pick up the matching medium gray computer mouse from the table.
 ```
 
-训练仍按 V72 规则将原始 4 段合并成观察、拾取两个阶段，各段时长与动作/视频末尾保持边界沿用原标注。每个阶段的具体描述进入实际训练 prompt 和 Wan T5 context；资源新增 38 个文本缓存。`raw_annotation` 选项恢复原始 4 段分段，仍使用新的具体目标描述。
+该历史版本按 V72 规则将原始 4 段合并成观察、拾取两个阶段，各段时长与动作/视频末尾保持边界沿用原标注，新增 38 个文本缓存。当前默认仍按 V72 分段，`raw_annotation` 可显式改为原始 4 段，但两者均读取当前配置指定的原始通用标签。
 
 新标注位于 `data/RMBench/data/data/observe_and_pickup/demo_clean/language_annotation.json`，目标元数据及旧标注备份一并保存在魔搭资源中。GitHub 中的 `provenance/observe_and_pickup_target_labels.json` 保留每条轨迹的目标描述、模型编号和标注来源。图像、动作数据、归一化统计和其他 11 个任务的标注可复用。
 
-已有项目在项目目录执行下列命令，补齐本次更新的标注及缓存，再启动新训练：
-
-```bash
-git pull --ff-only && bash setup.sh && bash train_task.sh observe_and_pickup --num-workers 2
-```
-
-初始化仍从 Wan、第 0 步开始。验证结果见 `reports/observe_target_labels_audit.json`；可用 `python scripts/audit_observe_target_labels.py --rgb-samples` 在已激活的项目环境中复查实际训练样本。
+历史验证结果见 `reports/observe_target_labels_audit.json`；可用 `python scripts/audit_observe_target_labels.py --rgb-samples` 复查目标描述版资源。当前 init-KV 配置使用 `scripts/audit_observe_init_frame.py --rgb-samples` 审查。
 
 ## 保留的训练与采样逻辑
 
@@ -250,14 +273,14 @@ git pull --ff-only && bash setup.sh && bash train_task.sh observe_and_pickup --n
 - Warmup 10000 steps，之后 cosine 至 200000 steps。视频与动作 scheduler 的 train/infer shift 均为 5。
 - 每 2000 steps 保存 checkpoint，保留最近 2 个；`eval_every=0`，`wandb=false`。
 - 每任务使用参考缓存中对应的 50 条 episode，保留原始顺序。绝对 qpos 动作维度 14、proprio 维度 14，使用原 z-score 归一化方法。
-- 输入仅包含当前 RGB 三视角和当前 proprio，没有历史帧、在线进度模型或数值进度。相机拼接为 384×320 RobotWin mosaic。
+- 基础输入包含当前 RGB 三视角和当前 proprio；`observe_and_pickup` 额外读取轨迹第 0 帧的完整 VAE latent 并注入 K/V。相机拼接为 384×320 RobotWin mosaic。
 - 从当前帧预测 32 个动作，视频采样为 t,t+4,...,t+32，共 9 帧。
-- GT 来自原始 `language_annotation.json`，默认按上述 V72 规则构造阶段，再截到 LeRobot 长度。`state[t]` 与原始 qpos[t]、`action[t]` 与原始 qpos[t+1] 精确对齐。
+- GT 默认来自 `language_annotation.json`；`observe_and_pickup` 显式读取 `language_annotation.before_target_labels.json`。按上述 V72 规则构造阶段，再截到 LeRobot 长度。`state[t]` 与原始 qpos[t]、`action[t]` 与原始 qpos[t+1] 精确对齐。
 - 当前 GT subtask 构造固定 Wan prompt，使用 128×4096 BF16 T5 context；padding context 置零，context mask 保持全部可见。
 - 每个 V72 GT 阶段独立处理。跨真正 subtask 边界的动作后缀重复本阶段最后动作；视频后缀重复本阶段最后已采样帧。除上述显式配置的 action loss 消融外，填充继续参与 loss。合并段内部的原始边界继续使用真实未来动作和视频。
 - 所有合法真实帧均可作为 anchor，包括短 segment 和尾部。每 epoch 按 seed+epoch 无放回打乱；DDP 对齐使用 -1 零损失样本，恢复时精确跳过已消费的 global microbatch。
 
-模型架构、优化器、图像处理和每个 epoch 的真实帧采样顺序沿用原代码。GT 阶段按上述 V72 规则合并；action loss 仅增加显式配置的按键段填充监督消融。
+优化器、图像处理和每个 epoch 的真实帧采样顺序沿用原代码；`observe_and_pickup` 使用前述 init-KV 注入。GT 阶段按上述 V72 规则合并；action loss 保留显式配置的按键段填充监督消融。
 
 ## 代码与验证记录
 

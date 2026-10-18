@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "task": "observe_and_pickup",
+  "episodes": 50,
+  "frames": 7473,
+  "annotation_file": "/home/tos/252806029/HDH/fastwam_rmbench_training/data/RMBench/data/data/observe_and_pickup/demo_clean/language_annotation.before_target_labels.json",
+  "annotation_sha256": "cda19acbcd5242e023cd51f6ee2dd7ee09831dd9289aaa152a6dc3e8214a715c",
+  "canonical_annotation_sha256": "69af83dff91bb1e8a6213f41ab3a426617f7d716d8f5a3402b7bf72996d5d23c",
+  "active_subtasks": [
+    "Pick up the target object.",
+    "Wait for wall appear."
+  ],
+  "same_stage_boundaries_all_frames": true,
+  "same_sampler_order_three_epochs_and_resume": true,
+  "unrelated_training_settings_unchanged": true,
+  "init_frame": 0,
+  "full_vae_shape": [
+    1,
+    48,
+    24,
+    20
+  ],
+  "full_patch_tokens": 120,
+  "cache_episodes_verified": 50,
+  "actual_rgb_action_proprio_context_checks": 10,
+  "dataset_root": "/home/cenzl/VLA/LatentWAM/FastWAM/data/rmbench_lerobot_cache/huggingface/lerobot/rmbench_all_12tasks_demo_clean_50",
+  "cache_root": "/home/tos/252806029/HDH/fastwam_rmbench_training/.runtime/audit_init_frame_latents/observe_and_pickup",
+  "gpu_jobs_started": 0
+}

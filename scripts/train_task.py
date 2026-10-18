@@ -107,6 +107,15 @@ def main():
             parser.error(f'task statistics are missing: {stats}')
         cfg.data.train.pretrained_norm_stats = str(stats)
     cfg_data = OmegaConf.to_container(cfg, resolve=True)
+    if selected is not None and cfg_data['model'].get('init_frame_kv_config') is not None:
+        # Current-only/target-label states cannot silently become init-KV runs.
+        if saved_cfg is None:
+            parser.error('Init-frame resume requires the original launch_config.yaml; use --fresh for older runs.')
+        for path in ('model.init_frame_kv_config', 'model.event_memory_video_conditioning',
+                     'model.init_frame_context_injection', 'data.train._target_',
+                     'data.train.gt_subtask_annotation_files', 'data.train.gt_subtask_segment_mode'):
+            if OmegaConf.select(saved_cfg, path) != OmegaConf.select(cfg, path):
+                parser.error(f'Incompatible checkpoint setting {path}; start the new input/label setup with --fresh.')
     info = manifest['tasks'][cli.task]
     assert cfg_data['data']['train']['episode_indices'] == info['episode_indices']
     assert cfg_data['data']['train']['progress_cache_root'] is None
@@ -190,6 +199,14 @@ def main():
             parser.error('training is already running on these GPUs: '
                          + ', '.join(sorted({row['run_dir'] for row in conflicts}))
                          + '; inspect with bash stop_training.sh --list')
+        data_cfg = cfg_data['data']['train']
+        if cfg_data['model'].get('init_frame_kv_config') is not None:
+            prepare = [sys.executable, str(ROOT / 'scripts/precompute_init_frame_latents.py'),
+                       '--dataset-root', data_cfg['dataset_dirs'][0],
+                       '--output-root', data_cfg['event_anchor_latent_cache_root'],
+                       '--episode-indices', *map(str, data_cfg['episode_indices'])]
+            if subprocess.call(prepare, cwd=ROOT) != 0:
+                return 1
         save_launch()
         if cli.foreground:
             process = subprocess.Popen(command, cwd=ROOT, start_new_session=True)

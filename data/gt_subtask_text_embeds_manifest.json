@@ -64,6 +64,7 @@
     "Pick up the right block and move it between the two mats.",
     "Pick up the right block and move it to the right empty mat.",
     "Pick up the second block and move it onto the green mat and then return it to the original mat.",
+    "Pick up the target object.",
     "Pick up the third block and move it onto the green mat and then return it to the original mat.",
     "Pick up two blocks.",
     "Place the block into the basket.",
@@ -102,12 +103,9 @@
     "Use right arm to pick up the right block and move it to the middle tray.",
     "Use right arm to pick up the right block and move it to the right tray.",
     "Use the left arm to place the red T-block into the initial pose of the blue T-block.",
-    "Use the right arm to place the blue T-block into the initial pose of the red T-block."
-  ],
-  "count": 100,
-  "source": "Reference GT contexts plus target-specific observe_and_pickup and numbered press_button contexts from the same Wan T5 encoder",
-  "legacy_subtasks_retained_in_resources": [
-    "Pick up the target object.",
+    "Use the right arm to place the blue T-block into the initial pose of the red T-block.",
     "Wait for wall appear."
-  ]
+  ],
+  "count": 102,
+  "source": "Active original Observe/Pickup labels, reference GT and numbered press_button contexts, plus archived target-specific contexts; same Wan T5 encoder"
 }

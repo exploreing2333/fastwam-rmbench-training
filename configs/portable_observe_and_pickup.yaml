@@ -33,14 +33,22 @@ wandb:
   api_key: null
   workspace: null
   project: fast-wam
-  name: rmbench_fastwam_gt_observe_and_pickup_current_gbs64_200k
+  name: rmbench_fastwam_gt_observe_and_pickup_initkv_original_labels_gbs64_200k
   group: null
   mode: online
   id: null
   resume: allow
 data:
   train:
-    _target_: fastwam.datasets.lerobot.gt_subtask_video_dataset.GroundTruthSubtaskRobotVideoDataset
+    _target_: fastwam.datasets.lerobot.init_frame_video_dataset.EpisodeInitFrameRobotVideoDataset
+    # One full trajectory-frame-zero VAE latent, shared across every subtask/time.
+    event_anchor_latent_cache_root: ${oc.env:FASTWAM_RUNTIME_ROOT}/init_frame_latents/observe_and_pickup
+    event_anchor_max_frames: 1
+    event_anchor_batch_grouping: true
+    event_anchor_cache_max_open_episodes: 8
+    init_frame_anchor_only: true
+    gt_subtask_annotation_files:
+      observe_and_pickup: ${oc.env:FASTWAM_BUNDLE_ROOT}/data/RMBench/data/data/observe_and_pickup/demo_clean/language_annotation.before_target_labels.json
     dataset_dirs:
     - ${oc.env:FASTWAM_BUNDLE_ROOT}/data/lerobot/rmbench_all_12tasks_demo_clean_50
     shape_meta:
@@ -284,7 +292,14 @@ model:
     lambda_action: 1.0
   progress_conditioning_bins: null
   train_progress_adapter_only: false
-  event_memory_video_conditioning: false
+  event_memory_video_conditioning: true
+  init_frame_context_injection: false
+  init_frame_kv_config:
+    anchor_frames: 1
+    recent_frames: 0
+    gist_tokens: 0
+    control_steps_per_latent: 16
+    position_encoding: shared_video_3d_rope
   event_memory_augmentation: null
 persistent_workers: true
 optimizer_fused: true

@@ -384,6 +384,9 @@ class ProgressSubtaskRobotVideoDataset(RobotVideoDatasetNoT5):
                     / "demo_clean"
                     / "language_annotation.json"
                 )
+                resolver = getattr(self, "_gt_annotation_path", None)
+                if resolver is not None:
+                    annotation_path = resolver(annotation_root, task_name)
                 if not annotation_path.is_file():
                     raise FileNotFoundError(
                         f"RMBench GT annotation is missing: {annotation_path}"

@@ -185,6 +185,16 @@ def main():
         cfg.data.train.dataset_dirs = [str(args.dataset_root.resolve())]
         cfg.data.train.gt_subtask_text_embedding_cache_dir = str(args.text_cache.resolve())
         cfg.data.train.pretrained_norm_stats = str(ROOT / f'data/task_norm_stats/{args.task}.json')
+        if cfg.model.get('init_frame_kv_config') is not None:
+            from precompute_init_frame_latents import prepare
+            # A one-episode runtime probe must not replace the full training cache.
+            probe_cache = runtime / 'checks/init_frame_latents' / args.task
+            prepare(args.dataset_root, probe_cache, cfg.data.train.episode_indices,
+                    'cpu' if args.cpu else 'cuda:0')
+            cfg.data.train.event_anchor_latent_cache_root = str(probe_cache)
+            for task, annotation in cfg.data.train.get('gt_subtask_annotation_files', {}).items():
+                cfg.data.train.gt_subtask_annotation_files[task] = str(
+                    args.raw_root / task / 'demo_clean' / Path(annotation).name)
         source = json.loads((ROOT / 'data/source_map_template.json').read_text())
         source['raw_root'] = str(args.raw_root.resolve())
         with tempfile.TemporaryDirectory(prefix='fastwam-real-data-') as temporary:
