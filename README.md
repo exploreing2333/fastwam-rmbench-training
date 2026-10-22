@@ -26,6 +26,48 @@ FASTWAM_RUNTIME_ROOT=/scratch/fastwam_rmbench_runtime bash setup.sh
 
 ## 每个任务一行启动
 
+### 完整 instruction 训练入口（12 个任务）
+
+每个任务均可加 `--instruction-mode full`，使用 LeRobot 中该任务原始的完整 instruction。
+训练样本仍由当前帧及未来 32 步 action、9 帧视频组成；窗口在同一个 episode 内连续取值，
+可以跨过原 subtask 边界，不再读取 subtask 标签或做 subtask 末尾保持，仅使用原版 episode 末尾填充及 mask。
+每个 epoch 对全部真实帧做 `torch.randperm(seed + epoch)` 随机打乱，每帧出现一次；
+DDP 对齐使用零损失样本，resume 精确跳过已消费的 global microbatch。
+
+```bash
+bash train_task.sh press_button --instruction-mode full
+bash train_task.sh battery_try --instruction-mode full
+bash train_task.sh cover_blocks --instruction-mode full
+bash train_task.sh place_block_mat --instruction-mode full
+bash train_task.sh classify_blocks --instruction-mode full
+bash train_task.sh rearrange_blocks --instruction-mode full
+bash train_task.sh swap_blocks --instruction-mode full
+bash train_task.sh storage_blocks --instruction-mode full
+bash train_task.sh blocks_ranking_try --instruction-mode full
+bash train_task.sh put_back_block --instruction-mode full
+bash train_task.sh observe_and_pickup --instruction-mode full
+bash train_task.sh swap_T --instruction-mode full
+```
+
+该模式的 run、checkpoint 和日志位于 `runs/<task>/full_instruction/<run_id>/`。
+默认新建 run 从头训练；显式 `--resume` 只选择该任务完整 instruction 模式最近保存完成的状态，
+并拒绝混用 subtask 模式 checkpoint。示例：
+
+```bash
+bash train_task.sh press_button --instruction-mode full --resume
+bash train_task.sh press_button --instruction-mode full --dry-run
+bash train_tasks_sequential.sh --instruction-mode full
+```
+
+完整 instruction 模式的顺序启动命令默认包含全部 12 个任务，也可用 `--tasks` 指定子集。
+启动时自动校验 `${FASTWAM_RUNTIME_ROOT}/full_instruction_text_embeds/`，缺失的文本缓存使用
+随项目提供的 Wan T5 权重在 CPU 编码一次；沿用 128×4096 BF16 context 和原版 padding mask 行为。
+instruction 和数据窗口之外的任务设置沿用对应 `portable_<task>.yaml`，包括
+`observe_and_pickup` 的首帧 init-KV、global batch=64、200000 steps、每 2000 steps 保存和保留最近两个 checkpoint。
+不加 `--instruction-mode full` 时继续使用下述 subtask 入口。
+
+真实样本及随机采样审查程序：`scripts/audit_full_instruction_training.py`。
+
 ### observe_and_pickup：轨迹初始帧 + 原始 subtask 标签
 
 `configs/portable_observe_and_pickup.yaml` 现使用与当前 Swap T 相同的 init-KV 方案。

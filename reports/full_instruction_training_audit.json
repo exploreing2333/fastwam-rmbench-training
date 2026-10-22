@@ -1,0 +1,202 @@
+{
+  "passed": true,
+  "tasks": 12,
+  "training_episodes": 600,
+  "shuffled_training_frames": 416711,
+  "real_rgb_action_checks": 24,
+  "gpu_jobs_started": 0,
+  "checks": [
+    {
+      "task": "press_button",
+      "episode": 0,
+      "sampled_frames": [
+        460,
+        628
+      ],
+      "crossed_subtask_boundary": 468,
+      "instruction": "Observe the two numbers on the table. Press the left button the number of times corresponding to the number on the left, and press the middle button the number of times corresponding to the number on the right. Then press the right button once to confirm.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 26302,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "battery_try",
+      "episode": 50,
+      "sampled_frames": [
+        263,
+        870
+      ],
+      "crossed_subtask_boundary": 271,
+      "instruction": "There are two batteries and a battery slot on the table. Combining the two batteries in different orientations causes the dashboard needle to rotate.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 33512,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "cover_blocks",
+      "episode": 100,
+      "sampled_frames": [
+        141,
+        997
+      ],
+      "crossed_subtask_boundary": 149,
+      "instruction": "On the table, red, green, and blue blocks are arranged randomly along with three lids. From the current viewpoint, cover the blocks from left to right using the lids, and then uncover them again in the sequence red, green, and blue.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 51077,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "place_block_mat",
+      "episode": 150,
+      "sampled_frames": [
+        349,
+        1069
+      ],
+      "crossed_subtask_boundary": 357,
+      "instruction": "Pick up the blocks from the blue mat and place them on the green mat, then put them back on the original mat, starting from left to right.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 53489,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "classify_blocks",
+      "episode": 200,
+      "sampled_frames": [
+        156,
+        964
+      ],
+      "crossed_subtask_boundary": 164,
+      "instruction": "There are two colors of blocks and two baskets on the table. Collect blocks of the same color into the same basket.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 47596,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "rearrange_blocks",
+      "episode": 250,
+      "sampled_frames": [
+        131,
+        403
+      ],
+      "crossed_subtask_boundary": 139,
+      "instruction": "Move the block between the two mats onto the empty mat, press the button, then move the other block (the one that started on a mat) to the space between the two mats.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 20085,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "swap_blocks",
+      "episode": 300,
+      "sampled_frames": [
+        160,
+        594
+      ],
+      "crossed_subtask_boundary": 168,
+      "instruction": "There are three traies on the table, and two blocks are placed in two different traies. You may move only one block at a time, and each tray can hold at most one block. Swap the positions of the two blocks. Finally press the button.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 30017,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "storage_blocks",
+      "episode": 350,
+      "sampled_frames": [
+        80,
+        631
+      ],
+      "crossed_subtask_boundary": 88,
+      "instruction": "There are blocks and a basket on the table. Store all the blocks on the table into the basket.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 38726,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "blocks_ranking_try",
+      "episode": 400,
+      "sampled_frames": [
+        68,
+        1492
+      ],
+      "crossed_subtask_boundary": 76,
+      "instruction": "There is a button and three colored cubes arranged in a random row on the table. Each time the cubes are rearranged, the arm presses the button until the arrangement is successful.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 73739,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "put_back_block",
+      "episode": 450,
+      "sampled_frames": [
+        128,
+        344
+      ],
+      "crossed_subtask_boundary": 136,
+      "instruction": "There are four mats, one block, and a button on the table. One block is on one of the mats. First, put the block to the center, then press the button. Then, put the block back in its original position.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 17562,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    },
+    {
+      "task": "observe_and_pickup",
+      "episode": 500,
+      "sampled_frames": [
+        36,
+        147
+      ],
+      "crossed_subtask_boundary": 44,
+      "instruction": "Initially, there is one target object on the shelf and five random objects on the table. Then, a screen obscures the target object. Pick up the corresponding target object from the table and lift it up.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 7473,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": true
+    },
+    {
+      "task": "swap_T",
+      "episode": 550,
+      "sampled_frames": [
+        76,
+        334
+      ],
+      "crossed_subtask_boundary": 84,
+      "instruction": "Swap the poses of the two T-blocks, including both position and orientation.",
+      "actual_targets_equal_continuous_base_dataset": true,
+      "only_episode_end_padding": true,
+      "shuffled_real_frames_per_epoch": 17133,
+      "three_epochs_match_fastwam_randperm": true,
+      "exact_sampler_resume": true,
+      "init_kv_preserved": false
+    }
+  ]
+}

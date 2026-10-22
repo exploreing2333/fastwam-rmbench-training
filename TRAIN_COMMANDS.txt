@@ -30,3 +30,26 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 bash train_task.sh rearrange_blocks --gpus 4
 
 先只检查启动命令，不启动训练：
 bash train_task.sh rearrange_blocks --dry-run
+
+完整 instruction + 连续 episode 数据窗口（12个任务；每个epoch逐帧随机打乱）：
+bash train_task.sh press_button --instruction-mode full
+bash train_task.sh battery_try --instruction-mode full
+bash train_task.sh cover_blocks --instruction-mode full
+bash train_task.sh place_block_mat --instruction-mode full
+bash train_task.sh classify_blocks --instruction-mode full
+bash train_task.sh rearrange_blocks --instruction-mode full
+bash train_task.sh swap_blocks --instruction-mode full
+bash train_task.sh storage_blocks --instruction-mode full
+bash train_task.sh blocks_ranking_try --instruction-mode full
+bash train_task.sh put_back_block --instruction-mode full
+bash train_task.sh observe_and_pickup --instruction-mode full
+bash train_task.sh swap_T --instruction-mode full
+
+按顺序训练全部12个完整instruction任务：
+bash train_tasks_sequential.sh --instruction-mode full
+
+只恢复该任务完整instruction模式下的最新checkpoint：
+bash train_task.sh press_button --instruction-mode full --resume
+
+只预览完整instruction配置，不启动训练：
+bash train_task.sh press_button --instruction-mode full --dry-run

@@ -16,6 +16,7 @@ import uuid
 from omegaconf import OmegaConf
 from training_processes import conflicting_training_processes, find_training_processes
 from checkpoint_resume import inspect_training_state, latest_training_state
+from training_modes import configure_instruction_mode, task_run_root
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -24,6 +25,8 @@ def main():
     manifest = json.loads((ROOT / 'data/task_manifest.json').read_text())
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('task', choices=list(manifest['tasks']))
+    parser.add_argument('--instruction-mode', choices=('subtask', 'full'), default='subtask',
+                        help='Use GT subtask clips (default), or full task instructions and continuous episode clips.')
     parser.add_argument('--gpus', type=int, choices=(1, 2, 4, 8))
     parser.add_argument('--microbatch', type=int)
     parser.add_argument('--grad-accum', type=int)
@@ -42,11 +45,14 @@ def main():
     parser.add_argument('--foreground', action='store_true')
     parser.add_argument('--dry-run', action='store_true')
     cli = parser.parse_args()
+    if cli.instruction_mode == 'full' and cli.subtask_segments:
+        parser.error('--subtask-segments applies only to --instruction-mode subtask.')
+    task_root = task_run_root(ROOT, cli.task, cli.instruction_mode).resolve()
     selected, skipped = None, []
     if cli.resume is not None:
         try:
             if cli.resume == 'latest':
-                selected, skipped = latest_training_state(ROOT/'runs'/cli.task)
+                selected, skipped = latest_training_state(task_root)
             else:
                 selected = inspect_training_state(Path(cli.resume))
         except (OSError, ValueError, KeyError, TypeError) as exc:
@@ -56,6 +62,13 @@ def main():
         previous_config = selected.run_dir/'launch_config.yaml'
         if previous_config.is_file():
             saved_cfg = OmegaConf.load(previous_config)
+        saved_mode = saved_cfg.get('instruction_mode', 'subtask') if saved_cfg is not None else 'subtask'
+        if saved_mode != cli.instruction_mode:
+            parser.error('Checkpoint instruction mode differs from the requested mode; start a fresh run.')
+        if cli.instruction_mode == 'full' and saved_cfg is None:
+            parser.error('Full instruction resume requires its original launch_config.yaml.')
+        if saved_cfg is not None and saved_cfg.get('rmbench_task', cli.task) != cli.task:
+            parser.error('Checkpoint belongs to a different task.')
         if cli.gpus is not None and cli.gpus != selected.world_size:
             parser.error(f'Full-state resume requires the saved GPU count {selected.world_size}; requested {cli.gpus}')
         if cli.microbatch is not None and cli.microbatch != selected.microbatch:
@@ -81,17 +94,17 @@ def main():
     if accumulation <= 0 or unit * accumulation != 64:
         parser.error('gpus * microbatch * grad-accum must equal the reference global batch size 64')
     launch_id = datetime.now(timezone.utc).strftime('%Y-%m-%d_%H-%M-%S') + '_' + uuid.uuid4().hex[:6]
-    task_root = (ROOT/'runs'/cli.task).resolve()
     reusable_run = selected is not None and selected.run_dir.parent == task_root
     run_id = cli.run_id or (selected.run_dir.name if reusable_run else launch_id)
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*', run_id):
         parser.error('run-id may contain letters, digits, dots, underscores, and hyphens')
     cfg = OmegaConf.load(ROOT / f'configs/portable_{cli.task}.yaml')
+    configure_instruction_mode(cfg, cli.instruction_mode)
     cfg.batch_size = cli.microbatch
     cfg.gradient_accumulation_steps = accumulation
     cfg.num_workers = cli.num_workers
     cfg.max_steps = cli.max_steps
-    cfg.output_dir = str(ROOT / 'runs' / cli.task / run_id)
+    cfg.output_dir = str(task_root / run_id)
     if cli.subtask_segments:
         cfg.data.train.gt_subtask_segment_mode = cli.subtask_segments
     cfg.resume = str(selected.path) if selected is not None else None
@@ -107,6 +120,11 @@ def main():
             parser.error(f'task statistics are missing: {stats}')
         cfg.data.train.pretrained_norm_stats = str(stats)
     cfg_data = OmegaConf.to_container(cfg, resolve=True)
+    if selected is not None and cli.instruction_mode == 'full':
+        for path in ('data.train._target_', 'data.train.training_shuffle_unit',
+                     'data.train.text_embedding_use_true_mask'):
+            if OmegaConf.select(saved_cfg, path) != OmegaConf.select(cfg, path):
+                parser.error(f'Incompatible full instruction checkpoint setting {path}; start a fresh run.')
     if selected is not None and cfg_data['model'].get('init_frame_kv_config') is not None:
         # Current-only/target-label states cannot silently become init-KV runs.
         if saved_cfg is None:
@@ -142,7 +160,9 @@ def main():
                   microbatch=cli.microbatch, gradient_accumulation_steps=accumulation,
                   num_workers=cli.num_workers,
                   global_batch_size=64, max_steps=cli.max_steps, resume=cfg_data['resume'],
-                  gt_subtask_segment_mode=cfg_data['data']['train']['gt_subtask_segment_mode'],
+                  instruction_mode=cli.instruction_mode,
+                  gt_subtask_segment_mode=cfg_data['data']['train'].get('gt_subtask_segment_mode'),
+                  training_shuffle_unit=cfg_data['data']['train']['training_shuffle_unit'],
                   exclude_terminal_hold_loss_subtasks=cfg_data['data']['train'].get('exclude_terminal_hold_loss_subtasks', []),
                   resume_mode='full_state' if selected is not None else 'fresh',
                   resume_step=selected.step if selected is not None else 0,
@@ -163,8 +183,12 @@ def main():
     print(shlex.join(command), flush=True)
     print(f'[training] task={cli.task} episodes=50 frames={info["frames"]} '
           f'global_batch=64 ({cli.gpus} GPUs x {cli.microbatch} x accumulation {accumulation})', flush=True)
-    print('[subtasks] mode=' + cfg_data['data']['train']['gt_subtask_segment_mode']
-          + ' event_instance_tasks=' + ','.join(cfg_data['data']['train']['gt_subtask_event_instance_tasks']), flush=True)
+    print('[instruction] mode=' + cli.instruction_mode, flush=True)
+    if cli.instruction_mode == 'subtask':
+        print('[subtasks] mode=' + cfg_data['data']['train']['gt_subtask_segment_mode']
+              + ' event_instance_tasks=' + ','.join(cfg_data['data']['train']['gt_subtask_event_instance_tasks']), flush=True)
+    else:
+        print('[clips] continuous within each episode; frame shuffle without replacement each epoch', flush=True)
     print('[action loss] exclude_terminal_hold_subtasks='
           + json.dumps(cfg_data['data']['train'].get('exclude_terminal_hold_loss_subtasks', [])), flush=True)
     print(f'[resume] mode={record["resume_mode"]} step={record["resume_step"]} path={cfg_data["resume"]}', flush=True)
@@ -200,6 +224,12 @@ def main():
                          + ', '.join(sorted({row['run_dir'] for row in conflicts}))
                          + '; inspect with bash stop_training.sh --list')
         data_cfg = cfg_data['data']['train']
+        if cli.instruction_mode == 'full':
+            prepare_text = [sys.executable, str(ROOT / 'scripts/prepare_full_instruction_text_cache.py'),
+                            '--task', cli.task, '--output-root', data_cfg['text_embedding_cache_dir'],
+                            '--context-len', str(data_cfg['context_len'])]
+            if subprocess.call(prepare_text, cwd=ROOT) != 0:
+                return 1
         if cfg_data['model'].get('init_frame_kv_config') is not None:
             prepare = [sys.executable, str(ROOT / 'scripts/precompute_init_frame_latents.py'),
                        '--dataset-root', data_cfg['dataset_dirs'][0],

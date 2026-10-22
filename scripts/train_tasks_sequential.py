@@ -9,6 +9,7 @@ root = Path(__file__).resolve().parents[1]
 manifest = json.loads((root / 'data/task_manifest.json').read_text())
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--tasks', nargs='+', choices=list(manifest['tasks']))
+parser.add_argument('--instruction-mode', choices=('subtask', 'full'), default='subtask')
 parser.add_argument('--gpus', type=int, choices=(1,2,4,8))
 parser.add_argument('--microbatch', type=int)
 parser.add_argument('--num-workers', type=int)
@@ -21,10 +22,12 @@ resume_group.add_argument('--fresh', action='store_true',
                           help='Start each task from Wan initialization (default).')
 parser.add_argument('--max-steps', type=int, default=200000)
 args = parser.parse_args()
-tasks = args.tasks or manifest['remaining_tasks']
+if args.instruction_mode == 'full' and args.subtask_segments:
+    parser.error('--subtask-segments applies only to --instruction-mode subtask.')
+tasks = args.tasks or (list(manifest['tasks']) if args.instruction_mode == 'full' else manifest['remaining_tasks'])
 for task in tasks:
     command = [sys.executable, str(root / 'scripts/train_task.py'), task, '--foreground',
-               '--max-steps', str(args.max_steps)]
+               '--max-steps', str(args.max_steps), '--instruction-mode', args.instruction_mode]
     if args.num_workers is not None:
         command.extend(['--num-workers',str(args.num_workers)])
     if args.gpus is not None:

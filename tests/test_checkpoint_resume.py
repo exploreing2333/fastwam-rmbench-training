@@ -19,6 +19,7 @@ sys.path.insert(0,str(ROOT/'scripts'))
 from checkpoint_resume import inspect_training_state, latest_training_state
 import train_task
 from fastwam.datasets.lerobot.press_button_labels import ORDINALS
+from training_modes import configure_instruction_mode
 
 
 EXPECTED_HOLD_LOSS_EXCLUSIONS = {
@@ -141,6 +142,62 @@ class ResumeTests(unittest.TestCase):
         for flags in ([],['--fresh']):
             code,output=self.launch('put_back_block',*flags,'--dry-run')
             self.assertEqual(code,0);self.assertIn('mode=fresh step=0',output)
+
+    def test_full_instruction_launch_for_every_task(self):
+        tasks=json.loads((self.root/'data/task_manifest.json').read_text())['tasks']
+        for task in tasks:
+            with self.subTest(task=task):
+                code,output=self.launch(task,'--instruction-mode','full','--dry-run','--run-id','full_preview')
+                self.assertEqual(code,0)
+                run=self.root/'runs'/task/'full_instruction/full_preview'
+                cfg=OmegaConf.load(next(run.glob('dry_runs/*/launch_config.yaml')))
+                data=cfg.data.train
+                self.assertEqual(cfg.instruction_mode,'full')
+                self.assertEqual(cfg.output_dir,str(run))
+                self.assertEqual((data.training_shuffle_unit,data.num_frames,data.action_video_freq_ratio),('frame',33,4))
+                self.assertIn('FullInstructionRobotVideoDataset',data._target_)
+                self.assertIn('full_instruction_text_embeds',data.text_embedding_cache_dir)
+                self.assertFalse(data.text_embedding_use_true_mask)
+                self.assertFalse(any(k.startswith(('gt_subtask_','subtask_')) for k in data))
+                self.assertNotIn('exclude_terminal_hold_loss_subtasks',data)
+                self.assertNotIn('press_button_label_mode',data)
+                self.assertEqual((cfg.max_steps,cfg.save_every,cfg.max_checkpoints_to_keep),(200000,2000,2))
+                baseline=OmegaConf.load(self.root/f'configs/portable_{task}.yaml')
+                self.assertEqual(cfg.model,baseline.model)
+                self.assertIn('mode=fresh step=0',output)
+
+    def test_full_instruction_resume_is_isolated_and_rejects_other_mode(self):
+        subtask=self.state(run='subtask',stamp=300)
+        full=self.state(task='put_back_block/full_instruction',run='full',stamp=200)
+        full_cfg=configure_instruction_mode(OmegaConf.load(self.root/'configs/portable_put_back_block.yaml'),'full')
+        OmegaConf.save(full_cfg,full.parent.parent.parent/'launch_config.yaml')
+        code,_=self.launch('put_back_block','--instruction-mode','full','--resume','--dry-run')
+        self.assertEqual(code,0)
+        cfg=OmegaConf.load(next(full.parent.parent.parent.glob('dry_runs/*/launch_config.yaml')))
+        self.assertEqual(cfg.resume,str(full))
+        code,_=self.launch('put_back_block','--resume','--dry-run')
+        self.assertEqual(code,0)
+        cfg=OmegaConf.load(next(subtask.parent.parent.parent.glob('dry_runs/*/launch_config.yaml')))
+        self.assertEqual(cfg.resume,str(subtask))
+        for flags in (['--instruction-mode','full','--resume',str(subtask)],['--resume',str(full)]):
+            with self.subTest(flags=flags),contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as exc:
+                self.launch('put_back_block',*flags,'--dry-run')
+            self.assertEqual(exc.exception.code,2)
+
+    def test_full_instruction_rejects_subtask_segment_option(self):
+        with contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as exc:
+            self.launch('press_button','--instruction-mode','full','--subtask-segments','raw_annotation','--dry-run')
+        self.assertEqual(exc.exception.code,2)
+
+    def test_sequential_full_instruction_covers_all_tasks_and_passes_resume(self):
+        with patch.object(sys,'argv',['train_tasks_sequential.py','--instruction-mode','full','--resume']), \
+             patch('subprocess.run') as launch,contextlib.redirect_stdout(io.StringIO()):
+            runpy.run_path(str(ROOT/'scripts/train_tasks_sequential.py'),run_name='__main__')
+        self.assertEqual(launch.call_count,12)
+        for call in launch.call_args_list:
+            command=call.args[0]
+            self.assertEqual(command[command.index('--instruction-mode')+1],'full')
+            self.assertIn('--resume',command)
 
     def test_observe_init_resume_requires_matching_inputs_and_annotation_source(self):
         saved = self.state(task='observe_and_pickup')

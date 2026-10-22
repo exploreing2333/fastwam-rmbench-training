@@ -79,6 +79,7 @@ def main():
     parser.add_argument('--master-port', type=int)
     parser.add_argument('--cpu', action='store_true', help='Check IPC and data without accessing GPUs')
     parser.add_argument('--task', default='observe_and_pickup')
+    parser.add_argument('--instruction-mode', choices=('subtask', 'full'), default='subtask')
     parser.add_argument('--real-data', action='store_true')
     parser.add_argument('--raw-root', type=Path, default=ROOT / 'data/RMBench/data/data')
     parser.add_argument('--dataset-root', type=Path, default=ROOT / 'data/lerobot/rmbench_all_12tasks_demo_clean_50')
@@ -181,9 +182,15 @@ def main():
         from hydra.utils import instantiate
         from fastwam.utils import misc
         cfg = OmegaConf.load(ROOT / f'configs/portable_{args.task}.yaml')
+        from training_modes import configure_instruction_mode
+        configure_instruction_mode(cfg, args.instruction_mode)
         cfg.data.train.episode_indices = [cfg.data.train.episode_indices[0]]
         cfg.data.train.dataset_dirs = [str(args.dataset_root.resolve())]
-        cfg.data.train.gt_subtask_text_embedding_cache_dir = str(args.text_cache.resolve())
+        if args.instruction_mode == 'subtask':
+            cfg.data.train.gt_subtask_text_embedding_cache_dir = str(args.text_cache.resolve())
+        else:
+            from prepare_full_instruction_text_cache import prepare as prepare_text
+            prepare_text(args.task, cfg.data.train.text_embedding_cache_dir)
         cfg.data.train.pretrained_norm_stats = str(ROOT / f'data/task_norm_stats/{args.task}.json')
         if cfg.model.get('init_frame_kv_config') is not None:
             from precompute_init_frame_latents import prepare
@@ -201,7 +208,8 @@ def main():
             temporary = Path(temporary)
             mapping = temporary / 'source_map.json'
             mapping.write_text(json.dumps(source))
-            cfg.data.train.subtask_source_map = str(mapping)
+            if args.instruction_mode == 'subtask':
+                cfg.data.train.subtask_source_map = str(mapping)
             misc.register_work_dir(temporary / 'samples')
             dataset = instantiate(cfg.data.train)
             arrow_files = [item['filename'] for child in dataset.lerobot_dataset.multi_dataset._datasets
