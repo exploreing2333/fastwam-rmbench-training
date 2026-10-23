@@ -68,9 +68,9 @@ instruction 和数据窗口之外的任务设置沿用对应 `portable_<task>.ya
 
 真实样本及随机采样审查程序：`scripts/audit_full_instruction_training.py`。
 
-### 完整 instruction：剩余 11 个任务串行训练，每任务 50000 steps
+### 完整 instruction：指定 8 个任务串行训练，每任务 50000 steps
 
-`battery_try` 已完成，下面的脚本固定跳过它，按顺序训练其余 11 个任务（包含 `cover_blocks`）：
+下面的脚本仅按顺序训练指定的 8 个任务：
 
 ```bash
 git pull --ff-only
@@ -79,9 +79,9 @@ bash train_full_instruction_50k.sh
 
 每个任务达到 50000 optimizer steps 并正常退出后，才启动下一个；任一任务报错会停止队列。
 默认从头训练，8 卡、global batch=64，每 2000 steps 保存、保留最近两个 checkpoint。
-任务顺序为 `press_button`、`cover_blocks`、`place_block_mat`、`classify_blocks`、
-`rearrange_blocks`、`swap_blocks`、`storage_blocks`、`blocks_ranking_try`、`put_back_block`、
-`observe_and_pickup`、`swap_T`。日志和 checkpoint 仍位于 `runs/<task>/full_instruction/<run_id>/`。
+任务顺序为 `blocks_ranking_try`、`cover_blocks`、`observe_and_pickup`、`press_button`、
+`put_back_block`、`rearrange_blocks`、`swap_blocks`、`swap_T`。
+日志和 checkpoint 仍位于 `runs/<task>/full_instruction/<run_id>/`。
 
 队列中断后显式加 `--resume`，会恢复各任务本模式最新的完整状态；已达到 50000 steps 的任务自动跳过，
 没有 checkpoint 的任务从头开始。仅预览或调整 GPU/worker 数量也通过同一脚本传入：

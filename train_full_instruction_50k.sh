@@ -1,19 +1,16 @@
 #!/usr/bin/env bash
-# Full instruction training, 50k per task; battery_try is already complete.
+# Full instruction training, 50k per task, for the eight selected tasks.
 set -euo pipefail
 
 bundle_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 tasks=(
-  press_button
+  blocks_ranking_try
   cover_blocks
-  place_block_mat
-  classify_blocks
+  observe_and_pickup
+  press_button
+  put_back_block
   rearrange_blocks
   swap_blocks
-  storage_blocks
-  blocks_ranking_try
-  put_back_block
-  observe_and_pickup
   swap_T
 )
 
