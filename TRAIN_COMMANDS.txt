@@ -53,3 +53,12 @@ bash train_task.sh press_button --instruction-mode full --resume
 
 只预览完整instruction配置，不启动训练：
 bash train_task.sh press_button --instruction-mode full --dry-run
+
+完整instruction：跳过已完成的battery_try，其余11个任务各训练50000 steps（串行，默认从头）：
+bash train_full_instruction_50k.sh
+
+中断后显式续训；已达到50000 steps的任务自动跳过：
+bash train_full_instruction_50k.sh --resume
+
+只预览11个任务的50000步配置，不启动训练：
+bash train_full_instruction_50k.sh --dry-run
